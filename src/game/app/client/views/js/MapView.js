@@ -184,22 +184,22 @@ class MapView extends Views {
      * @param {PositionClient} position map element position
      */
     createMapElementView = function(mapObject, position) {
-        var tileType;
-        var tile;
+        var mapElementType;
+        var mapElement;
 
         if (mapObject instanceof DoorClient) {
-            tileType = mapObject.getTypeOfDoor();
-            tile = this.gameObjectViewFactory.createDoorView(tileType, position, mapObject.getName());
+            mapElementType = mapObject.getTypeOfDoor();
+            mapElement = this.gameObjectViewFactory.createDoorView(mapElementType, position, mapObject.getName());
         } else {
-            tileType = mapObject.getGameObjectType();
-            tile = this.gameObjectViewFactory.createGameMapElementView(tileType, position, mapObject.getOffsets(),  mapObject.getName(), mapObject.getIsClickable(), mapObject.getOnClickData(), mapObject.getId())
+            mapElementType = mapObject.getGameObjectType();
+            mapElement = this.gameObjectViewFactory.createGameMapElementView(mapElementType, position, mapObject.getOffsets(),  mapObject.getName(), mapObject.getIsClickable(), mapObject.getOnClickData(), mapObject.getId())
         }
 
-        if (tile != null) {
-            this.tiles.push(tile);
+        if (mapElement != null) {
+            this.tiles.push(mapElement);
 
             if (mapObject instanceof DoorClient || mapObject.getIsClickable())
-                this.clickableTiles.push(tile);
+                this.clickableTiles.push(mapElement);
 
         }
     }

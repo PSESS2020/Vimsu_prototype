@@ -32,10 +32,10 @@ class OnClickStoryData extends OnClickDataParent {
      *                                         display the story.
      */
     getData() {
-        return Object.freeze({
+        return {
             type: TypeOfOnClickData.STORY,
-            story: this.#story
-        })
+            story: [...this.#story]
+        }
     }
 
 }

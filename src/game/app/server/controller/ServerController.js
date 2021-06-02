@@ -33,6 +33,7 @@ const RoomFactory = require('../models/RoomFactory.js');
 const Floorplan = require('../utils/Floorplan.js');
 const AssetPaths = require('../../client/shared/AssetPaths.js');
 const VariableReplacer = require('../utils/VariableReplacer.js');
+const OnClickDataParent = require('../models/onclickdatatypes/OnClickDataParent.js');
 
 /**
  * The Server Controller
@@ -3506,9 +3507,8 @@ module.exports = class ServerController {
         let currentRoomId = currentPosition.getRoomId();
         let currentRoom = this.getRoomById(currentRoomId);
 
-        let targetRoomId = newPos.getRoomId();
-        let targetRoom = this.getRoomById(targetRoomId);
-        let targetRoomType = targetRoom.getTypeOfRoom();
+        let targetRoom = this.#getRoomById(newPos.getRoomId());
+        let targetRoomId = targetRoom.getRoomId();
 
         currentRoom.exitParticipant(ppantID);
         targetRoom.enterParticipant(ppant);

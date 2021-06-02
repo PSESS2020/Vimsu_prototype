@@ -44,7 +44,7 @@ class OnClickIFrameData extends OnClickDataParent {
      *                  the correct view class
      */
     getData() {
-        return Object.freeze({ type: TypeOfOnClickData.IFRAME })
+        return { type: TypeOfOnClickData.IFRAME }
     }
 
     /**
@@ -53,12 +53,12 @@ class OnClickIFrameData extends OnClickDataParent {
      * @return {Object} The data needed to properly display the iFrame
      */
     getIFrameData() {
-        return Object.freeze({
+        return {
             title:  this.#title,
             width:  this.#width,
             height: this.#height,
             url:    this.#url
-        })
+        }
     }
 
 }

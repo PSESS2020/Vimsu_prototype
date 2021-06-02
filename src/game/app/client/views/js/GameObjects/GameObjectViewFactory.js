@@ -101,7 +101,7 @@ class GameObjectViewFactory {
         gameMapElementImage = this.assetImages[objectName];
         
         if (gameMapElementImage !== undefined) {
-            var offset = this.calculateMapElementOffset(offsets. gameObjectImage, gameObjectType);
+            var offset = this.calculateMapElementOffset(offsets, gameMapElementImage, gameObjectType);
             // Strange fix to make sure left & right tiles are displayed properly
             if (gameObjectType === GameObjectType.LEFTTILE) {
                 pos = new PositionClient(pos.getCordX(), pos.getCordY() + 1);
@@ -161,8 +161,8 @@ class GameObjectViewFactory {
             var offset = this.calculateObjectOffset(offsets, gameObjectImage, gameObjectType);
             if (isClickable) {
                 TypeChecker.isInt(gameObjectID);
-                //const { type } = onClickData
-                //TypeChecker.isEnumOf(type, OnClickDataType)
+                const { type } = onClickData
+                TypeChecker.isEnumOf(type, TypeOfOnClickData)
                 var creationData = {
                     gameObjectType,
                     gameObjectImage,
@@ -204,8 +204,10 @@ class GameObjectViewFactory {
 
         doorImage = this.assetImages[objectName];
 
+        let offsets = Settings[`${typeOfDoor.split("_")[0]}WALL_OFFSET`]
+
         if (doorImage !== undefined) {
-            var offset = this.calculateMapElementOffset(doorImage, typeOfDoor);
+            var offset = this.calculateMapElementOffset(offsets, doorImage, typeOfDoor);
             doorView = new DoorView(doorImage, [], pos, typeOfDoor, offset, objectName, this.eventManager);
         } else {
             throw new Error("The image for the key " + objectName + " could not be found in the cache for images. Did you reload the images after cache clear?");
@@ -230,7 +232,7 @@ class GameObjectViewFactory {
             return { x: offsets.x, y: this.tileRowHeight - image.height + offsets.y };
         } else {
             // some offsets do not follow the usual formula
-            return { x: 0, y: -this.tileRowHeight + offset.y };
+            return { x: 0, y: -this.tileRowHeight + offsets.y };
         }
     }
 
@@ -246,11 +248,7 @@ class GameObjectViewFactory {
         if (offsets === undefined) {
             offsets = Settings.DEFAULT_OFFSET
         }
-        if (offsets === Settings.DEFAULT_OFFSET) {
-            // not all offsets follow formula
-            return offsets;
-        } else {
-            return { x: this.tileColumnWidth * offsets.x, y: (this.tileRowHeight / 2) - image.width + offsets.y } 
-        }
+        const { x: facX, y: facY } = offsets
+        return { x: this.tileColumnWidth * facX, y: ((!facY) ? facY : ((this.tileRowHeight / 2) - image.width + offsets.y)) } 
     }
 }

@@ -1,7 +1,7 @@
 const TypeChecker = require('../../../client/shared/TypeChecker.js');
 const GameObjectType = require('../../../client/shared/GameObjectType.js');
 const Position = require('../Position.js');
-const OnClickData = require('../onclickdatatypes/OnClickDataParent.js');
+const OnClickDataParent = require('../onclickdatatypes/OnClickDataParent.js');
 
 /**
  * The Game Object Model
@@ -56,7 +56,7 @@ module.exports = class GameObject {
         TypeChecker.isInstanceOf(position, Position);
         TypeChecker.isBoolean(isSolid);
         TypeChecker.isBoolean(isClickable);
-        TypeChecker.isInstanceOf(onClickData, OnClickData);
+        TypeChecker.isInstanceOf(onClickData, OnClickDataParent);
 
         this.#id = id;
         this.#gameObjectType = gameObjectType;
@@ -156,7 +156,7 @@ module.exports = class GameObject {
      * Gets the data of the onclick
      */
     getOnClickData() {
-        this.#onClickData.getData();
+        return this.#onClickData.getData();
     }
 
     getIFrameData() {
@@ -171,16 +171,16 @@ module.exports = class GameObject {
      */
     getState() {
         return {
-            id: this.getId(),
-            type: this.getGameObjectType(),
-            name: this.getName(),
+            id: this.#id,
+            type: this.#gameObjectType,
+            name: this.#name,
             offset: this.#offset,
-            width: this.getWidth(),
-            length: this.getLength(),
+            width: this.#width,
+            length: this.#length,
             cordX: this.getPosition().getCordX(),
             cordY: this.getPosition().getCordY(),
-            isClickable: this.getClickable(),
-            onClickData: this.getOnClickData()
+            isClickable: this.#isClickable,
+            onClickData: {...this.getOnClickData()}
         }
     }
 }

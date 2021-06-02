@@ -107,7 +107,7 @@ class RoomFactory {
         }
         // ADD RIGHT WALLS
         for (var j = 0; j < width; j++) {
-            var newElems = this.#objFactory.createGameObject(roomId, { type: GameObjectType.LEFTWALL, position: [length, j], variation: wallstyle })
+            var newElems = this.#objFactory.createGameObject(roomId, { type: GameObjectType.RIGHTWALL, position: [length, j], variation: wallstyle })
             listOfWallsAndTiles = [...listOfWallsAndTiles, ...newElems]
         }
         return listOfWallsAndTiles

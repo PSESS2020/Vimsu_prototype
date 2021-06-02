@@ -544,17 +544,17 @@ module.exports = class Room {
     }
 
     getState() {
-        return Object.freeze({
-            id: this.getRoomId(),
-            name: this.getRoomName(),
-            type: this.getTypeOfRoom(),
-            width: this.getWidth(),
-            length: this.getLength(),
+        return {
+            id: this.#roomId,
+            name: this.#roomName,
+            type: this.#typeOfRoom,
+            width: this.#width,
+            length: this.#length,
             mapElementData: this.getListOfMapElements().map(elem => elem.getState()),
             gameObjectData: this.getListOfGameObjects().map(elem => elem.getState()),
             npcData: this.getListOfNPCs().map(elem => elem.getState()),
             doorData: this.getListOfDoors().map(elem => elem.getState()),
-            occMap: this.getOccMap()
-        })
+            occMap: this.getOccMap().map(row => [...row])
+        }
     }
 }

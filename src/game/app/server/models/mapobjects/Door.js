@@ -402,14 +402,14 @@ module.exports = class Door {
     }
 
     getState() {
-        return Object.freeze({
-            id: this.getId(),
-            type: this.getTypeOfDoor(),
-            name: this.getAssetPath(),
+        return {
+            id: this.#id,
+            type: this.#typeOfDoor,
+            name: this.#assetPath,
             cordX: this.getMapPosition().getCordX(),
             cordY: this.getMapPosition().getCordY(),
-            targetRoomId: this.getTargetRoomId()
-        })
+            targetRoomId: this.getTargetRoomId(),
+        }
     }
 
     /**

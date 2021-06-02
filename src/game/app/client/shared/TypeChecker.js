@@ -105,7 +105,7 @@ class TypeChecker {
      */
     static isEnumOf(object, Enum) {
         if (!Object.values(Enum).includes(object)) {
-            throw new TypeError(object + ' is not an enum of ' + Enum + '!')
+            throw new TypeError(`${object} is not an enum of ${Enum}!`)
         }
     }
 

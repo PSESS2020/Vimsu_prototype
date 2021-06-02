@@ -109,13 +109,13 @@ module.exports = class NPC {
     }
 
     getState() {
-        return Object.freeze({
+        return {
             id: this.getId(),
             name: this.getName(),
             cordX: this.getPosition().getCordX(),
             cordY: this.getPosition().getCordY(),
             direction: this.getDirection(),
             shirtColor: this.getShirtColor()
-        })
+        }
     }
 }

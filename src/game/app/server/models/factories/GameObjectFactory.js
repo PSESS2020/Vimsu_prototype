@@ -103,7 +103,7 @@ class GameObjectFactory {
 
         if (isClickable === undefined) { isClickable = false }
         if (onClickData === undefined) {
-            onClickData = (isClickable) ? this.#onClickDataAlternateMode(objData) : new OnClickEmptyData()
+            onClickData = ((isClickable) ? this.#onClickDataAlternateMode(objData) : new OnClickEmptyData())
             if (onClickData instanceof OnClickEmptyData) { isClickable = false }
         }
 

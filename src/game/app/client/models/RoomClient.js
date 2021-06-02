@@ -274,7 +274,6 @@ class RoomClient {
         this.assetPaths = assetPaths;
         this.listOfMapElements = [] 
         mapElementData.map( data => {
-            console.log(`${data.type} has on click data ${data.onClickData}`)
             this.listOfMapElements.push( new GameObjectClient(data) );
             if ( data.isClickable && (data.width > 1 || data.length > 1) ) {
                 this.addDummyClickers(this.listOfMapElements, data)
@@ -282,7 +281,6 @@ class RoomClient {
         });
         this.listOfGameObjects = []
         gameObjectData.forEach( data => {
-            console.log(`${data.type} has on click data ${data.onClickData}`)
             this.listOfGameObjects.push( new GameObjectClient(data) );
             if ( data.isClickable && (data.width > 1 || data.length > 1) ) {
                 this.addDummyClickers(this.listOfGameObjects, data)
