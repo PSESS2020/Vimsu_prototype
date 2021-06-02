@@ -47,7 +47,7 @@ class ChatListView extends WindowView {
 
     if (!this.handleEmptyChats(chats)) return;
 
-    this.ownUsername = ownUsername
+    this.ownUsername = ownUsername;
 
     chats.forEach((chat) => {
       if (chat.timestamp) {
@@ -60,7 +60,7 @@ class ChatListView extends WindowView {
     );
 
     this.chats.forEach((chat) => {
-      this.appendNewChat(chat);
+      this.prependNewChat(chat);
     });
   }
 
@@ -85,18 +85,18 @@ class ChatListView extends WindowView {
     }
 
     if (chat.previewUsername && chat.previewUsername !== this.ownUsername) {
-      previewMessage = chat.previewUsername + ": " + chat.previewMessage;
+      previewMessage = chat.previewUsername + ": " + previewMessage;
     }
 
     return { timestamp, previewMessage };
   }
 
   /**
-   * Appends new chat
+   * Prepends new chat
    * 
    * @param {Object} chat 
    */
-  appendNewChat(chat) {
+  prependNewChat(chat) {
     $("#nochat").empty();
 
     let { timestamp, previewMessage } = this.setChatPreview(chat);
@@ -116,10 +116,10 @@ class ChatListView extends WindowView {
                           <label class="name lead text-truncate" title="${chat.title}" data-toggle="tooltip">${chat.title}</label>
                         </div>
                         <div class="d-flex flex-row justify-content-start align-items-center">
-                            <span class="small text-truncate" style="opacity: 0.3" id="${"chatTimestamp" + chat.chatId}">${timestamp}</span>
+                            <span class="small text-truncate" style="opacity: 0.3">${timestamp}</span>
                         </div>
                         <div class="d-flex flex-row justify-content-start align-items-center">
-                            <span class ="small text-truncate" style="opacity: 0.8" id="${"chatPreviewMessage" + chat.chatId}" title="${previewMessage}" data-toggle="tooltip">${previewMessage}</span>
+                            <span class ="small text-truncate" style="opacity: 0.8" title="${previewMessage}" data-toggle="tooltip">${previewMessage}</span>
                         </div>
                     </div>
                   </div>
@@ -173,7 +173,7 @@ class ChatListView extends WindowView {
   addNewChat(chat) {
     if (!this.chats.includes(chat)) {
       this.chats.push(chat);
-      this.appendNewChat(chat);
+      this.prependNewChat(chat);
     }
   }
 
@@ -188,26 +188,12 @@ class ChatListView extends WindowView {
       const chat = this.chats[index];
 
       if (chat.chatId === chatID) {
-
         chat.previewUsername = message.senderUsername;
         chat.timestamp = message.timestamp;
         chat.previewMessage = message.msgText;
-
-        if (chat.timestamp) {
-          chat.timestamp = new Date(chat.timestamp);
-        }
-
-        let { timestamp, previewMessage } = this.setChatPreview(chat);
-
-        $("#chatTimestamp" + chatID).empty();
-        $("#chatTimestamp" + chatID).text(timestamp);
-        $("#chatPreviewMessage" + chatID).empty();
-        $("#chatPreviewMessage" + chatID).text(previewMessage);
-
         break;
       }
     };
-
     this.draw(this.chats, this.ownUsername);
   }
 
