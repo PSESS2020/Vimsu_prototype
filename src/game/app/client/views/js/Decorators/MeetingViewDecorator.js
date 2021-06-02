@@ -30,7 +30,7 @@
                 meeting:      { get: () => meetingData },
                 getGameObjectID: { value: function () { return this.gameObjectID } },
                 getGameObjectMeeting: { value: function () { return this.meeting } },
-                onClick: { value: function () { this.eventManager.handleMeetingJoined(this.meeting) } },
+                onclick: { value: function () { this.eventManager.handleMeetingJoined(this.meeting) } },
                 [GlobalStrings.ISDECORATED]: { get: () => true }
             })
         } else { console.log(`Object ${viewObject.getName()} with id ${viewObject.getGameObjectID()} has already been decorated.`) }

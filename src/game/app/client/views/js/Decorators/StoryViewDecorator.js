@@ -16,7 +16,7 @@
      */
      static decorate(viewObject, passedObjectID, storyData, headerName) {
         TypeChecker.isInt(passedObjectID)
-        TypeChecker.isSting(headerName)
+        TypeChecker.isString(headerName)
         TypeChecker.isInstanceOf(storyData, Array)
         storyData.forEach( x => TypeChecker.isString(x) )
         if (!viewObject.hasOwnProperty(GlobalStrings.ISDECORATED)) {
@@ -28,7 +28,7 @@
                 getGameObjectID: { value: function() { return this.gameObjectID } },
                 getStory: { value: function() { return this.story } },
                 getDescriptor: { value: function() { return this.descriptor } },
-                onClick: { value: function() { 
+                onclick: { value: function() { 
                     const npcStoryView = new NPCStoryView()
                     npcStoryView.addNewNPCStoryWindow(this.gameObjectID)
                     npcStoryView.draw(this.descriptor, this.story, this.gameObjectID)

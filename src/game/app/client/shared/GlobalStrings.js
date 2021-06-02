@@ -11,6 +11,8 @@
  */
 const GlobalStrings = Object.freeze({
 
+    ISDECORATED: "isDecorated",
+
     RECEPTION: "reception",
     FOYER: "foyer",
     FOODCOURT: "foodcourt",

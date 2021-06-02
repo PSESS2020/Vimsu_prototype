@@ -21,7 +21,7 @@
                 gameObjectID: { get: () => passedObjectID },
                 eventManager: { get: () => passedEventManager },
                 getGameObjectID: { value: function() { return this.gameObjectID } },
-                onClick: { value: function(mousePos) { 
+                onclick: { value: function(mousePos) { 
                     if (viewObject.getClickMapValueWithGridCoords(mousePos) === 1) {
                         //This Event fires multiple times because of three parallel schedule images.
                         //Not sure how to prevent this.

@@ -21,7 +21,7 @@ class IFrameViewDecorator {
                 gameObjectID: { get: () => passedObjectID },
                 eventManager: { get: () => passedEventManager },
                 getGameObjectID: { value: function() { return this.gameObjectID } },
-                onClick: { value: function() { this.eventManager.handleIFrameObjectClick(this.gameObjectID) } },
+                onclick: { value: function() { this.eventManager.handleIFrameObjectClick(this.gameObjectID) } },
                 [GlobalStrings.ISDECORATED]: { get: () => true }
             })
         } else { console.log(`Object ${viewObject.getName()} with id ${viewObject.getGameObjectID()} has already been decorated.`) }
