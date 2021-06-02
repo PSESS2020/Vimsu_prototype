@@ -204,6 +204,8 @@ class GameObjectViewFactory {
 
         doorImage = this.assetImages[objectName];
 
+        // hacky solution to make sure logos above door are displayed
+        // correctly. should probably be cleaned up soonishly.
         let offsets = Settings[`${typeOfDoor.split("_")[0]}WALL_OFFSET`]
 
         if (doorImage !== undefined) {
