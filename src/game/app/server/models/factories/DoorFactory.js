@@ -6,6 +6,7 @@ const TypeOfDoor = require('../../../client/shared/TypeOfDoor.js');
 const GlobalStrings = require('../../../client/shared/GlobalStrings.js');
 const DoorLogos = require('../../utils/DoorLogos.js');
 const Messages = require('../../utils/Messages.js');
+const Settings = require('../../utils/Settings.js');
 
 /**
  * The Door Factory
@@ -29,34 +30,6 @@ class DoorFactory {
 
         DoorFactory.instance = this;
         this.#doorIDPrefixList = [];
-    }
-
-    /**
-     * @private checks parameters' data type
-     * @method module:DoorFactory#checkParamTypes
-     * 
-     * @param {TypeOfDoor} typeOfDoor type of checked door
-     * @param {Position} mapPosition foyer door position
-     * @param {Position} targetPosition avatar's position on entering foyer door
-     * @param {Direction} direction avatar's direction on entering foyer door
-     * @param {boolean} isOpen decides if door is initially open or closed
-     * @param {Object} closedMessage message user gets if he tries to enter this door while it is closed
-     * @param {String} codeToOpen code to open this door while it is closed. If there is no code, this field is undefined
-     */
-    #checkParamTypes = function (typeOfDoor, mapPosition, targetPosition, direction, isOpen, closedMessage, codeToOpen) {
-        TypeChecker.isEnumOf(typeOfDoor, TypeOfDoor)
-        TypeChecker.isInstanceOf(mapPosition, Position);
-        TypeChecker.isBoolean(isOpen);
-        TypeChecker.isInstanceOf(closedMessage, Object);
-        TypeChecker.isString(closedMessage.header);
-        TypeChecker.isString(closedMessage.body);
-        if (codeToOpen !== undefined)
-            TypeChecker.isString(codeToOpen);
-
-        if (typeOfDoor !== TypeOfDoor.LEFT_LECTUREDOOR && typeOfDoor !== TypeOfDoor.RIGHT_LECTUREDOOR) {
-            TypeChecker.isInstanceOf(targetPosition, Position);
-            TypeChecker.isEnumOf(direction, Direction);
-        }
     }
 
     /**
@@ -153,8 +126,9 @@ class DoorFactory {
         const { roomId, wallSide, positionOfDoor: [xPos, yPos], positionOnExit: [idExit, xExit, yExit], directionOnExit, codeToOpen } = creationData
         var { logo, isOpen, closedMessage, isLectureDoor } = creationData
 
-        var enterPositionData;
+        if (isLectureDoor && !Settings.VIDEOSTORAGE_ACTIVATED) { throw new Error("You tried to create a lecture door, but video storage is not activated for this conference!") }
 
+        var enterPositionData;
         if ( wallSide === GlobalStrings.LEFT ) {
             enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
         } else if ( wallSide === GlobalStrings.RIGHT ) {
