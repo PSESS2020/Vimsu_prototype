@@ -216,6 +216,7 @@ class GameObjectViewFactory {
 
     /**
      * @param {Object} offsets The offsets of the asset as told by server
+     * @param {Image} image image asset of map element
      * @param {String} objectType type of object
      * 
      * @returns {Object} An object containing the x- and y-offset
@@ -235,6 +236,7 @@ class GameObjectViewFactory {
 
     /**
      * @param {Object} offsets The offsets of the asset as told by server
+     * @param {Image} image image asset of map element
      * @param {String} objectType type of map element
      * 
      * @returns {Object} An object containing the x- and y-offset
