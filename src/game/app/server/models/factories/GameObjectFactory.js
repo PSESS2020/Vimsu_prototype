@@ -24,11 +24,11 @@ class GameObjectFactory {
     #gameObjectIDs;
 
     constructor() {
-        if (!!GameObjectService.instance) {
-            return GameObjectService.instance;
+        if (!!GameObjectFactory.instance) {
+            return GameObjectFactoryinstance;
         }
 
-        GameObjectService.instance = this;
+        GameObjectFactory.instance = this;
         this.#gameObjectIDs = [];
     }
 
@@ -51,7 +51,7 @@ class GameObjectFactory {
     }
 
     #onClickDataAlternateMode = function (objData) {
-        for (onClickType of Object.values(TypeOfOnClickData)) {
+        for (var onClickType of Object.values(TypeOfOnClickData)) {
             if (objData.hasOwnProperty(onClickType)) {
                 let data = objData[onClickType]
                 return OnClickDataConstructors[onClickType](data) 
@@ -63,16 +63,22 @@ class GameObjectFactory {
     /**
      * @method module:GameObjectFactory#createGameObject
      * 
+     * WARNING: May exhibit unexpected behaviour, as it always returns
+     *          an array of GameObject instances, even when it created
+     *          only one. 
+     *          I'll get around to fixing this when I have the time.
+     * 
      * The onClickData contains information about what is supposed to happen
-     * when the object is clicked. It can be either an iFrameData object, an
-     * array of strings (so a story) or a set of meeting data.
+     * when the object is clicked. It can be either an instance of a subclass
+     * of the OnClickDataParent class or an object defining such an instance
+     * according to the rules laid out in the Floorplan example.
      * 
      * @param {String} roomId 
      * @param { { type:         GameObjectType, 
      *            position:     int[2],
      *            ?variation:   String,
      *            ?isClickable: Boolean,
-     *            ?onClickData: Object,
+     *            ?onClickData: Object OR OnClickDataParent,
      *            ?width:       int,
      *            ?length:      int,
      *            ?isSolid:     Boolean,
@@ -89,17 +95,15 @@ class GameObjectFactory {
         var { variation, isClickable, onClickData }      = objData  // optional
         var { width, length, isSolid, assetSet, offset } = objData  // custom
 
-        if (!GameObjectInfo.hasOwnProperty(type)) {
-            throw new TypeError(type + ' is not a known objecttype!')
+        if (!GameObjectInfo.isKnownObject(type)) {
+            throw new TypeError(`${type} is not a known type of object!`)
         }
         
         let returnData = []
 
-        if (isClickable === undefined) {
-            isClickable = false
-            onClickData = new OnClickEmptyData()
-        } else if (isClickable === true && onClickData === undefined) {
-            onClickData = this.#onClickDataAlternateMode(objData)
+        if (isClickable === undefined) { isClickable = false }
+        if (onClickData === undefined) {
+            onClickData = (isClickable) ? this.#onClickDataAlternateMode(objData) : new OnClickEmptyData()
             if (onClickData instanceof OnClickEmptyData) { isClickable = false }
         }
 

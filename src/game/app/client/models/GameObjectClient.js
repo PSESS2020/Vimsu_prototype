@@ -14,7 +14,7 @@ class GameObjectClient {
 
     id;
     name;
-    offset;
+    offsets;
     width;
     length;
     position;
@@ -58,7 +58,7 @@ class GameObjectClient {
         this.id = id;
         this.gameObjectType = type;
         this.name = name;
-        this.offset = offset;
+        this.offsets = offset;
         this.width = width;
         this.length = length;
 
@@ -140,6 +140,15 @@ class GameObjectClient {
      */
      getOnClickData() {
         return this.onClickData;
+    }
+
+    /**
+     * Gets game object offsets
+     * 
+     * @returns {Object} The offset of this object instance.
+     */
+    getOffsets() {
+        return this.offsets;
     }
 
 }

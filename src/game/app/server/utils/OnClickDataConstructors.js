@@ -1,6 +1,7 @@
 const TypeOfOnClickData = require("../../client/shared/TypeOfOnClickData")
 const OnClickEmptyData = require("../models/onclickdatatypes/OnClickEmptyData")
 const OnClickIFrameData = require("../models/onclickdatatypes/OnClickIFrameData")
+const OnClickStoryData = require("../models/onclickdatatypes/OnClickStoryData")
 const OnClickMeetingData = require("../models/onclickdatatypes/OnClickMeetingData")
 const OnClickScheduleData = require("../models/onclickdatatypes/OnClickScheduleData")
 const Settings = require("./Settings")
@@ -18,8 +19,7 @@ class OnClickDataConstructors {
     }
 
     static [TypeOfOnClickData.STORY] (data) {
-        const { story } = data
-        return new OnClickStoryData(story)
+        return new OnClickStoryData(data)
     }
 
     static [TypeOfOnClickData.MEETING] (data) {

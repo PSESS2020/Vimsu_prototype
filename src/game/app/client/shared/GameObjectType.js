@@ -38,6 +38,7 @@ const GameObjectType = Object.freeze({
         // Tables
         TABLE: 'TABLE',  // NOT COHERENT WITH ART STYLE
                          // DO NOT USE
+        LARGETABLE: 'RIGHTLARGETABLE', // LEGACY SUPPORT
         RIGHTLARGETABLE: 'RIGHTLARGETABLE',
         LEFTLARGETABLE: 'LEFTLARGETABLE',      
         SMALLTABLE: 'SMALLTABLE',

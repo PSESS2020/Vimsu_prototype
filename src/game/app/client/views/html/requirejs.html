@@ -21,20 +21,20 @@
 
             requirejs(['../client/views/js/Views',
                 '../client/utils/Settings',
-                '../client/shared/OnClickDataType'], () => {
+                '../client/shared/TypeOfOnClickData'], () => {
 
                     requirejs(['../client/views/js/ViewWithLanguageData',
                         '../client/utils/ImageLoader',
                         '../client/utils/ImageCache',
                         '../client/utils/IsometricEngine',
                         '../client/utils/SpriteAnimation',
-                        '../client/views/js/GameObjectView',
+                        '../client/views/js/GameObjects/GameObjectView',
                         '../client/utils/SpriteSheet',
                         '../client/utils/algorithms/AStar',], () => {
 
                             requirejs(['../client/views/js/WindowView',
                                 '../client/views/js/MapView',
-                                '../client/views/js/GameMapElementView',
+                                '../client/views/js/GameMapElements/GameMapElementView',
                                 '../client/views/js/AvatarView',
                                 '../client/views/js/LoadingView',
                                 '../client/utils/ClickableObjectViewCreators'], () => {
@@ -42,7 +42,7 @@
                                     requirejs([
                                         '../client/views/js/EmojiPicker',
                                         '../client/views/js/AllchatView',
-                                        '../client/views/js/GameObjectViewFactory',
+                                        '../client/views/js/GameObjects/GameObjectViewFactory',
                                         '../client/views/js/ProfileView',
                                         '../client/views/js/NotificationBar',
                                         '../client/views/js/ChatParticipantListView',
@@ -59,14 +59,14 @@
                                         '../client/views/js/InviteFriendsView',
                                         '../client/views/js/FriendRequestListView',
                                         '../client/views/js/BusinessCardView',
-                                        '../client/views/js/NPCStoryView',
+                                        '../client/views/js/NPCViews/NPCStoryView',
                                         '../client/views/js/ScheduleListView',
                                         '../client/views/js/RankListView',
                                         '../client/views/js/AchievementView',
                                         '../client/views/js/NewAchievementView',
                                         '../client/views/js/CurrentLecturesView',
                                         '../client/views/js/LectureView',
-                                        '../client/views/js/NPCAvatarView',
+                                        '../client/views/js/NPCViews/NPCAvatarView',
                                         '../client/views/js/InputGroupNameView',
                                         '../client/views/js/ParticipantAvatarView',
                                         '../client/views/js/ExternalWebsiteView',

@@ -1,4 +1,4 @@
-const OnClickData = require("./OnClickData");
+const OnClickDataParent = require("./OnClickDataParent");
 const TypeOfOnClickData  = require("../../../client/shared/TypeOfOnClickData")
 
 /**
@@ -7,12 +7,12 @@ const TypeOfOnClickData  = require("../../../client/shared/TypeOfOnClickData")
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class OnClickScheduleData extends OnClickData {
+class OnClickScheduleData extends OnClickDataParent {
 
     /**
      * @constructor module:OnClickScheduleData
      */
-    constructor() { }
+    constructor() { super() }
 
     /**
      * @method module:OnClickScheduleData#getData

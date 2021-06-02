@@ -93,7 +93,7 @@ class TypeChecker {
      */
     static isInstanceOf(object, objectClass) {
         if (!(object instanceof objectClass)) {
-            throw new TypeError(object + ' is not an instance of ' + objectClass + ' class!')
+            throw new TypeError(object + ' is not an instance of ' + objectClass.name + ' class!')
         }
     }
 

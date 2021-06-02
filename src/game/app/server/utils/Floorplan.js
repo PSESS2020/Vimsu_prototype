@@ -274,9 +274,9 @@ const Floorplan = Object.freeze({
             {wallSide: GlobalStrings.RIGHT, logo: GlobalStrings.FOODCOURT,  positionOfDoor: [25, 9], positionOnExit: [Settings.FOODCOURT_ID, 2, 0], directionOnExit: Direction.DOWNRIGHT, isOpen: true},
             {wallSide: GlobalStrings.RIGHT, logo: GlobalStrings.RECEPTION,  positionOfDoor: [25, 21], positionOnExit: [Settings.RECEPTION_ID, 2, 0], directionOnExit: Direction.DOWNRIGHT, isOpen: true}
         ],
-        LECTUREDOORS: [
+        /* LECTUREDOORS: [
             {wallSide: GlobalStrings.LEFT, logo: GlobalStrings.LECTURE, positionOfDoor: [2, -1]}
-        ],
+        ], */
         NPCS: [
             {name: FloorplanConstants.NPCNAMES.foyer, position: [0, 0], direction: Direction.DOWNRIGHT, dialog: NPCDialog.foyerHelperDialog}
         ]

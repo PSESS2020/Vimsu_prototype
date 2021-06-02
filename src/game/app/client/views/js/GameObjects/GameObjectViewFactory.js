@@ -1,5 +1,3 @@
-const TypeChecker = require("../../../shared/TypeChecker");
-
 /**
  * The Game Object View Factory
  * 
@@ -91,7 +89,7 @@ class GameObjectViewFactory {
      * 
      * @return {GameMapElementView} GameMapElementView instance
      */
-    createGameMapElementView(gameObjectType, pos, objectName, isClickable, onClickData, gameObjectID) {
+    createGameMapElementView(gameObjectType, pos, offsets, objectName, isClickable, onClickData, gameObjectID) {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
@@ -103,7 +101,7 @@ class GameObjectViewFactory {
         gameMapElementImage = this.assetImages[objectName];
         
         if (gameMapElementImage !== undefined) {
-            var offset = this.calculateMapElementOffset(gameMapElementImage, gameObjectType);
+            var offset = this.calculateMapElementOffset(offsets. gameObjectImage, gameObjectType);
             // Strange fix to make sure left & right tiles are displayed properly
             if (gameObjectType === GameObjectType.LEFTTILE) {
                 pos = new PositionClient(pos.getCordX(), pos.getCordY() + 1);
@@ -111,6 +109,9 @@ class GameObjectViewFactory {
                 pos = new PositionClient(pos.getCordX() - 1, pos.getCordY());
             }
             if (isClickable) {
+                TypeChecker.isInt(gameObjectID);
+                const { type } = onClickData
+                TypeChecker.isEnumOf(type, OnClickDataType)
                 var creationData = {
                     gameObjectType,
                     gameObjectImage,
@@ -147,24 +148,21 @@ class GameObjectViewFactory {
      *
      * @return {GameObjectView} GameObjectView instance
      */
-    createGameObjectView(gameObjectType, pos, objectName, isClickable, onClickData, gameObjectID) {
+    createGameObjectView(gameObjectType, pos, offsets, objectName, isClickable, onClickData, gameObjectID) {
         TypeChecker.isEnumOf(gameObjectType, GameObjectType);
         TypeChecker.isInstanceOf(pos, PositionClient);
         TypeChecker.isString(objectName);
-        TypeChecker.isInt(gameObjectID);
-
-        // Destructuring
-        const { type } = onClickData
-        TypeChecker.isEnumOf(type, OnClickDataType)
 
         var gameObjectView = null;
         var gameObjectImage;
-
         gameObjectImage = this.assetImages[objectName];
 
         if (gameObjectImage !== undefined) {
-            var offset = this.calculateObjectOffset(gameObjectImage, gameObjectType);
+            var offset = this.calculateObjectOffset(offsets, gameObjectImage, gameObjectType);
             if (isClickable) {
+                TypeChecker.isInt(gameObjectID);
+                const { type } = onClickData
+                TypeChecker.isEnumOf(type, OnClickDataType)
                 var creationData = {
                     gameObjectType,
                     gameObjectImage,
@@ -217,19 +215,18 @@ class GameObjectViewFactory {
     }
 
     /**
-     * @param {Image} image image asset of object
+     * @param {Object} offsets The offsets of the asset as told by server
      * @param {String} objectType type of object
      * 
      * @returns {Object} An object containing the x- and y-offset
      *                   necessary to properly portray the object
      */
-    calculateObjectOffset = function (image, objectType) {
-        let offset = GameObjectOffsets[objectType]
-        if (offset === undefined) {
-            offset = Settings.DEFAULT_OFFSET
+    calculateObjectOffset = function (offsets, image, objectType) {
+        if (offsets === undefined) {
+            offsets = Settings.DEFAULT_OFFSET
         }
-        if (objectType != GameObjectType.RECEPTIONCOUNTER) {
-            return { x: offset.x, y: this.tileRowHeight - image.height + offset.y };
+        if (objectType !== GameObjectType.RECEPTIONCOUNTER) {
+            return { x: offsets.x, y: this.tileRowHeight - image.height + offsets.y };
         } else {
             // some offsets do not follow the usual formula
             return { x: 0, y: -this.tileRowHeight + offset.y };
@@ -237,22 +234,21 @@ class GameObjectViewFactory {
     }
 
     /**
-     * @param {Image} image image asset of map element
+     * @param {Object} offsets The offsets of the asset as told by server
      * @param {String} objectType type of map element
      * 
      * @returns {Object} An object containing the x- and y-offset
      *                   necessary to properly portray the mapElement
      */
-    calculateMapElementOffset = function (image, objectType) {
-        let offset = GameObjectOffsets[objectType]
-        if (offset === undefined) {
+    calculateMapElementOffset = function (offsets, image, objectType) {
+        if (offsets === undefined) {
             offset = Settings.DEFAULT_OFFSET
         }
-        if (offset == Settings.DEFAULT_OFFSET) {
+        if (offsets === Settings.DEFAULT_OFFSET) {
             // not all offsets follow formula
-            return offset;
+            return offsets;
         } else {
-            return { x: this.tileColumnWidth * offset.x, y: (this.tileRowHeight / 2) - image.width + offset.y } 
+            return { x: this.tileColumnWidth * offsets.x, y: (this.tileRowHeight / 2) - image.width + offsets.y } 
         }
     }
 }

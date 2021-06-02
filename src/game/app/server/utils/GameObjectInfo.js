@@ -331,6 +331,7 @@ class GameObjectInfo {
             }
         },
         [GameObjectType.RIGHTLARGETABLE]: {
+            isSolid: true,
             width: Settings.SMALL_OBJECT_WIDTH,
             length: 3 * Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
@@ -341,6 +342,7 @@ class GameObjectInfo {
             }
         },
         [GameObjectType.LEFTLARGETABLE]: {
+            isSolid: true,
             width: 3 * Settings.SMALL_OBJECT_WIDTH,
             length: Settings.SMALL_OBJECT_LENGTH,
             assetSet: { 
@@ -488,7 +490,7 @@ class GameObjectInfo {
         if (TypeChecker.stringIsInteger(variation)) {
             let keys = Object.keys(assets)
             let parsed = parseInt(variation, 10)
-            if (-1 < parsed < keys.length) { variation = keys[length] }
+            if (-1 < parsed < keys.length) { variation = keys[parsed] }
             else {
                 console.log(`WARNING! The GameObjectType ${objectType} does only have ${keys.length} variations, so  ${parsed} does not index one. Reverted to ${GlobalStrings.DEFAULT}.`)
                 variation = GlobalStrings.DEFAULT
@@ -510,29 +512,29 @@ class GameObjectInfo {
      * 
      * TypeChecking should be done by whoever calls this method!
      * 
-     * @method module:GameObjectInfo#getAsset
+     * @method module:GameObjectInfo#getOffset
      * 
      * @param {String} objectType 
      * @param {String} variation
      *  
-     * @returns { { x: Integer, y: Integer } }  The asset-path indexed by the
+     * @returns { { x: Integer, y: Integer } }  The offset indexed by the
      *                                          passed variation. If no path 
      *                                          indexed, return default.  
      */
-     static getAsset (objectType, variation) {
+     static getOffset (objectType, variation) {
         let offsets = GameObjectInfo.getInfo(objectType, "offsets")
         
         if (TypeChecker.stringIsInteger(variation)) {
             let keys = Object.keys(offsets)
             let parsed = parseInt(variation, 10)
-            if (-1 < parsed < keys.length) { variation = keys[length] }
+            if (-1 < parsed < keys.length) { variation = keys[parsed] }
             else {
                 //console.log(`WARNING! The GameObjectType ${objectType} does only have ${keys.length} variations, so  ${parsed} does not index one. Reverted to ${GlobalStrings.DEFAULT}.`)
                 variation = GlobalStrings.DEFAULT
             }  
         }
 
-        if (assets.hasOwnProperty(variation)) {
+        if (offsets.hasOwnProperty(variation)) {
             return offsets[variation]
         } else {
             //console.log(`WARNING! The GameObjectType ${objectType} does not have a variation called ${variation}. Reverted to ${GlobalStrings.DEFAULT}.`);
@@ -555,6 +557,18 @@ class GameObjectInfo {
      */
     static hasProperty (objectType, key) {
         return GameObjectInfo.#INFORMATION[objectType].hasOwnProperty(key)
+    }
+
+    /**
+     * Takes a string and checls if the file contains information
+     * about an object of that type-
+     * 
+     * @param {String} objectType 
+     * 
+     * @returns {Boolean} Whether such an object of that type is known of not
+     */
+    static isKnownObject (objectType) {
+        return GameObjectInfo.#INFORMATION.hasOwnProperty(objectType)
     }
     
 }

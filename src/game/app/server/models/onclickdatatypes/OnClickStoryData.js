@@ -1,5 +1,6 @@
-const OnClickData = require("./OnClickData");
-const TypeOfOnClickData  = require("../../../client/shared/TypeOfOnClickData")
+const OnClickDataParent = require("./OnClickDataParent");
+const TypeOfOnClickData  = require("../../../client/shared/TypeOfOnClickData");
+const TypeChecker = require("../../../client/shared/TypeChecker");
 
 /**
  * @module OnClickStoryData
@@ -7,7 +8,7 @@ const TypeOfOnClickData  = require("../../../client/shared/TypeOfOnClickData")
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class OnClickStoryData extends OnClickData {
+class OnClickStoryData extends OnClickDataParent {
 
     #story
 
@@ -17,6 +18,9 @@ class OnClickStoryData extends OnClickData {
      * @param {String[]} story the story being displayed on click
      */
     constructor(story) {
+        super()
+        TypeChecker.isInstanceOf(story, Array)
+        story.forEach(elem => TypeChecker.isString(elem))
         this.#story = story
     }
 

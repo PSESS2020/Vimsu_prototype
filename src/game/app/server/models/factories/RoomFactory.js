@@ -64,7 +64,7 @@ class RoomFactory {
         // TODO this can probably be done with Array.flat()
         room.addMapElements( this.#buildObjects(ID, MAPELEMENTS) );
         room.setGameObjects( this.#buildObjects(ID, OBJECTS) );
-        room.setNPCs( NPCS.map(npcData => { this.#npcFactory.createNPC(Object.assign({ roomId: ID }, npcData)) }) )
+        room.setNPCs( NPCS.map(npcData => this.#npcFactory.createNPC(Object.assign({ roomId: ID }, npcData))) )
         room.setDoors( DOORS.map(doorData => { 
             var { wallSide, positionOfDoor: [xPos, yPos] } = doorData
             let type = GameObjectType[wallSide + "TILE"]
@@ -96,16 +96,19 @@ class RoomFactory {
         // ADD TILES
         for (var i = 0; i < length; i++) {
             for (var j = 0; j < width; j++) {
-                listOfWallsAndTiles-push( this.#objFactory.createGameObject(roomId, { type: GameObjectType.TILE, position: [i, j], variation: tilestyle }) )
+                var newElems = this.#objFactory.createGameObject(roomId, { type: GameObjectType.TILE, position: [i, j], variation: tilestyle })
+                listOfWallsAndTiles = [...listOfWallsAndTiles, ...newElems]
             }
         }
         // ADD LEFT WALLS
         for (var i = 0; i < length; i++) {
-            listOfWallsAndTiles-push( this.#objFactory.createGameObject(roomId, { type: GameObjectType.LEFTWALL, position: [i, -1], variation: wallstyle }) )
+            var newElems = this.#objFactory.createGameObject(roomId, { type: GameObjectType.LEFTWALL, position: [i, -1], variation: wallstyle })
+            listOfWallsAndTiles = [...listOfWallsAndTiles, ...newElems]
         }
         // ADD RIGHT WALLS
         for (var j = 0; j < width; j++) {
-            listOfWallsAndTiles-push( this.#objFactory.createGameObject(roomId, { type: GameObjectType.LEFTWALL, position: [length, j], variation: wallstyle }) )
+            var newElems = this.#objFactory.createGameObject(roomId, { type: GameObjectType.LEFTWALL, position: [length, j], variation: wallstyle })
+            listOfWallsAndTiles = [...listOfWallsAndTiles, ...newElems]
         }
         return listOfWallsAndTiles
     }

@@ -1,7 +1,7 @@
 const TypeChecker = require('../../../client/shared/TypeChecker.js');
 const GameObjectType = require('../../../client/shared/GameObjectType.js');
 const Position = require('../Position.js');
-const OnClickData = require('../onclickdatatypes/OnClickData.js');
+const OnClickData = require('../onclickdatatypes/OnClickDataParent.js');
 
 /**
  * The Game Object Model

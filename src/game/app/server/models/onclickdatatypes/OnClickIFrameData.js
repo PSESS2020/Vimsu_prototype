@@ -1,4 +1,4 @@
-const OnClickData = require("./OnClickData");
+const OnClickDataParent = require("./OnClickDataParent");
 const TypeOfOnClickData  = require("../../../client/shared/TypeOfOnClickData");
 const TypeChecker = require("../../../client/shared/TypeChecker");
 
@@ -8,7 +8,7 @@ const TypeChecker = require("../../../client/shared/TypeChecker");
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class OnClickIFrameData extends OnClickData {
+class OnClickIFrameData extends OnClickDataParent {
 
     #title
     #width
@@ -25,6 +25,7 @@ class OnClickIFrameData extends OnClickData {
      *                        the iFrame
      */
     constructor(title, width, height, url) {
+        super()
         TypeChecker.isString(title)
         TypeChecker.isIntAboveZero(width)
         TypeChecker.isIntAboveZero(height)

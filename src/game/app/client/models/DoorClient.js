@@ -41,7 +41,7 @@ class DoorClient {
             TypeChecker.isNumber(targetRoomId);
 
         this.id = id;
-        this.typeOfDoor = typeOfDoor;
+        this.typeOfDoor = type;
         this.name = name;
         this.mapPosition = new PositionClient(cordX, cordY);
         this.targetRoomId = targetRoomId;

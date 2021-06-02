@@ -36,6 +36,9 @@ const Settings = Object.freeze({
     /* Object constants */
     SMALL_OBJECT_WIDTH: 1,
     SMALL_OBJECT_LENGTH: 1,
+    DEFAULT_OFFSET: { x: 0, y: 0 },
+    LEFTWALL_OFFSET: { x: 0, y: 1 },
+    RIGHTWALL_OFFSET: { x: -1, y: 1 },
 
     /* Avatar constants */
     AVATAR_WIDTH: 64,

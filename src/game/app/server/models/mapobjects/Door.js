@@ -406,8 +406,8 @@ module.exports = class Door {
             id: this.getId(),
             type: this.getTypeOfDoor(),
             name: this.getAssetPath(),
-            cordX: door.getMapPosition().getCordX(),
-            cordY: door.getMapPosition().getCordY(),
+            cordX: this.getMapPosition().getCordX(),
+            cordY: this.getMapPosition().getCordY(),
             targetRoomId: this.getTargetRoomId()
         })
     }

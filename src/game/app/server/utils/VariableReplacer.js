@@ -1,4 +1,4 @@
-const Participant = require("../models/Participant")
+const Participant = require("../models/mapobjects/Participant")
 const Room = require("../models/mapobjects/Room")
 
 /**

@@ -545,7 +545,7 @@ module.exports = class Room {
 
     getState() {
         return Object.freeze({
-            id: this.getId(),
+            id: this.getRoomId(),
             name: this.getRoomName(),
             type: this.getTypeOfRoom(),
             width: this.getWidth(),

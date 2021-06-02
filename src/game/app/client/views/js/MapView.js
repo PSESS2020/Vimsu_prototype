@@ -144,7 +144,7 @@ class MapView extends Views {
      */
     buildMap = function() {
 
-        this.tileIndicator = this.gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tileselected_default", false, false);
+        this.tileIndicator = this.gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), Settings.DEFAULT_OFFSET, "tileselected_default", false);
 
         for (var row = (this.xNumTiles - 1); row >= 0; row--) {
             for (var col = 0; col < this.yNumTiles; col++) {
@@ -192,7 +192,7 @@ class MapView extends Views {
             tile = this.gameObjectViewFactory.createDoorView(tileType, position, mapObject.getName());
         } else {
             tileType = mapObject.getGameObjectType();
-            tile = this.gameObjectViewFactory.createGameMapElementView(tileType, position, mapObject.getName(), mapObject.getIsClickable(), mapObject.getOnClickData(), mapObject.getId())
+            tile = this.gameObjectViewFactory.createGameMapElementView(tileType, position, mapObject.getOffsets(),  mapObject.getName(), mapObject.getIsClickable(), mapObject.getOnClickData(), mapObject.getId())
         }
 
         if (tile != null) {
@@ -213,7 +213,7 @@ class MapView extends Views {
     createObjectView = function(gameObject, position) {
         // TODO
         var objectType = gameObject.getGameObjectType();
-        var objectView = this.gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getName(), gameObject.getIsClickable(), gameObject.getOnClickData(), gameObject.getId());
+        var objectView = this.gameObjectViewFactory.createGameObjectView(objectType, position, gameObject.getOffsets(), gameObject.getName(), gameObject.getIsClickable(), gameObject.getOnClickData(), gameObject.getId());
 
         if (objectView != null) {
             this.gameObjects.push(objectView);

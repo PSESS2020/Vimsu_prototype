@@ -1,4 +1,4 @@
-const OnClickData = require("./OnClickData");
+const OnClickDataParent = require("./OnClickDataParent");
 const TypeOfOnClickData  = require("../../../client/shared/TypeOfOnClickData");
 const Settings = require("../../utils/Settings");
 const ObjectId = require('mongodb').ObjectID;
@@ -15,7 +15,7 @@ const TypeChecker = require("../../../client/shared/TypeChecker");
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class OnClickMeetingData extends OnClickData {
+class OnClickMeetingData extends OnClickDataParent {
 
     #id
     #name
@@ -29,6 +29,7 @@ class OnClickMeetingData extends OnClickData {
      * @param {?String} domain
      */
     constructor(name, domain) {
+        super()
         TypeChecker.isString(name)
         if (domain !== undefinded) { TypeChecker.isString(domain) }
         

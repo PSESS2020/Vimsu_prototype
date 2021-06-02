@@ -114,7 +114,7 @@ class DoorFactory {
      * @param { wallSide:         String,
      *          ?logo:            String, 
      *          positionOfDoor:   int[2],
-     *          positionOnExit:   Array[3],
+     *          ?positionOnExit:  Array[3],
      *          directionOnExit:  Direction,
      *          ?isOpen:          Boolean,
      *          ?closedMessage:   String[],
@@ -123,36 +123,37 @@ class DoorFactory {
      * @returns {Door} A door instance with the passed attributes
      */
     createDoor(creationData) {
-        const { roomId, wallSide, positionOfDoor: [xPos, yPos], positionOnExit: [idExit, xExit, yExit], directionOnExit, codeToOpen } = creationData
-        var { logo, isOpen, closedMessage, isLectureDoor } = creationData
+        const { roomId, wallSide, positionOfDoor: [xPos, yPos], directionOnExit, codeToOpen } = creationData
+        var { positionOnExit, logo, isOpen, closedMessage, isLectureDoor } = creationData
 
         if (isLectureDoor && !Settings.VIDEOSTORAGE_ACTIVATED) { throw new Error("You tried to create a lecture door, but video storage is not activated for this conference!") }
-
-        var enterPositionData;
-        if ( wallSide === GlobalStrings.LEFT ) {
-            enterPositionData = this.#generateEnterPositionsLeftWall(mapPosition);
-        } else if ( wallSide === GlobalStrings.RIGHT ) {
-            enterPositionData = this.#generateEnterPositionsRightWall(mapPosition);
-        } else {
-            throw new Error(`${wallSide} is not a legal option for the wallside of a door.`);
-        }
-
-        if ( isOpen        === undefined ) { isOpen        = true  }
-        if ( closedMessage === undefined ) { closedMessage = Messages.STANDARDDOORCLOSED }
-        if ( isLectureDoor === undefined ) { isLectureDoor = false }
-        if ( logo          === undefined ) { logo          = GlobalStrings.DEFAULT }
+        if ( isOpen         === undefined ) { isOpen        = true  }
+        if ( closedMessage  === undefined ) { closedMessage = Messages.STANDARDDOORCLOSED }
+        if ( isLectureDoor  === undefined ) { isLectureDoor = false }
+        if ( positionOnExit !== undefined ) { var [idExit, xExit, yExit] = positionOnExit }
+        else if ( !isLectureDoor ) { throw new Error("You must define an exit position when creating a non-lecture door!") }
+        if ( logo           === undefined ) { logo          = GlobalStrings.DEFAULT }
 
         const assetPath = this.#getDoorLogo(logo, wallSide)
         const doorPosition = new Position(roomId, xPos, yPos)
         const exitPosition = (!isLectureDoor) ? new Position(idExit, xExit, yExit) : doorPosition
-
-        const { enterPositions, enterPositionWithoutClick } = enterPositionData
         const doorTypeKey = `${wallSide}_${(isLectureDoor) ? "LECTURE" : ""}DOOR`
 
+        var enterPositionData;
+        if ( wallSide === GlobalStrings.LEFT ) {
+            enterPositionData = this.#generateEnterPositionsLeftWall(doorPosition);
+        } else if ( wallSide === GlobalStrings.RIGHT ) {
+            enterPositionData = this.#generateEnterPositionsRightWall(doorPosition);
+        } else {
+            throw new Error(`${wallSide} is not a legal option for the wallside of a door.`);
+        }
+        const { enterPositions, enterPositionWithoutClick } = enterPositionData
+
         // TODO redo
-        let doorIdPrefix = "F" + mapPosition.getRoomId() + "T" + targetPosition.getRoomId();
+        let doorIdPrefix = "F" + doorPosition.getRoomId() + "T" + exitPosition.getRoomId();
         let doorId = doorIdPrefix + '_' + this.#countDoorOccurrences(doorIdPrefix);
         this.#doorIDPrefixList.push(doorIdPrefix);
+        
 
         return new Door(doorId, TypeOfDoor[doorTypeKey], assetPath, doorPosition, enterPositionWithoutClick, enterPositions, exitPosition, directionOnExit, isOpen, closedMessage, codeToOpen)   
     } 

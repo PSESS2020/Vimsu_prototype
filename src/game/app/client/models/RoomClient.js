@@ -256,7 +256,7 @@ class RoomClient {
         TypeChecker.isInstanceOf(occMap, Array);
         TypeChecker.isInstanceOf(doorData, Array);
         TypeChecker.isInstanceOf(occMap, Array);
-        occupationMap.forEach(line => {
+        occMap.forEach(line => {
             TypeChecker.isInstanceOf(line, Array);
             line.forEach(element => {
                 TypeChecker.isInt(element);
@@ -274,7 +274,7 @@ class RoomClient {
         this.assetPaths = assetPaths;
         this.listOfMapElements = [] 
         mapElementData.map( data => {
-            this.listOfMapElements( new GameObjectClient(data) );
+            this.listOfMapElements.push( new GameObjectClient(data) );
             if ( data.isClickable && (data.width > 1 || data.length > 1) ) {
                 this.addDummyClickers(this.listOfMapElements, data)
             }
@@ -291,7 +291,7 @@ class RoomClient {
         this.listOfPPants = [];
         this.width = width;
         this.length = length;
-        this.occupationMap = occupationMap;
+        this.occupationMap = occMap;
 
         this.buildMapArray();
     }
