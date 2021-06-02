@@ -24,7 +24,7 @@
 * {
   margin: 0rem;
   padding: 0rem;
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
   color: var(--white-color);
 }
 
