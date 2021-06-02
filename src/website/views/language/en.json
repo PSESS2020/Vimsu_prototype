@@ -504,8 +504,27 @@
                     "body": "You are no longer a moderator."  
                 }
             },
+            "room": {
+                "unknownCommand": {
+                    "header": "Unrecognized room command",
+                    "body": "You entered an unrecognized command. Enter '\\room' to receive an overview of all room commands and how to use them."
+                },
+                "roomNotFound": {
+                    "header": "Room not found",
+                    "body": "There is no room with the passed ID. Please try again."
+                },
+                "noRoomIDPassed": {
+                    "header": "No room ID passed",
+                    "body": "Don't forget to pass a valid room ID. See all rooms and their ID with '\\room log'."
+                }
+            },
             "msgParts": {
-                "userLogHeader": "List of all active participants"
+                "userLogHeader": "List of all active participants",
+                "room": {
+                    "userLogHeader": "List of all active participants in room roomNamePlaceholder",
+                    "roomLogHeader": "List of all exisiting Rooms",
+                    "roomLogBodyPart": "roomNamePlaceholder has ID roomIDPlaceholder."
+                }
             }
         }
     }

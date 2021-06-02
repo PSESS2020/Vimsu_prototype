@@ -504,8 +504,27 @@
                     "body": "Du bist jetzt kein Moderator mehr."  
                 }
             },
+            "room": {
+                "unknownCommand": {
+                    "header": "Unbekannter Raumbefehl",
+                    "body": "Du hast einen unbekannten Befehl eingegeben. Du kannst '\\room' eingeben, um eine Übersicht über alle verfügbaren Raumbefehle mit Beschreibung zu erhalten."
+                },
+                "roomNotFound": {
+                    "header": "Raum nicht gefunden",
+                    "body": "Es gibt keinen Raum mit dieser ID. Bitte versuche es erneut."
+                },
+                "noRoomIDPassed": {
+                    "header": "Keine Raum-ID übergeben",
+                    "body": "Bitte vergiss nicht, eine Raum-ID zu übergeben. Du kannst dir alle Räume mit ihrer ID mit '\\room log' ansehen."
+                }
+            },
             "msgParts": {
-                "userLogHeader": "Liste aller aktiven Teilnehmer"
+                "userLogHeader": "Liste aller aktiven Teilnehmer",
+                "room": {
+                    "userLogHeader": "Liste aller aktiven Teilnehmer in Raum roomNamePlaceholder",
+                    "roomLogHeader": "Liste aller existierenden Räume",
+                    "roomLogBodyPart": "roomNamePlaceholder hat ID roomIDPlaceholder."
+                }
             }
         }
     }

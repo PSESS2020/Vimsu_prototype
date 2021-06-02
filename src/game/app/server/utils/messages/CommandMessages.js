@@ -196,28 +196,5 @@ module.exports = Object.freeze({
         body: [ "Invalid group port command. Valid commands:",
                 "\\port group <groupname> topos <roomID> <cordX> <cordY>",
                 "\\port group <groupname> touser <username>",]
-    },
-
-    /**************************************************************************/
-    /************************* ROOM ALLCHAT MESSAGES **************************/
-    /**************************************************************************/
-
-    UNKNOWNROOMCOMMAND: {
-        header: "Unrecognized room command",
-        body: "You entered an unrecognized command. Enter '\\room' to receive an overview of all room commands and how to use them."
-    },
-    ROOMNOTFOUND: {
-        header: "Room not found",
-        body: "There is no room with the passed ID. Please try again."
-    },
-    NOROOMIDPASSED: {
-        header: "No room ID passed",
-        body: "Don't forget to pass a valid room ID. See all rooms and their ID with '\\room log'."
-    },
-    PARTICIPANTLOGBYROOM(roomName, usernames) {
-        return {
-            header: "List of all participants in room " + roomName,
-            body: usernames
-        }
-    },
+    }
 });

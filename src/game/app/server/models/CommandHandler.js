@@ -216,7 +216,7 @@ module.exports = class CommandHandler {
                 var commandToExecute = this.#getMethodString(this.#roomCommandList, roomCommandType);
                 this[commandToExecute](socket, context, commandArgs);
             } else {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNROOMCOMMAND);
+                this.#serverController.sendNotification(socket.id, messages.room.unknownCommand);
             }
         }
     }
@@ -464,7 +464,7 @@ module.exports = class CommandHandler {
         
         //no roomID was passed
         if (commandArgs.length < 1) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.NOROOMIDPASSED);
+            this.#serverController.sendNotification(socket.id, messages.room.noRoomIDPassed);
             return;
         }
         
@@ -473,7 +473,7 @@ module.exports = class CommandHandler {
 
         //roomID was passed, but is not valid
         if (room === undefined) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.ROOMNOTFOUND);
+            this.#serverController.sendNotification(socket.id, messages.room.roomNotFound);
             return;
         }
 
@@ -487,7 +487,7 @@ module.exports = class CommandHandler {
         if (allUsernames.length < 1) {
             this.#serverController.sendNotification(socket.id, messages.general.noUsersFound);
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.PARTICIPANTLOGBYROOM(roomName, allUsernames));
+            this.#serverController.sendNotification(socket.id, {header: messages.msgParts.room.userLogHeader.replace('roomNamePlaceholder', roomName), body: allUsernames});
         }
     }
 
@@ -501,13 +501,13 @@ module.exports = class CommandHandler {
      */
     logAllRooms(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
-    
+        const messages = socket.messages;
+
         let rooms = this.#serverController.getRooms();
-        let header = "List of all exisiting Rooms";
+        let header = messages.msgParts.room.roomLogHeader;
         let body = [];
         for (let i = 0; i < rooms.length; i++) {
-        
-            body.splice(0, 0,  rooms[i].getRoomName() + " has ID " +  rooms[i].getRoomId() + ".");
+            body.splice(0, 0,  messages.msgParts.room.roomLogBodyPart.replace('roomNamePlaceholder', rooms[i].getRoomName()).replace('roomIDPlaceholder', rooms[i].getRoomId()));
         }
         this.#serverController.sendNotification(socket.id, { header: header, body: body });
     }
