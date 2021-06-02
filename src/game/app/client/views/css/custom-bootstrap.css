@@ -147,7 +147,8 @@ button:focus {
 
 .modal-dialog {
   max-width: 30rem;
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .modal-dialog-centered {
