@@ -427,6 +427,32 @@
                         "\\msg showallby <list of usernames>\nNimmt eine Liste von Nutzernamen entgegen, jeweils getrennt durch ein Leerzeichen, und zeigt alle Nachrichten an, die diese in den Vortragschat geschrieben haben.", 
                         "\\revoke <list of usernames>\nNimmt eine Liste von Nutzernamen entgegen, jeweils getrennt durch ein Leerzeichen, und nimmt ihnen den Vortragstoken weg (wenn sie gerade dem Vortrag zuhören und den Token besitzen). Sie haben nun nicht mehr die Möglichkeit, in den Vortragschat zu schreiben."]
                 }
+            },
+            "general": {
+                "warning": {
+                    "header": "Warnung",
+                    "body": "Eine deiner Nachrichten wurde von einem Moderator entfernt. Bitte befolge die Chat-Regeln. Weitere Verstöße könnten zu einem permanenten Bann führen."
+                },
+                "unknownCommand": {
+                    "header": "Unbekannter Befehl",
+                    "body": "Du hast einen unbekannte Befehl eingegeben. Du kannst '\\help' eingeben, um eine Übersicht über alle verfügbaren Befehle mit Beschreibung zu erhalten."
+                },
+                "invalidParameters": {
+                    "header": "Ungültige Parameter",
+                    "body": "Ungültige Befehlsparameter. Bitte versuche es erneut. Du kannst dir dir einen Überblick über alle Befehle mit '\\help' beschaffen."
+                },
+                "unknownUsername": {
+                    "header": "Unbekannter Nutzername",
+                    "body": "Der eingegebene Nutzername existiert nicht."
+                },
+                "noUsersFound": {
+                    "header": "Keine Nutzer gefunden",
+                    "body": "Es wurde kein Nutzer gefunden, der deine Suchkriterien erfüllt. Bitte versuche es erneut."
+                },
+                "noUsernamePassed": {
+                    "header": "Keinen Nutzernamen übergeben",
+                    "body": "Bitte vergiss nicht, einen Nutzernamen zu übergeben."
+                }
             }
         }
     }

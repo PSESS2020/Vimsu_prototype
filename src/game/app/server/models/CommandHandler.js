@@ -310,9 +310,6 @@ module.exports = class CommandHandler {
      * @param {String[]} commandArgs command arguments
      */
     removeMessage(socket, context, commandArgs) {
-        // refactor?
-        // can we do something here that we can remove messages both by id and by sender?
-
         this.#checkParamTypes(context, commandArgs);
 
         var criterion;
@@ -334,8 +331,11 @@ module.exports = class CommandHandler {
             }
         }
         toWarn.forEach((senderID) => {
-            this.#serverController.sendNotification(this.#serverController.getSocketId(senderID),
-                CommandMessages.WARNING);
+            let socketID = this.#serverController.getSocketId(senderID);
+            let socketObject = this.#serverController.getSocketObject(socketID);
+            let warningMsgInSenderLanguage = socketObject.languageData.messages.general.warning;
+
+            this.#serverController.sendNotification(socketID, warningMsgInSenderLanguage);
         });
         context.updateMessages();
     };
@@ -434,6 +434,7 @@ module.exports = class CommandHandler {
      */
     logAllParticipants(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.languageData.messages;
         
         let ppants = this.#serverController.getOnlineParticipants();
         let allUsernames = [];
@@ -443,7 +444,7 @@ module.exports = class CommandHandler {
 
         //Should never happen, because at least moderator who executed this command is online
         if (allUsernames.length < 1) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
+            this.#serverController.sendNotification(socket.id, messages.general.noUsersFound);
         } else {
             this.#serverController.sendNotification(socket.id, CommandMessages.PARTICIPANTLOG(allUsernames));
         }
@@ -459,6 +460,7 @@ module.exports = class CommandHandler {
      */
     logAllParticipantsByRoom(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.languageData.messages;
         
         //no roomID was passed
         if (commandArgs.length < 1) {
@@ -483,7 +485,7 @@ module.exports = class CommandHandler {
         } 
 
         if (allUsernames.length < 1) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
+            this.#serverController.sendNotification(socket.id, messages.general.noUsersFound);
         } else {
             this.#serverController.sendNotification(socket.id, CommandMessages.PARTICIPANTLOGBYROOM(roomName, allUsernames));
         }
@@ -906,17 +908,18 @@ module.exports = class CommandHandler {
      */
     modUser(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.languageData.messages;
 
         let username = commandArgs[0];
 
         if (username === undefined) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERNAME)
+            this.#serverController.sendNotification(socket.id, messages.general.noUsernamePassed)
         } else {
             this.#serverController.setModState(username, true).then(res => {
                 if (res) {
                     this.#serverController.sendNotification(socket.id, CommandMessages.SETMOD(username));
                 } else {
-                    this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
+                    this.#serverController.sendNotification(socket.id, messages.general.unknownUsername);
                 }
             });
         }
@@ -932,17 +935,18 @@ module.exports = class CommandHandler {
      */
     unmodUser(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.languageData.messages;
 
         let username = commandArgs[0];
 
         if (username === undefined) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERNAME)
+            this.#serverController.sendNotification(socket.id, messages.general.noUsernamePassed)
         } else {
             this.#serverController.setModState(username, false).then(res => {
                 if (res) {
                     this.#serverController.sendNotification(socket.id, CommandMessages.SETUNMOD(username));
                 } else {
-                    this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNUSERNAME);
+                    this.#serverController.sendNotification(socket.id, messages.general.unknownUsername);
                 }
             });
         }
@@ -958,9 +962,10 @@ module.exports = class CommandHandler {
      */
     async createGroup(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.languageData.messages;
 
         if (commandArgs.length < 3) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDPARAMETERS);
+            this.#serverController.sendNotification(socket.id, messages.general.invalidParameters);
             return;
         }
 
@@ -981,7 +986,7 @@ module.exports = class CommandHandler {
         let unknownUsernames = participantData.unknownUsernames;
         
         if (memberIDs.length < 1) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
+            this.#serverController.sendNotification(socket.id, messages.general.noUsersFound);
             return;
         }
 
@@ -1002,9 +1007,10 @@ module.exports = class CommandHandler {
      */
     deleteGroup(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.languageData.messages;
 
         if (commandArgs.length < 1) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDPARAMETERS);
+            this.#serverController.sendNotification(socket.id, messages.general.invalidParameters);
             return;
         }
 
@@ -1043,9 +1049,10 @@ module.exports = class CommandHandler {
      */
     async addGroupMember(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.languageData.messages;
 
         if (commandArgs.length < 2) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDPARAMETERS);
+            this.#serverController.sendNotification(socket.id, messages.general.invalidParameters);
             return;
         }
 
@@ -1057,7 +1064,7 @@ module.exports = class CommandHandler {
         let unknownUsernames = participantData.unknownUsernames;
 
         if (memberIDs.length < 1) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
+            this.#serverController.sendNotification(socket.id, messages.general.noUsersFound);
             return;
         }
 
@@ -1078,9 +1085,10 @@ module.exports = class CommandHandler {
      */
     async removeGroupMember(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.languageData.messages;
 
         if (commandArgs.length < 2) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDPARAMETERS);
+            this.#serverController.sendNotification(socket.id, messages.general.invalidParameters);
             return;
         }
 
@@ -1092,7 +1100,7 @@ module.exports = class CommandHandler {
         let unknownUsernames = participantData.unknownUsernames;
 
         if (memberIDs.length < 1) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.NOUSERSFOUND);
+            this.#serverController.sendNotification(socket.id, messages.general.noUsersFound);
             return;
         }
 
@@ -1135,7 +1143,8 @@ module.exports = class CommandHandler {
      * @param {SocketIO} socket socket instance
      */
     unknownCommand(socket) {
-        this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNCOMMAND);
+        const messages = socket.languageData.messages;
+        this.#serverController.sendNotification(socket.id, messages.general.unknownCommand);
     }
 
     /**

@@ -427,6 +427,32 @@
                         "\\msg showallby <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and displays all messages send into the chat by these users.", 
                         "\\revoke <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and revokes their lecture tokens (if they own one). They will no longer be able to post messages into the lecture chat."]
                 }
+            },
+            "general": {
+                "warning": {
+                    "header": "Warning",
+                    "body": "One of your messages was removed by a moderator. Please follow the general chat etiquette. Additional infractions may result in a permanent ban."
+                },
+                "unknownCommand": {
+                    "header": "Unrecognized command",
+                    "body": "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
+                },
+                "invalidParameters": {
+                    "header": "Invalid parameters",
+                    "body": "Invalid command parameters. Please try again and check all commands with '\\help'."
+                },
+                "unknownUsername": {
+                    "header": "Unknown username",
+                    "body": "Entered username does not exist."
+                },
+                "noUsersFound": {
+                    "header": "No users found",
+                    "body": "No users were found with this search criterion. Please try again."
+                },
+                "noUsernamePassed": {
+                    "header": "No username passed",
+                    "body": "Don't forget to pass a username!"
+                }
             }
         }
     }

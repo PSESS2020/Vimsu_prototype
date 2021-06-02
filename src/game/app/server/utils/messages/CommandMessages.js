@@ -10,37 +10,6 @@ const MessageBodyParts = require('./MessageBodyParts.js');
 module.exports = Object.freeze({
 
     /**************************************************************************/
-    /************************** GENERAL MESSAGES ******************************/
-    /**************************************************************************/
-
-    WARNING: {
-        header: "Warning",
-        body: "One of your messages was removed by a moderator. Please follow the " +
-              "general chat etiquette. Additional infractions may result in a permanent " +
-              "ban."
-    },
-    UNKNOWNCOMMAND: {
-        header: "Unrecognized command",
-        body: "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
-    },
-    INVALIDPARAMETERS: {
-        header: "Invalid parameters",
-        body: "Invalid command parameters. Please try again and check all commands with '\\help'."
-    },
-    UNKNOWNUSERNAME: {
-        header: "Unknown username",
-        body: "Entered username does not exist or user with that username is currently not online."
-    },
-    NOUSERSFOUND: {
-        header: "No users found",
-        body: "No users were found with this search criterion. Please try again."
-    }, 
-    NOUSERNAME: {
-        header: "No username passed",
-        body: "Don't forget to pass a username!"
-    },
-
-    /**************************************************************************/
     /************************ LECTURECHAT MESSAGES ****************************/
     /**************************************************************************/
 
