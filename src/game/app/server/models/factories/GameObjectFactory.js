@@ -6,6 +6,11 @@ const GlobalStrings = require('../../../client/shared/GlobalStrings.js');
 const OnClickEmptyData = require('../onclickdatatypes/OnClickEmptyData.js');
 const OnClickIFrameData = require('../onclickdatatypes/OnClickIFrameData.js');
 const TypeOfOnClickData = require('../../../client/shared/TypeOfOnClickData.js');
+const OnClickMeetingData = require('../onclickdatatypes/OnClickMeetingData.js');
+const TypeChecker = require('../../../client/shared/TypeChecker.js');
+const OnClickScheduleData = require('../onclickdatatypes/OnClickScheduleData.js');
+const OnClickDataConstructors = require('../../utils/OnClickDataConstructors.js');
+const Settings = require('../../utils/Settings.js');
 
 /**
  * The Game Object Factory
@@ -46,17 +51,13 @@ class GameObjectFactory {
     }
 
     #onClickDataAlternateMode = function (objData) {
-        const typesToCheck = Object.values(TypeOfOnClickData)
-        const keysToCheck = Object.keys(objData).map(key => key.toLowerCase)
-        const { iFrameData, story } = objData;
-        if ( iFrameData !== undefined ) {
-            const { title, width, height, url } = iFrameData
-            return new OnClickIFrameData(title, width, height, url)
-        } else if ( story !== undefined) {
-
-        } else {
-            return new OnClickEmptyData();
+        for (onClickType of Object.values(TypeOfOnClickData)) {
+            if (objData.hasOwnProperty(onClickType)) {
+                let data = objData[onClickType]
+                return OnClickDataConstructors[onClickType](data) 
+            }
         }
+        return new OnClickEmptyData()
     }
 
     /**
@@ -99,6 +100,11 @@ class GameObjectFactory {
             onClickData = new OnClickEmptyData()
         } else if (isClickable === true && onClickData === undefined) {
             onClickData = this.#onClickDataAlternateMode(objData)
+            if (onClickData instanceof OnClickEmptyData) { isClickable = false }
+        }
+
+        if (onClickData instanceof OnClickScheduleData && !Settings.VIDEOSTORAGE_ACTIVATED) {
+            throw new Error("You added an object to the floorplan that was supposed to open the schedule when clicked, but video storage isn't activated for this conference.")
         }
 
         if (variation === undefined) { variation = GlobalStrings.DEFAULT }

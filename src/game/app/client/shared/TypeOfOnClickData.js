@@ -5,10 +5,10 @@
  * @version 1.0.0
  */
 const TypeOfOnClickData = Object.freeze({
-    IFRAME: "IFRAMEDATA",
-    STORY: "STORY",
-    MEETING: "MEETING",
-    SCHEDULE: "SCHEDULE",
+    IFRAME: "IFrameData",
+    STORY: "StoryData",
+    MEETING: "MeetingData",
+    SCHEDULE: "isSchedule",
     EMPTY: "EMPTY",
 });
 

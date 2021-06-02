@@ -124,7 +124,7 @@ const Floorplan = Object.freeze({
     /**  Since game objects can also be map elements, everything from the    **/
     /**  above section still holds true. However, since game objects can be  **/
     /**  made clickable, they offer additional options.                      **/
-    /**  Objects can either display a text message (story) or an iFrame (an  **/
+    /**  Objects can either display a text message (StoryData) or an iFrame (an  **/
     /**  external website openend inside of the app) on click.               **/
     /**  If both are defined, the iFrame takes precedence.                   **/
     /**                                                                      **/
@@ -136,7 +136,7 @@ const Floorplan = Object.freeze({
     /**                             #   width: <Integer>,  (in pixel)        **/
     /**                             #   height: <Integer>  (in pixel)        **/
     /**                             # Any additonal value is ignored.        **/
-    /**    story: <String[]>        # Each array entry gets its own textbox. **/
+    /**    StoryData: <String[]>        # Each array entry gets its own textbox. **/
     /**                                                                      **/
     /**  NOTE You can add a selection of variables to the iFrameData.url     **/
     /**       Any occurence of '$name', '$username' or '$room' will be       **/
@@ -266,7 +266,7 @@ const Floorplan = Object.freeze({
             {type: GameObjectType.PICTUREFRAME, position: [25, 14]}
         ],
         OBJECTS: [
-            {type: GameObjectType.PLANT, position: [24, 0], isClickable: true, story: ["I'm a plant.", "Please do not touch me.", "My precious leaves!"]},
+            {type: GameObjectType.PLANT, position: [24, 0], isClickable: true, StoryData: ["I'm a plant.", "Please do not touch me.", "My precious leaves!"]},
             {type: GameObjectType.SOFA, position: [[22, 0], [23, 0]], variation: 0},
             {type: GameObjectType.SOFA, position: [24, [1, 2, 3, 4, 5]], variation: 1}
         ],
