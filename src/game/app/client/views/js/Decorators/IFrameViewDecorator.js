@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
- class IFrameViewDecorator {
+class IFrameViewDecorator {
     /**
      * @static Takes an object view instance and adds the required
      *         functionality to properly display an iFrame on click.
@@ -26,4 +26,8 @@
             })
         } else { console.log(`Object ${viewObject.getName()} with id ${viewObject.getGameObjectID()} has already been decorated.`) }
     }
+}
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = IFrameViewDecorator;
 }

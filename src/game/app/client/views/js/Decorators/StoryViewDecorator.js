@@ -38,3 +38,7 @@
         } else { console.log(`Object ${viewObject.getName()} with id ${viewObject.getGameObjectID()} has already been decorated.`) }
     } 
 }
+
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = StoryViewDecorator;
+}

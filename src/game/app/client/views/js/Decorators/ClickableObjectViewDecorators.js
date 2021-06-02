@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-const ClickableObjectViewCreators = Object.freeze({
+const ClickableObjectViewDecorators = Object.freeze({
     [TypeOfOnClickData.IFRAME] (creationData) {
         const { gameObjectImage, clickMap, pos, offset, objectName, gameObjectID, eventManager } = creationData
         return new IFrameObjectView( gameObjectImage, clickMap, pos, offset, objectName, gameObjectID, eventManager )
@@ -34,7 +34,7 @@ const ClickableObjectViewCreators = Object.freeze({
 })
 
 if (typeof module === 'object' && typeof exports === 'object') {
-    module.exports = ClickableObjectViewCreators;
+    module.exports = ClickableObjectViewDecorators;
 }
 
 
