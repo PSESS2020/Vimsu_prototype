@@ -20,7 +20,7 @@
      *                         that will be opened on click.
      * @param {EventManager} eventManager event manager instance
      */
-    constructor(objectImage, clickMap, gridPosition, screenPositionOffset, name, meeting, eventManager) {
+    constructor(objectImage, clickMap, gridPosition, screenPositionOffset, name, gameObjectID, meeting, eventManager) {
         super(objectImage, clickMap, gridPosition, screenPositionOffset, name);
         TypeChecker.isInstanceOf(meeting, Object);
         TypeChecker.isString(meeting.id);
@@ -28,6 +28,7 @@
         TypeChecker.isString(meeting.name);
         TypeChecker.isString(meeting.password);
 
+        this.gameObjectID = gameObjectID;
         this.meeting = meeting;
         this.eventManager = eventManager;
     }
@@ -37,8 +38,17 @@
      * 
      * @returns {number} IFrame object ID
      */
-     getGameObjectMeeting() {
+    getGameObjectMeeting() {
         return this.meeting;
+    }
+
+    /**
+     * Returns IFrame object ID
+     * 
+     * @returns {number} IFrame object ID
+     */
+    getGameObjectID() {
+        return this.gameObjectID;
     }
 
     /**

@@ -31,7 +31,7 @@ class OnClickMeetingData extends OnClickDataParent {
     constructor(name, domain) {
         super()
         TypeChecker.isString(name)
-        if (domain !== undefinded) { TypeChecker.isString(domain) }
+        if (domain !== undefined) { TypeChecker.isString(domain) }
         
         this.#id = new ObjectId().toHexString()
         this.#name = name

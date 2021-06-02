@@ -32,7 +32,7 @@ class IFrameObjectView extends GameObjectView {
      * 
      * @returns {number} IFrame object ID
      */
-     getGameObjectID() {
+    getGameObjectID() {
         return this.gameObjectID;
     }
 

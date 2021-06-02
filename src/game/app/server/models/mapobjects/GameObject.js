@@ -160,7 +160,7 @@ module.exports = class GameObject {
     }
 
     getIFrameData() {
-        if ( 'getIFrameData' in this.#onClickData ) { this.#onClickData.getIFrameData() }
+        if ( 'getIFrameData' in this.#onClickData ) { return this.#onClickData.getIFrameData() }
         else { throw new Error("Tried to call getIFrameData() on none-IFrame GameObject instance. Please report this error to the developers.") }
     }
 

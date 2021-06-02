@@ -1801,6 +1801,7 @@ module.exports = class ServerController {
 
                 let iFrameData = gameObject.getIFrameData();
 
+                /*
                 iFrameData.url = iFrameData.url.replaceAll(Settings.VARREGEX, match => {
                     // We remove the $ from the beginning of the match and
                     // cast it to lower case to turn it into the name of
@@ -1808,6 +1809,7 @@ module.exports = class ServerController {
                     let varToReplace = match.substring(1).toLowerCase();
                     return VariableReplacer[varToReplace](ppant, currentRoom)
                 })
+                */
 
         
                 socket.emit('showExternalWebsite', iFrameData, gameObjectID);

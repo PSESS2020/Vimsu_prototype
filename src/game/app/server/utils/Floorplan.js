@@ -3,6 +3,10 @@ const GameObjectType = require('../../client/shared/GameObjectType');
 const GlobalStrings = require('../../client/shared/GlobalStrings');
 const TypeOfRoom = require('../../client/shared/TypeOfRoom');
 const DoorClosedMessages = require('./messages/DoorClosedMessages');
+const OnClickStoryData = require('../models/onclickdatatypes/OnClickStoryData')
+const OnClickScheduleData = require('../models/onclickdatatypes/OnClickScheduleData')
+const OnClickMeetingData = require('../models/onclickdatatypes/OnClickMeetingData')
+const OnClickIFrameData = require('../models/onclickdatatypes/OnClickIFrameData')
 const NPCDialog = require('./NPCDialog');
 const Settings = require('./' + process.env.SETTINGS_FILENAME);
 
@@ -261,12 +265,16 @@ const Floorplan = Object.freeze({
         MAPELEMENTS: [
             {type: GameObjectType.LEFTSCHEDULE, position: [5, -1], isClickable: Settings.VIDEOSTORAGE_ACTIVATED},
             {type: GameObjectType.LEFTWINDOW, position: [[22, -1], [23, -1], [24, -1]]},
+            {type: GameObjectType.LEFTWINDOW, position: [19, -1], isClickable: true, onClickData: new OnClickStoryData(["Wow!", "The possiblities!"])},
+            {type: GameObjectType.LEFTWINDOW, position: [20, -1], isClickable: true, StoryData: ["Hmm...", "Somehow, the view is better from the one on the right."]},
             {type: GameObjectType.RIGHTWINDOW, position: [[25, 0], [25, 1], [25, 2], [25, 3], [25, 4], [25, 5], [25, 23]]},
             {type: GameObjectType.CONFERENCELOGO, position: [13, -1]},
             {type: GameObjectType.PICTUREFRAME, position: [25, 14]}
         ],
         OBJECTS: [
             {type: GameObjectType.PLANT, position: [24, 0], isClickable: true, StoryData: ["I'm a plant.", "Please do not touch me.", "My precious leaves!"]},
+            {type: GameObjectType.PLANT, position: [13, 13], isClickable: true, onClickData: new OnClickMeetingData("test meeting fsdf fafdsfdsfdsf", "https://meet.jit.si/")},
+            {type: GameObjectType.PLANT, position: [20, 20], isClickable: true, MeetingData: {name: "another test meeting fdsfdffsaffda", domain: "https://meet.jit.si/"}},
             {type: GameObjectType.SOFA, position: [[22, 0], [23, 0]], variation: 0},
             {type: GameObjectType.SOFA, position: [24, [1, 2, 3, 4, 5]], variation: 1}
         ],
@@ -336,7 +344,8 @@ const Floorplan = Object.freeze({
         MAPELEMENTS: [],
         OBJECTS: [
             {type: GameObjectType.PLANT, position: [[14, 0], [14, 19]]},
-            {type: GameObjectType.PLANT, position: [0, 2], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }},
+            {type: GameObjectType.PLANT, position: [0, 2], isClickable: true,
+                onClickData: new OnClickIFrameData("KIT", 750, 500, "https://www.kit.edu")},
             {type: GameObjectType.SMALLTABLE, position: [0, 0], isClickable: true, iFrameData: {title: "Binary", url: "https://media.lehr-lern-labor.info/workshops/binary/", width: 600, height: 300 }},
             {type: GameObjectType.SMALLTABLE, position: [0, 1]},
             {type: GameObjectType.TEA, position: [0, 1], isClickable: true, iFrameData: {title: "KIT", url: "https://www.kit.edu/", width: 750, height: 500 }},
