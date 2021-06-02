@@ -1928,10 +1928,12 @@ module.exports = class ServerController {
                     return;
                 }
 
+                const messages = socket.messages;
+
                 if (door.enterCodeToOpen(ppantID, enteredCode)) {
-                    this.sendNotification(socket.id, CommandMessages.CORRECTCODE);
+                    this.sendNotification(socket.id, messages.door.correctCode);
                 } else {
-                    this.sendNotification(socket.id, CommandMessages.WRONGCODE);
+                    this.sendNotification(socket.id, messages.door.wrongCode);
                 }
             });
 

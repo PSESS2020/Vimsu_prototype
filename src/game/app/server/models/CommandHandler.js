@@ -108,7 +108,7 @@ module.exports = class CommandHandler {
                 var commandToExecute = this.#getMethodString(this.#doorCommandList, doorCommandType);
                 this[commandToExecute](socket, context, commandArgs);
             } else {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORCOMMAND);
+                this.#serverController.sendNotification(socket.id, messages.door.unknownCommand);
             }
         }
     }
@@ -522,9 +522,10 @@ module.exports = class CommandHandler {
      */
     logAllDoors(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.messages;
 
         let rooms = this.#serverController.getRooms();
-        let header = "List of all exisiting Doors";
+        let header = messages.msgParts.door.doorLogHeader;
         let body = [];
         for (let i = 0; i < rooms.length; i++) {
             let room = rooms[i];
@@ -537,16 +538,32 @@ module.exports = class CommandHandler {
                         targetRoomName = rooms[k].getRoomName();
                     }
                 }
-                body.splice(0, 0,  "Door in " + room.getRoomName() + 
-                ((doors[j].isLectureDoor()) ? (" is a LectureDoor and") : (" to " + targetRoomName))
-                + " has ID " +  doors[j].getId() + ". Door is currently " + 
-                ((doors[j].isOpen()) ? "open" : "closed") + 
-                ((doors[j].hasCodeToOpen()) ? (" and has code " + doors[j].getCodeToOpen() + " to open it.") : (" and has no code to open it.")));
+                if (doors[j].isLectureDoor()) {
+                    if (doors[j].hasCodeToOpen()) {
+                        var bodyPart = messages.msgParts.door.doorLogBodyPartLectureDoorWithCode.replace('roomNamePlaceholder', room.getRoomName()).replace(
+                            'doorIDPlaceholder', doors[j].getId()).replace('openStatusPlaceholder', (doors[j].isOpen() ? messages.msgParts.door.open : messages.msgParts.door.closed)).replace(
+                            'codePlaceholder', doors[j].getCodeToOpen());
+                    } else {
+                        var bodyPart = messages.msgParts.door.doorLogBodyPartLectureDoorNoCode.replace('roomNamePlaceholder', room.getRoomName()).replace(
+                            'doorIDPlaceholder', doors[j].getId()).replace('openStatusPlaceholder', (doors[j].isOpen() ? messages.msgParts.door.open : messages.msgParts.door.closed))
+                    }
+                } else {
+                    if (doors[j].hasCodeToOpen()) {
+                        var bodyPart = messages.msgParts.door.doorLogBodyPartNormalDoorWithCode.replace('roomName1Placeholder', room.getRoomName()).replace(
+                            'doorIDPlaceholder', doors[j].getId()).replace('openStatusPlaceholder', (doors[j].isOpen() ? messages.msgParts.door.open : messages.msgParts.door.closed)).replace(
+                            'codePlaceholder', doors[j].getCodeToOpen()).replace('roomName2Placeholder', targetRoomName);
+                    } else {
+                        var bodyPart = messages.msgParts.door.doorLogBodyPartNormalDoorNoCode.replace('roomName1Placeholder', room.getRoomName()).replace(
+                            'doorIDPlaceholder', doors[j].getId()).replace('openStatusPlaceholder', (doors[j].isOpen() ? messages.msgParts.door.open : messages.msgParts.door.closed)).replace(
+                            'roomName2Placeholder', targetRoomName);
+                    }
+                }
+                body.splice(0, 0, bodyPart);
             }
         }
 
         if (body.length < 1) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.NODOORS);
+            this.#serverController.sendNotification(socket.id, messages.door.noDoors);
         } else {
             this.#serverController.sendNotification(socket.id, { header: header, body: body });
         }
@@ -562,6 +579,7 @@ module.exports = class CommandHandler {
      */
     closeDoor(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.messages;
 
         let doorID = commandArgs[0];
         let door = this.#serverController.getDoorByID(doorID);
@@ -573,9 +591,11 @@ module.exports = class CommandHandler {
         }
 
         if (closed) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.CLOSEDDOORFORALL(doorID));
+            let msg = JSON.parse(JSON.stringify(messages.door.closedDoorForAll));
+            msg.body = msg.body.replace('doorIDPlaceholder', doorID);
+            this.#serverController.sendNotification(socket.id, msg);
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORID);
+            this.#serverController.sendNotification(socket.id, messages.door.unknownDoorID);
         }
     }
 
@@ -589,6 +609,7 @@ module.exports = class CommandHandler {
      */
     openDoor(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.messages;
 
         let doorID = commandArgs[0];
         let door = this.#serverController.getDoorByID(doorID);
@@ -600,9 +621,11 @@ module.exports = class CommandHandler {
         }
 
         if (opened) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.OPEPNEDDOORFORALL(doorID));
+            let msg = JSON.parse(JSON.stringify(messages.door.openedDoorForAll));
+            msg.body = msg.body.replace('doorIDPlaceholder', doorID);
+            this.#serverController.sendNotification(socket.id, msg);
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORID);
+            this.#serverController.sendNotification(socket.id, messages.door.unknownDoorID);
         }
     }
 
@@ -616,6 +639,7 @@ module.exports = class CommandHandler {
      */
     closeDoorFor(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.messages;
 
         let doorID = commandArgs[0];
         let usernames = commandArgs.slice(1);
@@ -635,9 +659,13 @@ module.exports = class CommandHandler {
         }
 
         if (closed) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.CLOSEDDOOR(doorID, unknownUsernames));
+            let msg = JSON.parse(JSON.stringify(messages.door.closedDoor));
+            msg.body = msg.body.replace('doorIDPlaceholder', doorID) + (unknownUsernames.length > 0 
+                ? messages.msgParts.usersThatWereNotFound + unknownUsernames
+                : "");
+            this.#serverController.sendNotification(socket.id, msg);
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORID);
+            this.#serverController.sendNotification(socket.id, messages.door.unknownDoorID);
         }
     }
 
@@ -651,6 +679,7 @@ module.exports = class CommandHandler {
      */
     openDoorFor(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.messages;
 
         let doorID = commandArgs[0];
         let usernames = commandArgs.slice(1);
@@ -670,9 +699,13 @@ module.exports = class CommandHandler {
         }
 
         if (opened) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.OPEPNEDDOOR(doorID, unknownUsernames));
+            let msg = JSON.parse(JSON.stringify(messages.door.openedDoor));
+            msg.body = msg.body.replace('doorIDPlaceholder', doorID) + (unknownUsernames.length > 0 
+                ? messages.msgParts.usersThatWereNotFound + unknownUsernames
+                : "");
+            this.#serverController.sendNotification(socket.id, msg);
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORID);
+            this.#serverController.sendNotification(socket.id, messages.door.unknownDoorID);
         }
     }
 
@@ -686,6 +719,7 @@ module.exports = class CommandHandler {
      */
     closeAllDoorsFor(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.messages;
 
         let usernames = commandArgs;
 
@@ -701,7 +735,11 @@ module.exports = class CommandHandler {
             });
         });
 
-        this.#serverController.sendNotification(socket.id, CommandMessages.CLOSEDALLDOORS(unknownUsernames))
+        let msg = JSON.parse(JSON.stringify(messages.door.closedAllDoorsFor));
+        msg.body = msg.body + (unknownUsernames.length > 0 
+            ? messages.msgParts.usersThatWereNotFound + unknownUsernames
+            : "");
+        this.#serverController.sendNotification(socket.id, msg);
     }
 
     /**
@@ -714,6 +752,7 @@ module.exports = class CommandHandler {
      */
     openAllDoorsFor(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.messages;
 
         let usernames = commandArgs;
    
@@ -729,7 +768,11 @@ module.exports = class CommandHandler {
             });
         });
 
-        this.#serverController.sendNotification(socket.id, CommandMessages.OPENEDALLDOORS(unknownUsernames))
+        let msg = JSON.parse(JSON.stringify(messages.door.openedAllDoorsFor));
+        msg.body = msg.body + (unknownUsernames.length > 0 
+            ? messages.msgParts.usersThatWereNotFound + unknownUsernames
+            : "");
+        this.#serverController.sendNotification(socket.id, msg);
     }
 
     /**
@@ -742,6 +785,7 @@ module.exports = class CommandHandler {
      */
     setDoorCode(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.messages;
 
         let doorID = commandArgs[0];
         let code = commandArgs[1];
@@ -751,12 +795,14 @@ module.exports = class CommandHandler {
         if (door !== undefined) {
             if (code !== undefined) {
                 door.setCodeToOpen(code);
-                this.#serverController.sendNotification(socket.id, CommandMessages.SETCODE(doorID, code));
+                let msg = JSON.parse(JSON.stringify(messages.door.setDoorCode));
+                msg.body = msg.body.replace('doorIDPlaceholder', doorID).replace('codePlaceholder', code);
+                this.#serverController.sendNotification(socket.id, msg);
             } else {
-                this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDDOORCODE);
+                this.#serverController.sendNotification(socket.id, messages.door.invalidDoorCode);
             }
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNDOORID);
+            this.#serverController.sendNotification(socket.id, messages.door.unknownDoorID);
         }
     }
 
@@ -917,7 +963,7 @@ module.exports = class CommandHandler {
         } else {
             this.#serverController.setModState(username, true).then(res => {
                 if (res) {
-                    let msg = messages.mod.modSet;
+                    let msg = JSON.parse(JSON.stringify(messages.mod.modSet));
                     msg.body = msg.body.replace('usernamePlaceholder', username);
                     this.#serverController.sendNotification(socket.id, msg);
                 } else {
@@ -946,7 +992,7 @@ module.exports = class CommandHandler {
         } else {
             this.#serverController.setModState(username, false).then(res => {
                 if (res) {
-                    let msg = messages.mod.unmodSet;
+                    let msg = JSON.parse(JSON.stringify(messages.mod.unmodSet));
                     msg.body = msg.body.replace('usernamePlaceholder', username);
                     this.#serverController.sendNotification(socket.id, msg);
                 } else {

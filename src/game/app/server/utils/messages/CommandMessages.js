@@ -1,5 +1,3 @@
-const MessageBodyParts = require('./MessageBodyParts.js');
-
 /**
  * Messages that will be emitted from a command input by a moderator/orator
  * @module CommandMessages
@@ -8,77 +6,6 @@ const MessageBodyParts = require('./MessageBodyParts.js');
  * @version 1.0.0
  */
 module.exports = Object.freeze({
-
-    /**************************************************************************/
-    /************************* DOOR ALLCHAT MESSAGES **************************/
-    /**************************************************************************/
-
-    UNKNOWNDOORCOMMAND: {
-        header: "Unrecognized door command",
-        body: "You entered an unrecognized command. Enter '\\door' to receive an overview of all door commands and how to use them."
-    },
-    UNKNOWNDOORID: {
-        header: "Unknown Door ID",
-        body: "You entered a wrong DoorID. Please check it again with '\\door log'."
-    },
-    INVALIDDOORCODE: {
-        header: "Invalid Door Code", 
-        body: "Don't forget to pass a valid door code!"
-    },
-    OPEPNEDDOOR(doorID) {
-        return {
-            header: "Successfully opened door",
-            body: "You successfully opened the door with the ID " + doorID + " for all passed users."
-        }
-    },
-    CLOSEDDOOR(doorID, unknownUsernames) {
-        return {
-            header: "Successfully closed door",
-            body: "You successfully closed the door with the ID " + doorID + " for all passed users." + MessageBodyParts.unknownUsernamesMessage(unknownUsernames)
-        }
-    },
-    OPEPNEDDOORFORALL(doorID) {
-        return {
-            header: "Successfully opened door",
-            body: "You successfully opened the door with the ID " + doorID + " for all users."
-        }
-    },
-    CLOSEDDOORFORALL(doorID) {
-        return {
-            header: "Successfully closed door",
-            body: "You successfully closed the door with the ID " + doorID + " for all users."
-        }
-    },
-    CLOSEDALLDOORS(unknownUsernames) {
-        return {
-            header: "Successfully closed all doors",
-            body: "You successfully closed all doors for all passed users." + MessageBodyParts.unknownUsernamesMessage(unknownUsernames)
-        }
-    },
-    OPENEDALLDOORS(unknownUsernames) {
-        return {
-            header: "Successfully opened all doors",
-            body: "You successfully opened all doors for all passed users."  + MessageBodyParts.unknownUsernamesMessage(unknownUsernames)
-        }
-    },
-    NODOORS: {
-        header: "No doors available",
-        body: "There is either no room with this ID or there are no doors."
-    },
-    SETCODE(doorID, code) {
-        return {
-            header: "Code set successfully",
-            body: "You successfully set the door code of the door with the ID " + doorID + " to " + code + "."
-        }
-    },
-    CORRECTCODE: {
-        header: "Code was correct!",
-        body: "The code you entered was correct! The door is now open for you."
-    },
-    WRONGCODE: {
-        header: "Code was wrong!",
-        body: "The code you entered was wrong! Try again."
-    },
 
     /**************************************************************************/
     /************************* GROUP ALLCHAT MESSAGES *************************/

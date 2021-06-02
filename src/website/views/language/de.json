@@ -518,13 +518,77 @@
                     "body": "Bitte vergiss nicht, eine Raum-ID zu übergeben. Du kannst dir alle Räume mit ihrer ID mit '\\room log' ansehen."
                 }
             },
+            "door": {
+                "unknownCoomand": {
+                    "header": "Unbekannter Türbefehl",
+                    "body": "Du hast einen unbekannten Befehl eingegeben. Du kannst '\\door' eingeben, um eine Übersicht über alle verfügbaren Türbefehle mit Beschreibung zu erhalten."
+                },
+                "unknownDoorID": {
+                    "header": "Unbekannte Tür-ID",
+                    "body": "Du hast eine falsche Tür-ID eingegeben. Du kannst dir alle Tür-IDs mit '\\door log' ausgeben lassen."
+                },
+                "invalidDoorCode": {
+                    "header": "Ungültiger Tür-Code", 
+                    "body": "Bitte vergiss nicht, einen gültigen Tür-Code zu übergeben."
+                },
+                "openedDoor": {
+                    "header": "Tür erfolgreich geöffnet",
+                    "body": "Du hast die Tür mit ID doorIDPlaceholder für alle übergebenen Nutzernamen erfolgreich geöffnet."
+                },
+                "closedDoor": {
+                    "header": "Tür erfolgreich geschlossen",
+                    "body": "Du hast die Tür mit ID doorIDPlaceholder für alle übergebenen Nutzernamen erfolgreich geschlossen." 
+                },
+                "openedDoorForAll": {
+                    "header": "Tür erfolgreich geöffnet",
+                    "body": "Du hast die Tür mit ID doorIDPlaceholder für alle Nutzer erfolgreich geöffnet."
+                },
+                "closedDoorForAll": {
+                    "header": "Tür erfolgreich geschlossen",
+                    "body": "Du hast die Tür mit ID doorIDPlaceholder für alle Nutzer erfolgreich geschlossen."
+                },
+                "closedAllDoorsFor": {
+                    "header": "Alle Türen erfolgreich geschlossen",
+                    "body": "Du hast alle Türen für alle Nutzer erfolgreich geschlossen." 
+                },
+                "openedAllDoorsFor": {
+                    "header": "Alle Türen erfolgreich geöffnet",
+                    "body": "Du hast alle Türen für alle Nutzer erfolgreich geöffnet."
+                },
+                "noDoors": {
+                    "header": "Keine Türen verfügbar",
+                    "body": "Es gibt entweder keinen Raum mit dieser ID oder keine Türen."
+                },
+                "setDoorCode": {
+                    "header": "Code erfolgreich gesetzt",
+                    "body": "Du hast den Tür-Code der Tür mit der ID doorIDPlaceholder erfolgreich zu codePlaceholder geändert."
+                },
+                "correctCode": {
+                    "header": "Code war korrekt!",
+                    "body": "Der von dir eingegebene Code war korrekt! Die Tür ist jetzt für dich geöffnet."
+                },
+                "wrongCode": {
+                    "header": "Falscher Code",
+                    "body": "Der von dir eingegebene Code war leider falsch. Bitte versuche es erneut."
+                }
+            },
             "msgParts": {
                 "userLogHeader": "Liste aller aktiven Teilnehmer",
                 "room": {
                     "userLogHeader": "Liste aller aktiven Teilnehmer in Raum roomNamePlaceholder",
                     "roomLogHeader": "Liste aller existierenden Räume",
                     "roomLogBodyPart": "roomNamePlaceholder hat ID roomIDPlaceholder."
-                }
+                },
+                "door": {
+                    "doorLogHeader": "Liste aller existierenden Türen",
+                    "doorLogBodyPartLectureDoorWithCode": "Tür in roomNamePlaceholder ist eine LectureDoor und hat die ID doorIDPlaceholder. Die Tür ist gerade openStatusPlaceholder und hat den Code codePlaceholder um sie zu öffnen.",
+                    "doorLogBodyPartLectureDoorNoCode": "Tür in roomNamePlaceholder ist eine LectureDoor und hat die ID doorIDPlaceholder. Die Tür ist gerade openStatusPlaceholder und hat keinen Code um sie zu öffnen.",
+                    "doorLogBodyPartNormalDoorWithCode": "Tür in roomName1Placeholder zu roomName2Placeholder hat die ID doorIDPlaceholder. Die Tür is gerade openStatusPlaceholder und hat den Code codePlaceholder um sie zu öffnen.",
+                    "doorLogBodyPartNormalDoorNoCode": "Tür in roomName1Placeholder zu roomName2Placeholder hat die ID doorIDPlaceholder. Die Tür ist gerade openStatusPlaceholder und hat keinen Code um sie zu öffnen.",
+                    "closed": "verschlossen",
+                    "open": "geöffnet"
+                },
+                "usersThatWereNotFound": " Nutzer die nicht gefunden wurden: "
             }
         }
     }
