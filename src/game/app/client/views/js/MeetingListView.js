@@ -92,15 +92,11 @@ class MeetingListView extends WindowView {
             <li class="list-group-item bg-transparent chatthread px-0" id="${"meetingEntry" + meeting.id}">
                 <a class="" title="${this.languageData.tooltips.openMeeting}" id="${"meeting" + meeting.id}" role="button" data-toggle="modal" href="">
                     <div class="d-flex flex-row align-items-center">
-                        <div class="col-2 pr-0 my-auto">
-                            <div class="d-flex flex-row justify-content-center align-items-center">
-                                <i class="fa fa-video fa-5x navbarIcons"></i>
-                            </div>
+                        <div class="col-1 px-0">
+                            <i class="fa fa-video fa-2x navbarIcons" style="margin-left: 0.3125rem" ></i>
                         </div>
-                        <div class="col-10 pl-3">
-                            <div class="d-flex flex-row justify-content-start align-items-center">
-                                <span class="name lead text-truncate mr-3" title="${meeting.name}" data-toggle="tooltip">${meeting.name}</span>
-                            </div>
+                        <div class="d-flex col-11 align-items-center text-left">
+                            <span class="name lead text-truncate" title="${meeting.name}" data-toggle="tooltip">${meeting.name}</span>
                         </div>
                     </div>
                 </a>
