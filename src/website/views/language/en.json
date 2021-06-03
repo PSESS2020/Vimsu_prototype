@@ -572,6 +572,57 @@
                     "body": "The code you entered was wrong. Try again."
                 }
             },
+            "group": {
+                "unknownCommand": {
+                    "header": "Unrecognized group command",
+                    "body": "You entered an unrecognized command. Enter '\\group' to receive an overview of all group commands and how to use them."
+                },
+                "unknownColor": {
+                    "header": "Unknown color",
+                    "body": "Entered color does not exist. Currently available colors are blue, red, green, yellow, tosca, purple, orange, pink, and white."
+                },
+                "invalidName": {
+                    "header": "Invalid group name",
+                    "body": "The entered group name is already used by another group. Please try again."
+                },
+                "notExists": {
+                    "header": "Group does not exist",
+                    "body": "A group with this name does not exist. Please try again."
+                },
+                "deletedAll": {
+                    "header": "Successfully deleted all groups",
+                    "body": "All exisiting groups were sucessfully deleted."
+                },
+                "created": {
+                    "header": "Group successfully created",
+                    "body": "Successfully created group groupNamePlaceholder."
+                },
+                "deleted": {
+                    "header": "Group successfully deleted",
+                    "body": "Successfully deleted group groupNamePlaceholder."
+                },
+                "addedUsers": {
+                    "header": "Added users to group",
+                    "body": "Successfully added users to group groupNamePlaceholder."
+                },
+                "removedUsers": {
+                    "header": "Removed users from group",
+                    "body": "Successfully removed users from group groupNamePlaceholder."
+                },
+                "youJoined": {
+                    "header": "Group joined",
+                    "body": "You joined group groupNamePlaceholder."
+                },
+                "youLeft": {
+                    "header": "Group left",
+                    "body": "You left group groupNamePlaceholder."
+                },
+                "noGroupsExist": {
+                    "header": "No groups",
+                    "body": ["There are no existing groups at the moment.",
+                        "Enter '\\group' to receive an overview of all group commands and how to create them."]
+                }
+            },
             "msgParts": {
                 "userLogHeader": "List of all active participants",
                 "room": {
@@ -587,6 +638,10 @@
                     "doorLogBodyPartNormalDoorNoCode": "Door in roomName1Placeholder to roomName2Placeholder and has ID doorIDPlaceholder. Door is currently openStatusPlaceholder and has no code to open it.",
                     "closed": "closed",
                     "open": "open"
+                },
+                "group": {
+                    "groupLogHeader": "List of all existing groups",
+                    "groupLogBodyPart": "Group groupNamePlaceholder has group color colorPlaceholder."
                 },
                 "usersThatWereNotFound": " Users that were not found: "
             }

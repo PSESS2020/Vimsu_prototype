@@ -135,7 +135,7 @@ module.exports = class CommandHandler {
                 var commandToExecute = this.#getMethodString(this.#groupCommandList, groupCommandType);
                 this[commandToExecute](socket, context, commandArgs);
             } else {
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNGROUPCOMMAND);
+                this.#serverController.sendNotification(socket.id, messages.group.unknownCommand);
             }
         }
     }
@@ -1027,7 +1027,7 @@ module.exports = class CommandHandler {
         try {
             TypeChecker.isEnumOf(groupColor, ShirtColor);
         } catch (e) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.UNKNOWNCOLOR);
+            this.#serverController.sendNotification(socket.id, messages.group.unknownColor);
             return;
         }
 
@@ -1041,9 +1041,13 @@ module.exports = class CommandHandler {
         }
 
         if (this.#serverController.createGroup(groupName, groupColor, memberIDs)) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.CREATEDGROUP(groupName, unknownUsernames));
+            let msg = JSON.parse(JSON.stringify(messages.group.created));
+            msg.body = msg.body.replace('groupNamePlaceholder', groupName) + (unknownUsernames.length > 0 
+                ? messages.msgParts.usersThatWereNotFound + unknownUsernames
+                : "");
+            this.#serverController.sendNotification(socket.id, msg);
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.INVALIDGROUPNAME);
+            this.#serverController.sendNotification(socket.id, messages.group.invalidName);
         } 
     }
 
@@ -1067,9 +1071,11 @@ module.exports = class CommandHandler {
         let groupName = commandArgs[0];
 
         if (this.#serverController.deleteGroup(groupName)) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.DELETEDGROUP(groupName));
+            let msg = JSON.parse(JSON.stringify(messages.group.deleted));
+            msg.body = msg.body.replace('groupNamePlaceholder', groupName);
+            this.#serverController.sendNotification(socket.id, msg);
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.GROUPNOTEXISTS);
+            this.#serverController.sendNotification(socket.id, messages.group.notExists);
         } 
     }
 
@@ -1083,9 +1089,10 @@ module.exports = class CommandHandler {
      */
     deleteAllGroups(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.messages;
 
         this.#serverController.deleteAllGroups();
-        this.#serverController.sendNotification(socket.id, CommandMessages.DELETEDALLGROUPS);
+        this.#serverController.sendNotification(socket.id, messages.group.deletedAll);
     } 
     
 
@@ -1119,9 +1126,13 @@ module.exports = class CommandHandler {
         }
 
         if (this.#serverController.addGroupMember(groupName, memberIDs)) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.ADDEDUSERSTOGROUP(groupName, unknownUsernames))
+            let msg = JSON.parse(JSON.stringify(messages.group.addedUsers));
+            msg.body = msg.body.replace('groupNamePlaceholder', groupName) + (unknownUsernames.length > 0 
+                ? messages.msgParts.usersThatWereNotFound + unknownUsernames
+                : "");
+            this.#serverController.sendNotification(socket.id, msg)
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.GROUPNOTEXISTS);
+            this.#serverController.sendNotification(socket.id, messages.group.notExists);
         } 
     }
 
@@ -1155,9 +1166,13 @@ module.exports = class CommandHandler {
         }
 
         if (this.#serverController.removeGroupMember(groupName, memberIDs)) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.RMUSERSFROMGROUP(groupName, unknownUsernames));
+            let msg = JSON.parse(JSON.stringify(messages.group.removedUsers));
+            msg.body = msg.body.replace('groupNamePlaceholder', groupName) + (unknownUsernames.length > 0 
+                ? messages.msgParts.usersThatWereNotFound + unknownUsernames
+                : "");
+            this.#serverController.sendNotification(socket.id, msg);
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.GROUPNOTEXISTS);
+            this.#serverController.sendNotification(socket.id, messages.group.notExists);
         } 
     }
 
@@ -1171,18 +1186,19 @@ module.exports = class CommandHandler {
      */
     logAllGroups(socket, context, commandArgs) {
         this.#checkParamTypes(context, commandArgs);
+        const messages = socket.messages;
 
         let groups = this.#serverController.getGroups();
         let groupInfo = [];
 
         groups.forEach(group => {
-            groupInfo.push({name: group.getName(), color: group.getShirtColor()});
+            groupInfo.push(messages.msgParts.group.groupLogBodyPart.replace('groupNamePlaceholder', group.getName()).replace('colorPlaceholder', group.getShirtColor()));
         })
 
         if (groupInfo.length < 1) {
-            this.#serverController.sendNotification(socket.id, CommandMessages.NOGROUPSEXISTING);
+            this.#serverController.sendNotification(socket.id, messages.group.noGroupsExist);
         } else {
-            this.#serverController.sendNotification(socket.id, CommandMessages.GROUPLOG(groupInfo));
+            this.#serverController.sendNotification(socket.id, {header: messages.msgParts.group.groupLogHeader, body: groupInfo});
         }
     }
 

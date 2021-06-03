@@ -572,6 +572,57 @@
                     "body": "Der von dir eingegebene Code war leider falsch. Bitte versuche es erneut."
                 }
             },
+            "group": {
+                "unknownCommand": {
+                    "header": "Unbekannter Gruppenbefehl",
+                    "body": "Du hast einen unbekannten Befehl eingegeben. Du kannst '\\group' eingeben, um eine Übersicht über alle verfügbaren Gruppenbefehle mit Beschreibung zu erhalten."
+                },
+                "unknownColor": {
+                    "header": "Unbekannte Farbe",
+                    "body": "Die eingegebene Farbe existiert nicht. Die zurzeit verfügbaren Farben sind „blue”, „red”, „green”, „yellow”, „tosca”, „purple”, „orange”, „pink”, und „white”."
+                },
+                "invalidName": {
+                    "header": "Ungültiger Gruppenname",
+                    "body": "Der eingegebene Gruppenname ist schon vergeben. Bitte versuche es erneut."
+                },
+                "notExists": {
+                    "header": "Gruppe existiert nicht",
+                    "body": "Es existiert keine Gruppe mit diesem Namen. Bitte versuche es erneut."
+                },
+                "deletedAll": {
+                    "header": "Alle Gruppen gelöscht",
+                    "body": "Alle existierenden Gruppen wurden erfolgreich gelöscht."
+                },
+                "created": {
+                    "header": "Gruppe erstellt",
+                    "body": "Die Gruppe groupNamePlaceholder wurde erfolgreich erstellt."
+                },
+                "deleted": {
+                    "header": "Gruppe gelöscht",
+                    "body": "Die Gruppe groupNamePlaceholder wurde erfolgreich gelöscht."
+                },
+                "addedUsers": {
+                    "header": "Nutzer hinzugefügt",
+                    "body": "Die Nutzer wurden erfolgreich zur Gruppe groupNamePlaceholder hinzugefügt."
+                },
+                "removedUsers": {
+                    "header": "Nutzer entfernt",
+                    "body": "Die Nutzer wurden erfolgreich von der Gruppe groupNamePlaceholder entfernt."
+                },
+                "youJoined": {
+                    "header": "Gruppe beigetreten",
+                    "body": "Du bist der Gruppe groupNamePlaceholder beigetreten."
+                },
+                "youLeft": {
+                    "header": "Gruppe verlassen",
+                    "body": "Du hast die Gruppe groupNamePlaceholder verlassen."
+                },
+                "noGroupsExist": {
+                    "header": "Keine Gruppen",
+                    "body": ["Im Moment existieren keine Gruppen.",
+                        "Du kannst '\\group' eingeben, um eine Übersicht über alle verfügbaren Gruppenbefehle zu erhalten."]
+                }
+            },
             "msgParts": {
                 "userLogHeader": "Liste aller aktiven Teilnehmer",
                 "room": {
@@ -587,6 +638,10 @@
                     "doorLogBodyPartNormalDoorNoCode": "Tür in roomName1Placeholder zu roomName2Placeholder hat die ID doorIDPlaceholder. Die Tür ist gerade openStatusPlaceholder und hat keinen Code um sie zu öffnen.",
                     "closed": "verschlossen",
                     "open": "geöffnet"
+                },
+                "group": {
+                    "groupLogHeader": "Liste aller existierenden Gruppen",
+                    "groupLogBodyPart": "Gruppe groupNamePlaceholder hat Gruppenfarbe colorPlaceholder."
                 },
                 "usersThatWereNotFound": " Nutzer die nicht gefunden wurden: "
             }

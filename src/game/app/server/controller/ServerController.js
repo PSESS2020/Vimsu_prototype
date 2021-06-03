@@ -11,7 +11,6 @@ const Schedule = require('../models/Schedule')
 const RankListService = require('../services/RankListService')
 const Account = require('../../../../website/models/Account.js');
 const TypeOfTask = require('../utils/TypeOfTask.js')
-const CommandMessages = require('../utils/messages/CommandMessages.js');
 const Conference = require('../models/Conference.js');
 const ChatService = require('../services/ChatService.js');
 const ParticipantService = require('../services/ParticipantService.js');
@@ -2495,9 +2494,12 @@ module.exports = class ServerController {
                             
                             this.#handleChangeShirtColor(member, groupColor, socket);
                     
-                            //Notify user that he joined a new group (right now only for status bar)
+                            //Notify user that he joined a new group
                             socket.emit('join group', groupName);
-                            this.sendNotification(socketID, CommandMessages.YOUJOINEDGROUP(groupName));
+
+                            let msg = JSON.parse(JSON.stringify(socket.messages.group.youJoined));
+                            msg.body = msg.body.replace('groupNamePlaceholder', groupName);
+                            this.sendNotification(socketID, msg);
                         }
                     });
                 })    
@@ -2544,7 +2546,10 @@ module.exports = class ServerController {
 
                 //Notify user that he left a group, client changes status bar and removes groupChat from View
                 socket.emit('leave group');
-                this.sendNotification(socketID, CommandMessages.YOULEFTGROUP(groupName));
+                
+                let msg = JSON.parse(JSON.stringify(socket.messages.group.youLeft));
+                msg.body = msg.body.replace('groupNamePlaceholder', groupName);
+                this.sendNotification(socketID, msg);
             }
         });
 
@@ -2607,9 +2612,12 @@ module.exports = class ServerController {
                     
                     this.#handleChangeShirtColor(member, groupColor, socket);
 
-                    //Notify user that he joined a new group (right now only for status bar)
+                    //Notify user that he joined a new group 
                     socket.emit('join group', groupName);
-                    this.sendNotification(socketID, CommandMessages.YOUJOINEDGROUP(groupName));
+
+                    let msg = JSON.parse(JSON.stringify(socket.messages.group.youJoined));
+                    msg.body = msg.body.replace('groupNamePlaceholder', groupName);
+                    this.sendNotification(socketID, msg);
                 }
         }   
         });
@@ -2663,7 +2671,10 @@ module.exports = class ServerController {
 
                     //Notify user that he left a group, client changes status bar and removes groupChat from View
                     socket.emit('leave group');
-                    this.sendNotification(socketID, CommandMessages.YOULEFTGROUP(groupName));
+
+                    let msg = JSON.parse(JSON.stringify(socket.messages.group.youLeft));
+                    msg.body = msg.body.replace('groupNamePlaceholder', groupName);
+                    this.sendNotification(socketID, msg);
                 }
             }
         });
