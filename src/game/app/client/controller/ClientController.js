@@ -171,6 +171,7 @@ class ClientController {
      */
     setUpSocket = function () {
         this.socket.on('isVideoConference', this.handleFromServerSetIsVideoConference.bind(this));
+        this.socket.on('selectedLanguageData', this.handleFromServerSetSelectedLanguageData.bind(this));
         this.socket.on('initOwnParticipantState', this.handleFromServerInitOwnParticipant.bind(this));
         this.socket.on('currentGameStateYourRoom', this.handleFromServerUpdateRoom.bind(this));
         this.socket.on('currentGameStateYourPosition', this.handleFromServerUpdatePosition.bind(this)); //Called when server wants to update your position
@@ -281,6 +282,18 @@ class ClientController {
         TypeChecker.isBoolean(isVideoConference);
 
         this.isVideoConference = isVideoConference;
+    }
+
+    /**
+     * Message from server, receives language data from selected language and sends it directly to view and dateParser
+     * 
+     * @param {json} languageData
+     */
+    handleFromServerSetSelectedLanguageData = function (languageData) {
+        this.gameView.initViews(languageData);
+
+        /* Init DateParser and emit languageData */
+        new DateParser(languageData.days, languageData.months);
     }
 
     /**
@@ -965,7 +978,7 @@ class ClientController {
     handleFromServerNewGlobalAnnouncement = function (moderatorUsername, messageText) {
         TypeChecker.isString(moderatorUsername);
         TypeChecker.isString(messageText);
-        var timestamp = new DateParser(new Date()).parseOnlyTime();
+        var timestamp = new DateParser().parseOnlyTime(new Date());
         var messageHeader = "On " + timestamp + " moderator " + moderatorUsername + " announced:";
         this.gameView.initGlobalChatView(messageHeader, messageText);
     }

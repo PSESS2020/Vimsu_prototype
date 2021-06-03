@@ -6,29 +6,44 @@
  */
 class DateParser {
 
-    date;
+    days;
+    months;
 
     /**
-     * creates an instance of Date parser
+     * creates an instance of DateParser only if there is not an instance already.
+     * Otherwise the existing instance will be returned.
      * 
-     * @param {Date} date date
+     * @param {?json} daysLanguageData language data for days, only needs to be passed when this constructor is called for the first time
+     * @param {?json} monthsLanguageData language data for months, only needs to be passed when this constructor is called for the first time
      */
-    constructor(date) {
-        TypeChecker.isDate(date);
-        this.date = date;
+    constructor(daysLanguageData, monthsLanguageData) {
+        if (!!DateParser.instance) {
+            return DateParser.instance;
+        }
+
+        if (daysLanguageData === undefined || monthsLanguageData === undefined) {
+            throw new Error("Don't forget to pass language data for days and months if DataParser is accessed for the first time!");
+        }
+
+        DateParser.instance = this;
+
+        this.days = [daysLanguageData.sunday, daysLanguageData.monday, daysLanguageData.tuesday, daysLanguageData.wednesday, 
+            daysLanguageData.thursday, daysLanguageData.friday, daysLanguageData.saturday];
+        this.months = [monthsLanguageData.january, monthsLanguageData.february, monthsLanguageData.march, monthsLanguageData.april, monthsLanguageData.may, 
+            monthsLanguageData.june, monthsLanguageData.july, monthsLanguageData.august, monthsLanguageData.september, monthsLanguageData.october, 
+            monthsLanguageData.november, monthsLanguageData.december]
     }
 
     /**
      * Parse date without seconds
      * 
+     * @param {Date} date 
+     * 
      * @return {String} parsed date
      */
-    parse() {
-        var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-
-        var parsedDate = days[this.date.getDay()] + ", " + this.printTwoDigitsNumber(this.date.getDate()) + " "
-            + months[this.date.getMonth()] + " " + this.date.getFullYear() + " " + this.parseOnlyTime();
+    parse(date) { 
+        var parsedDate = this.days[date.getDay()] + ", " + this.printTwoDigitsNumber(date.getDate()) + " "
+            + this.months[date.getMonth()] + " " + date.getFullYear() + " " + this.parseOnlyTime(date);
 
         return parsedDate;
     }
@@ -36,20 +51,24 @@ class DateParser {
     /**
      * Parse date with seconds
      * 
+     * @param {Date} date 
+     * 
      * @return {String} parsed date
      */
-    parseWithSeconds() {
-        var parsedDate = this.parse() + ":" + this.printTwoDigitsNumber(this.date.getSeconds());
+    parseWithSeconds(date) {
+        var parsedDate = this.parse(date) + ":" + this.printTwoDigitsNumber(date.getSeconds());
         return parsedDate;
     }
 
     /**
      * Parse only time without seconds
      * 
+     * @param {Date} date 
+     * 
      * @return {String} parsed time
      */
-    parseOnlyTime() {
-        var parsedDate = this.printTwoDigitsNumber(this.date.getHours()) + ":" + this.printTwoDigitsNumber(this.date.getMinutes());
+    parseOnlyTime(date) {
+        var parsedDate = this.printTwoDigitsNumber(date.getHours()) + ":" + this.printTwoDigitsNumber(date.getMinutes());
         return parsedDate;
     }
 

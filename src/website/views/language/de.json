@@ -123,5 +123,563 @@
         "maxParticipants": "# Teilnehmer",
         "video": "Video",
         "supportedFiles": "Unterstütztes Dateiformat: .mp4 || Maximale Dateigröße: 50 MB"
+    },
+
+    "conference": {
+        "clientView": {
+            "hud": {
+                "ranklist": "Rangliste",
+                "achievements": "Erfolge",
+                "schedule": "Zeitplan",
+                "meetings": "Gruppenmeetings",
+                "friendlist": "Freundesliste",
+                "chats": "Chats",
+                "leave": "Verlassen",
+                "showNotification": "Benachrichtigung anzeigen",
+                "hideNotification": "Benachrichtigung ausblenden",
+                "confirmLeave": "Sicher, dass du die Konferenz verlassen möchtest?",
+                "tooltips": {
+                    "points": "Deine Punkte",
+                    "rank": "Dein Rang",
+                    "profile": "Profil",
+                    "ranklist": "Rangliste der Konferenzteilnehmer",
+                    "achievements": "Liste deiner Erfolge",
+                    "schedule": "Präsentationszeitplan",
+                    "meetings": "Liste deiner Meetings",
+                    "friendlist": "Freundesliste und Freundschaftsanfragen",
+                    "chats": "Liste deiner Chats",
+                    "leave": "Konferenz verlassen"
+                },
+                "statusBar": {
+                    "fps": "FPS",
+                    "location": "Standort",
+                    "ping": "Ping",
+                    "group": "Gruppe",
+                    "lostConnection": "Verbindung zum Server verloren.",
+                    "reconnect": "Verbindung zum Server wird wiederhergestellt..."
+                },
+                "allchat": {
+                    "chat": "Chat",
+                    "showMessages": "<roomName> Chat Nachrichten anzeigen",
+                    "enterMessage": "<roomName> Chat Nachricht eingeben...",
+                    "quietChat": "Der <roomName> Chat ist momentan sehr ruhig. Vielleicht mal eine Nachricht dalassen?",
+                    "tooltips": {
+                        "sendMessage": "Senden",
+                        "emojis": "Emojis auswählen"
+                    }
+                },
+                "notifBar": {
+                    "newMessage": "Neue Nachricht von usernamePlaceholder.",
+                    "newChat": "usernamePlaceholder hat einen Chat mit dir gestartet.",
+                    "newGroupChat": "usernamePlaceholder hat dich zum Gruppenchat groupNamePlaceholder eingeladen.",
+                    "newMeeting": "Du wurdest zum Meeting meetingNamePlaceholder eingeladen.",
+                    "newFriendRequest": "Neue Freundschaftsanfrage von usernamePlaceholder.",
+                    "requestAccepted": "usernamePlaceholder hat deine Freundschaftsanfrage angenommen.",
+                    "inCall": "Du bist gerade in einem Anruf mit meetingNamePlaceholder."
+                }
+            },
+            "days": {
+                "monday": "Montag",
+                "tuesday": "Dienstag",
+                "wednesday": "Mittwoch",
+                "thursday": "Donnerstag",
+                "friday": "Freitag",
+                "saturday": "Samstag",
+                "sunday": "Sonntag"
+            },
+            "months": {
+                "january": "Januar",
+                "february": "Februar",
+                "march": "März",
+                "april": "April",
+                "may": "Mai",
+                "june": "Juni",
+                "july": "Juli",
+                "august": "August",
+                "september": "September",
+                "october": "Oktober",
+                "november": "November",
+                "december": "Dezember"
+            },
+            "achievements": {
+                "yourAchievements": "Deine Erfolge",
+                "nextTarget": "Ziel: [<currentCount> / <nextTarget>]",
+                "completed": "Abgeschlossen",
+                "level": "Level"
+            },
+            "ranklist": {
+                "bestParticipants": "Die besten Teilnehmer",
+                "noParticipants": "An dieser Konferenz hat noch niemand teilgenommen."
+            },
+            "schedule": {
+                "noLectureFound": "Es wurde leider kein Vortrag gefunden",
+                "seconds": "s",
+                "scheduleList": "Zeitplan",
+                "lectureTitle": "Titel",
+                "oratorName": "Name Redner",
+                "startingTime": "Startzeitpunkt",
+                "durationInMin": "Dauer in Minuten",
+                "seatAmount": "Anzahl der Sitzplätze",
+                "remarks": "Bemerkungen",
+                "status": "Status",
+                "states": {
+                    "Coming soon": "Startet demnächst",
+                    "Opened": "Geöffnet",
+                    "Running": "Läuft gerade",
+                    "Expired": "Abgelaufen"
+                },
+                "allExpired": "Leider sind alle Vorträge bereits abgelaufen."
+            },
+            "businessCard": {
+                "businessCard": "Visitenkarte",
+                "profession": "Beruf",
+                "at": "bei",
+                "unknown": "Unbekannt",
+                "email": "E-Mail",
+                "rank": "Rang",
+                "role": "Rolle",
+                "roles": {
+                    "moderator": "Moderator",
+                    "participant": "Teilnehmer"
+                },
+                "tooltips": {
+                    "chatNow": "Visitenkarte schließen und chatten"
+                }
+            },
+            "chats": {
+                "yourChats": "Deine Chats",
+                "group": "Gruppe",
+                "noMessages": "keine Nachrichten",
+                "noChats": "Keine Chats gefunden. Connecte dich mit anderen Nutzern!",
+                "tooltips": {
+                    "openChat": "Chat öffnen",
+                    "addFriend": "Freund hinzufügen",
+                    "videoCall": "Videochat mit Chatteilnehmern",
+                    "showMembers": "Chatteilnehmer anzeigen",
+                    "inviteFriends": "Freunde zu Gruppenchat einladen",
+                    "leaveChat": "Chat verlassen",
+                    "emojis": "Emojis auswählen",
+                    "requestSent": "Freundschaftsanfrage gesendet",
+                    "sendRequest": "Freundschaftsanfrage senden"
+                },
+                "enterMessage": "Nachricht eingeben ...",
+                "send": "Senden",
+                "chatParticipantList": "Chatteilnehmer",
+                "confirmLeaveChat": "Sicher dass du den Chat chat_name verlassen möchtest?",
+                "createGroupChat": "Gruppenchat erstellen",
+                "inviteFriends": "Freunde einladen",
+                "enterGroupName": "Gruppenname eingeben",
+                "tooManyFriends": "Du kannst maximal limit Freunde einladen. Bitte entferne diff Freunde.",
+                "emptyGroupName": "Gruppenname war leer",
+                "noFriends": "Keine Freunde zum Einladen",
+                "selectAtLeastOne": "Bitte wähle mindestens einen Freund aus!"
+            },
+            "externalWebsite": {
+                "fullscreenMode": "Zu Vollbild wechseln",
+                "normalMode": "Zu normaler Größe zurückwechseln"
+            },
+            "enterCode": {
+                "enterCode": "Code eingeben",
+                "sendCode": "Code senden",
+                "tooltips": {
+                    "sendCode": "Sendet den eingegebenen Code"
+                }
+            },
+            "loadingConference": "Konferenz wird geladen percentagePlaceholder . . .",
+            "currentLectures": {
+                "by": "Von",
+                "start": "Beginn",
+                "duration": "Dauer",
+                "minutes": "Minuten",
+                "seats": "Sitzplätze",
+                "participants": "Teilnehmer",
+                "fullLecture": "Vortrag ist momentan voll.",
+                "enter": "Beitreten",
+                "currentLectures": "Laufende Vorträge",
+                "noLectures": "Vorträge werden hier 10 Minuten vor Start angezeigt. Wirf einen Blick auf den Zeitplan an und komme später wieder."
+            },
+            "lecture": {
+                "lectureChat": "Vortragschat",
+                "questionsAfterLecture": "Du kannst nach dem Vortrag Fragen stellen.",
+                "chatAfterLecture": "Der Chat wird nach dem Vortrag geöffnet.",
+                "moderatorRights": "Du hast nach dem Vortrag das Recht, den Vortrag zu schließen und Teilnehmer zu bannen.",
+                "secondsTill": "Sekunden bis die",
+                "presentationStarts": "Präsentation startet",
+                "notOverWithToken": "Der Vortrag ist nicht zu Ende! Wenn du ihn verlässt, hast du 5 Minuten Zeit zurückzukommen. Brauchst du länger, läuft dein Token ab. Sicher, dass du den Vortrag verlassen möchtest?",
+                "notOverOrator": "Der Vortrag ist nicht zu Ende! Um die Fragen der Zuhörer zu beantworten musst du rechtzeitig vor Ende des Vortrags zurück sein. Sicher, dass du den Vortrag verlassen möchtest?",
+                "notOverWithoutToken": "Der Vortrag ist nicht zu Ende! Sicher, dass du den Vortrag verlassen möchtest?",
+                "comeBackOnTime": "Wenn du gehst, hast du 5 Minuten nach Vortragsbeginn Zeit, zurückzukommen. Nach dieser Zeit läuft dein Token für diesen Vortrag ab. Komme rechtzeitig wieder!",
+                "send": "Senden",
+                "enterMessage": "Nachricht eingeben",
+                "tokenMessages": {
+                    "revoke": "Dein Token wurde von einem Moderator oder vom Redner widerrufen. Aus diesem Grund kannst du keine Fragen mehr in den Vortragschat schreiben. Bitte befolge zukünftig die Chatregeln.",
+                    "timeout": "Du hast mehr als 5 Minuten des Vortrags verpasst. Aus diesem Grund kannst du keine Fragen in den Vortragschat schreiben.",
+                    "hasToken": "Du hast den Frage-Token erhalten!"
+                }
+            },
+            "friendList": {
+                "friendList": "Freundesliste",
+                "requests": "Anfrage",
+                "friendRequestList": "Freundschaftsanfragen",
+                "sureToRemove": "Sicher, dass du usernamePlaceholder von deiner Freundesliste entfernen möchtest?",
+                "noFriends": "Keine Freunde gefunden. Chatte mit anderen und versende Freundschaftsanfragen!",
+                "noRequests": "Keine Freundschaftsanfragen erhalten",
+                "unfriend": "Freund entfernen",
+                "accept": "Annehmen",
+                "reject": "Ablehnen",
+                "accepted": "Angenommen",
+                "rejected": "Abgelehnt",
+                "chat": "Chat",
+                "tooltips": {
+                    "chatNow": "Freundesliste schließen und chatten",
+                    "removeFriend": "Von Freundesliste entfernen",
+                    "acceptRequest": "Anfrage akzeptieren und als Freund hinzufügen",
+                    "rejectRequest": "Anfrage ablehnen"
+                }
+            },
+            "meetings": {
+                "yourMeetings": "Deine Meetings",
+                "noMeetings": "Kein Meeting gefunden.",
+                "tooltips": {
+                    "openMeeting": "Meeting öffnen",
+                    "minimizeMeeting": "Meeting minmieren, Sprachchat bleibt aktiv"
+                }
+            },
+            "npcSays": "npcNamePlaceholder sagt...",
+            "newAchievement": {
+                "unlocked": "Neuen Erfolg freigeschalten!",
+                "unlockedWithNameAndLevel": "titlePlaceholder Level levelPlaceholder jetzt freigeschalten!",
+                "unlockedWithDescription": "Du hast einen neuen Erfolg freigeschalten: descriptionPlaceholder"
+            }
+        },
+
+        "messages": {
+            "help": {
+                "listOfAllchatCommands": {
+                    "header": "Liste aller Befehle",
+                    "body": [ "\\ban <list of usernames>\nNimmt eine Liste von Nutzernamen entgegen, jeweils getrennt durch ein Leerzeichen, und entfernt diese von der Konferenz. Sie haben anschließend nicht mehr die Möglichkeit, die Konferenz zu betreten. WARNUNG: Es ist momentan nicht möglich, Nutzer zu entsperren!",
+                        "\\door\nZeigt eine Liste aller Türbefehle mit Beschreibung an.",
+                        "\\door <command>\nFührt Türbefehl <command> aus. Verfügbare Befehle: close, closeallfor, closefor, log, open, openallfor, openfor, setcode.",
+                        "\\global <message>\nSchickt eine Nachricht in den Global Chat. Diese Nachricht wird jedem Teilnehmer als Pop-Up angezeigt.",
+                        "\\group\nZeigt eine Liste aller Gruppenbefehle mit Beschreibung an.",
+                        "\\group <command>\nFührt Gruppenbefehl <command> aus. Verfügbare Befehle: add, create, delete, deleteall, log, rm.",
+                        "\\help\nDieser Befehl. Zeigt eine Liste aller Befehle mit Beschreibung an.",
+                        "\\mod <username>\nSetzt einen normalen Nutzer mit Nutzernamen <username> als Moderator.",
+                        "\\unmod <username>\nSetzt einen Moderator mit Nutzernamen <username> zu einem normalen Nutzer.",
+                        "\\msg\nZeigt eine Liste aller Message-Befehle an.",
+                        "\\msg <command>\nFührt Message-Befehl <command> aus. Verfügbare Befehle: log, rm, rmallby, showallby.",
+                        "\\mute <list of usernames>\nNimmt eine Liste von Nutzernamen entgegen, jeweils getrennt durch ein Leerzeichen, und schaltet diese stumm, d.h. sie können keine Nachrichten mehr in den Allchat schreiben.",
+                        "\\unmute <list of usernames>\nNimmt eine Liste von Nutzernamen entgegen, jeweils getrennt durch ein Leerzeichen, und hebt ihre Stummschaltung auf, d.h. sie können wieder Nachrichten in den Allchat schreiben, falls sie zuvor stummgeschaltet waren.",
+                        "\\port\nZeigt eine Liste aller Port-Befehle an.",
+                        "\\port <command>\nFührt Port-Befehl <command> aus. Verfügbare Befehle: group, user.",
+                        "\\room\nZeigt eine Liste alle Raumbefehle an.",
+                        "\\room <command>\nFührt Raumbefehl <command> aus. Verfügbare Befehle: log, userlog.",
+                        "\\userlog\nZeigt eine Liste aller Teilnehmer, die derzeit online sind, mit ihrem Nutzernamen an."]
+                },
+                "listOfDoorCommands": {
+                    "header": "Liste aller Türbefehle",
+                    "body": [ "\\door close <doorID>\nSchließt die Tür mit ID <doorID> für alle Nutzer.",
+                        "\\door closeallfor <list of usernames>\nSchließt alle existierenden Türen für jeden der übergebenen Nutzernamen in <list of usernames>, jeweils getrennt durch ein Leerzeichen.",
+                        "\\door closefor <doorID> <list of usernames>\nSchließt die Tür mit ID <doorID> für jeden der übergebenen Nutzernamen in <list of usernames>, jeweils getrennt durch ein Leerzeichen.",
+                        "\\door log\nGibt einen Log aller existierenden Türen mit ID und Status Informationen zurück.", 
+                        "\\door log <list of roomIDs>\nGibt einen Log aller Türen, die sich in Räumen mit ID in <list of roomIDs> befinden, mit ID und Status Informationen zurück. Jede roomID in <list of roomIDs> wird durch ein Leerzeichen getrennt.",
+                        "\\door open <doorID>\nÖffnet die Tür mit ID <doorID> für alle Nutzer.", 
+                        "\\door openallfor <list of usernames>\nÖffnet alle existierenden Türen für jeden der übergebenen Nutzernamen in <list of usernames>, jeweils getrennt durch ein Leerzeichen.",
+                        "\\door openfor <doorID> <list of usernames>\nÖffnet die Tür mit ID <doorID> für jeden der übergebenen Nutzernamen in <list of usernames>, jeweils getrennt durch ein Leerzeichen.",
+                        "\\door setcode <doorID> <doorCode>\nFügt den Code <doorCode> zu Tür mit ID <doorID> hinzu."]
+                },
+                "listOfGroupCommands": {
+                    "header": "Liste aller Gruppenbefehle",
+                    "body": [ "\\group add <groupName> <list of usernames>\nFügt alle Nutzer mit Nutzername in <list of usernames> zu Gruppe <groupName> hinzu, alle Nutzernamen getrennt durch ein Leerzeichen.",
+                        "\\group create <groupName> <groupColor> <list of usernames>\nErstellt die Gruppe mit dem eindeutigen Namen <groupName>. Jedes Gruppenmitglied wird ein T-Shirt mit der Farbe <groupColor> tragen. Jeder Nutzer mit Nutzername in <list of usernames> wird zur Gruppe hinzugefügt, alle Nutzernamen getrennt durch ein Leerzeichen.",
+                        "\\group delete <groupName>\nLöscht die Gruppe mit dem eindeutigen Namen <groupName>.",
+                        "\\group deleteall\nLöscht alle derzeit existierenden Gruppen.",
+                        "\\group log\nGibt einen Log aller existierenden Gruppen mit Gruppenname und Gruppenfarbe zurück.",
+                        "\\group rm <groupName> <list of usernames>\nEntfernt alle Nutzer mit Nutzername in <list of usernames> aus der Gruppe <groupName>, alle Nutzernamen getrennt durch ein Leerzeichen."]
+                    },
+                "listOfMessageCommands": {
+                    "header": "Liste aller Message-Befehle",
+                    "body": [ "\\msg log\nGibt einen Log aller Nachrichten, die in den Allchat des Raumes, in dem du dich gerade befindest, geschrieben wurden, mit Message-ID und Nutzername des Senders zurück.",
+                        "\\msg rm <list of msgIDs>\nNimmt eine Liste von Message-IDs entgegen, jeweils getrennt durch ein Leerzeichen, und entfernt sie aus dem Allchat des Raumes, in dem du dich gerade befindest. Sendet außerdem eine Warnung an die Sender dieser Nachrichten, die sie daran erinntert, die Chat-Regeln zu befolgen.",
+                        "\\msg rmallby <list of usernames>\nNimmt eine Liste von Nutzernamen entgegen, jeweils getrennt durch ein Leerzeichen, und entfernt alle ihre Nachrichten aus dem Allchat des Raumes, in dem du dich gerade befindest. Sendet außerdem eine Warnung an die Sender dieser Nachrichten, die sie daran erinntert, die Chat-Regeln zu befolgen.",
+                        "\\msg showallby <list of usernames>\nNimmt eine Liste von Nutzernamen entgegen, jeweils getrennt durch ein Leerzeichen, und zeigt alle Nachrichten an, die diese in den Allchat des Raumes, in dem du dich gerade befindest, geschrieben haben."]
+                },
+                "listOfPortCommands": {
+                    "header": "Liste aller Port-Befehle",
+                    "body": [  "\\port group <groupname> topos <roomID> <cordX> <cordY>\nTeleportiert alle Gruppenmitglieder der Gruppe mit dem Namen <groupName> zu Position (<cordX>, <cordY>) in Raum mit Raum-ID <roomID>.",
+                        "\\port group <groupname> touser <username>\nTeleportiert alle Gruppenmitglieder der Gruppe mit dem Namen <groupName> zu Nutzer mit Nutzernamen <username>.",
+                        "\\port user <username> topos <roomID> <cordX> <cordY>\nTeleportiert Nutzer mit dem Nutzernamen <username> zu Position (<cordX>, <cordY>) in Raum mit Raum-ID <roomID>.",
+                        "\\port user <username1> touser <username2>\nTeleportiert Nutzer mit dem Nutzernamen <username1> zu Nutzer mit dem Nutzernamen <username2>."]
+                },
+                "listOfRoomCommands": {
+                    "header": "Liste aller Raumbefehle",
+                    "body": [ "\\room log\nZeigt eine Liste aller existierenden Räume mit ihrer Raum-ID.",
+                        "\\room userlog <roomID>\nZeigt eine Liste aller Teilnehmer, die sich derzeit im Raum mit ID <roomID> befinden, mit ihrem Nutzernamen an."]
+                },
+                "listOfLectureCommands": {
+                    "header": "Liste aller Vortragsbefehle",
+                    "body": [  "\\ban <list of usernames>\nNimmt eine Liste von Nutzernamen entgegen, jeweils getrennt durch ein Leerzeichen, und entfernt diese von diesem Vortrag. Sie haben anschließend nicht mehr die Möglichkeit, diesen Vortrag zu betreten. WARNUNG: Es ist momentan nicht möglich, Nutzer zu entsperren!",
+                        "\\close\nSchließt den Vortrag. Jeder Zuhörer wird aus dem Vortrag geworfen und niemand kann mehr beitreten. WARNUNG: Dieser Befehl kann NICHT rückgängig gemacht werden.",
+                        "\\grant <list of usernames>\nNimmt eine Liste von Nutzernamen entgegen, jeweils getrennt durch ein Leerzeichen, und gibt ihnen den Vortragstoken (wenn sie gerade dem Vortrag zuhören und den Token noch nicht besitzen). Sie haben nun die Möglichkeit, in den Vortragschat zu schreiben.",
+                        "\\help\nDieser Befehl. Zeigt eine Liste aller Vortragsbefehle mit Beschreibung an.",
+                        "\\msg log\nGibt einen Log aller Nachrichten, die in den Vortragschat geschrieben wurden, mit Message-ID und Nutzername des Senders zurück.",
+                        "\\msg rm <list of msgIDs>\nNimmt eine Liste von Message-IDs entgegen, jeweils getrennt durch ein Leerzeichen, und entfernt sie aus dem Vortragschat. Sendet außerdem eine Warnung an die Sender dieser Nachrichten, die sie daran erinntert, die Chat-Regeln zu befolgen.",
+                        "\\msg rmallby <list of usernames>\nNimmt eine Liste von Nutzernamen entgegen, jeweils getrennt durch ein Leerzeichen, und entfernt alle ihre Nachrichten aus dem Vortragschat. Sendet außerdem eine Warnung an die Sender dieser Nachrichten, die sie daran erinntert, die Chat-Regeln zu befolgen.",
+                        "\\msg showallby <list of usernames>\nNimmt eine Liste von Nutzernamen entgegen, jeweils getrennt durch ein Leerzeichen, und zeigt alle Nachrichten an, die diese in den Vortragschat geschrieben haben.", 
+                        "\\revoke <list of usernames>\nNimmt eine Liste von Nutzernamen entgegen, jeweils getrennt durch ein Leerzeichen, und nimmt ihnen den Vortragstoken weg (wenn sie gerade dem Vortrag zuhören und den Token besitzen). Sie haben nun nicht mehr die Möglichkeit, in den Vortragschat zu schreiben."]
+                }
+            },
+            "general": {
+                "warning": {
+                    "header": "Warnung",
+                    "body": "Eine deiner Nachrichten wurde von einem Moderator entfernt. Bitte befolge die Chat-Regeln. Weitere Verstöße könnten zu einem permanenten Bann führen."
+                },
+                "unknownCommand": {
+                    "header": "Unbekannter Befehl",
+                    "body": "Du hast einen unbekannte Befehl eingegeben. Du kannst '\\help' eingeben, um eine Übersicht über alle verfügbaren Befehle mit Beschreibung zu erhalten."
+                },
+                "invalidParameters": {
+                    "header": "Ungültige Parameter",
+                    "body": "Ungültige Befehlsparameter. Bitte versuche es erneut. Du kannst dir dir einen Überblick über alle Befehle mit '\\help' beschaffen."
+                },
+                "unknownUsername": {
+                    "header": "Unbekannter Nutzername",
+                    "body": "Der eingegebene Nutzername existiert nicht."
+                },
+                "noUsersFound": {
+                    "header": "Keine Nutzer gefunden",
+                    "body": "Es wurde kein Nutzer gefunden, der deine Suchkriterien erfüllt. Bitte versuche es erneut."
+                },
+                "noUsernamePassed": {
+                    "header": "Keinen Nutzernamen übergeben",
+                    "body": "Bitte vergiss nicht, einen Nutzernamen zu übergeben."
+                }
+            },
+            "lecture": {
+                "revoke": {
+                    "header": "Token entzogen",
+                    "body": "Dein Frage-Token wurde dir entzogen, da du gegen die Chat-Regeln verstoßen hast. Du bist jetzt nicht mehr in der Lage, Nachrichten in den Vortragschat zu schreiben."
+                },
+                "grant": {
+                    "header": "Token erhalten",
+                    "body": "Du hast den Frage-Token erhalten. Du bist jetzt in der Lage, Nachrichten in den Vortragschat zu schreiben. Bitte halte dich an die Chat-Regeln."
+                },
+                "removal": {
+                    "header": "Aus Vortrag entfernt",
+                    "body": "Du wurdest von einem Moderator aus dem Vortrag geworfen. Bitte halte dich zukünftig an die Chat-Regeln."
+                },
+                "closed": {
+                    "header": "Vortrag geschlossen",
+                    "body": "Der Redner hat seinen Vortrag geschlossen. Es ist nun nicht mehr möglich, diesem beizutreten."
+                }
+            },
+            "allchat": {
+                "mute": {
+                    "header": "Stummgeschaltet",
+                    "body": "Du wurdest stummgeschaltet, da du gegen die Chat-Regeln verstoßen hast. Du bist jetzt nicht mehr in der Lage, Nachrichten in den Allchat zu schreiben."
+                },
+                "unmute": {
+                    "header": "Stummschaltung aufgehoben",
+                    "body": "Du bist nicht mehr stummgeschaltet und bist jetzt wieder in der Lage, Nachrichten in den Allchat zu schreiben. Bitte halte dich an die Chat-Regeln."
+                },
+                "unknownCommand": {
+                    "header": "Unbekannter Message-Befehl",
+                    "body": "Du hast einen unbekannten Befehl eingegeben. Du kannst '\\msg' eingeben, um eine Übersicht über alle verfügbaren Message-Befehle mit Beschreibung zu erhalten."
+                }
+            },
+            "mod": {
+                "modSet": {
+                    "header": "Modstatus erfolgreich gesetzt",
+                    "body": "usernamePlaceholder ist jetzt ein Moderator."
+                },
+                "unmodSet": {
+                    "header": "Modstatus erfolgreich gesetzt",
+                    "body": "usernamePlaceholder is jetzt kein Moderator mehr."
+                },
+                "youAreNowMod": {
+                    "header": "Dein Modstatus hat sich verändert",
+                    "body": "Du bist jetzt ein Moderator. Du kannst dir dir einen Überblick über alle Befehle mit '\\help' beschaffen."
+                },
+                "youAreNoLongerMod": {
+                    "header": "Dein Modstatus hat sich verändert",
+                    "body": "Du bist jetzt kein Moderator mehr."  
+                }
+            },
+            "room": {
+                "unknownCommand": {
+                    "header": "Unbekannter Raumbefehl",
+                    "body": "Du hast einen unbekannten Befehl eingegeben. Du kannst '\\room' eingeben, um eine Übersicht über alle verfügbaren Raumbefehle mit Beschreibung zu erhalten."
+                },
+                "roomNotFound": {
+                    "header": "Raum nicht gefunden",
+                    "body": "Es gibt keinen Raum mit dieser ID. Bitte versuche es erneut."
+                },
+                "noRoomIDPassed": {
+                    "header": "Keine Raum-ID übergeben",
+                    "body": "Bitte vergiss nicht, eine Raum-ID zu übergeben. Du kannst dir alle Räume mit ihrer ID mit '\\room log' ansehen."
+                }
+            },
+            "door": {
+                "unknownCoomand": {
+                    "header": "Unbekannter Türbefehl",
+                    "body": "Du hast einen unbekannten Befehl eingegeben. Du kannst '\\door' eingeben, um eine Übersicht über alle verfügbaren Türbefehle mit Beschreibung zu erhalten."
+                },
+                "unknownDoorID": {
+                    "header": "Unbekannte Tür-ID",
+                    "body": "Du hast eine falsche Tür-ID eingegeben. Du kannst dir alle Tür-IDs mit '\\door log' ausgeben lassen."
+                },
+                "invalidDoorCode": {
+                    "header": "Ungültiger Tür-Code", 
+                    "body": "Bitte vergiss nicht, einen gültigen Tür-Code zu übergeben."
+                },
+                "openedDoor": {
+                    "header": "Tür erfolgreich geöffnet",
+                    "body": "Du hast die Tür mit ID doorIDPlaceholder für alle übergebenen Nutzernamen erfolgreich geöffnet."
+                },
+                "closedDoor": {
+                    "header": "Tür erfolgreich geschlossen",
+                    "body": "Du hast die Tür mit ID doorIDPlaceholder für alle übergebenen Nutzernamen erfolgreich geschlossen." 
+                },
+                "openedDoorForAll": {
+                    "header": "Tür erfolgreich geöffnet",
+                    "body": "Du hast die Tür mit ID doorIDPlaceholder für alle Nutzer erfolgreich geöffnet."
+                },
+                "closedDoorForAll": {
+                    "header": "Tür erfolgreich geschlossen",
+                    "body": "Du hast die Tür mit ID doorIDPlaceholder für alle Nutzer erfolgreich geschlossen."
+                },
+                "closedAllDoorsFor": {
+                    "header": "Alle Türen erfolgreich geschlossen",
+                    "body": "Du hast alle Türen für alle Nutzer erfolgreich geschlossen." 
+                },
+                "openedAllDoorsFor": {
+                    "header": "Alle Türen erfolgreich geöffnet",
+                    "body": "Du hast alle Türen für alle Nutzer erfolgreich geöffnet."
+                },
+                "noDoors": {
+                    "header": "Keine Türen verfügbar",
+                    "body": "Es gibt entweder keinen Raum mit dieser ID oder keine Türen."
+                },
+                "setDoorCode": {
+                    "header": "Code erfolgreich gesetzt",
+                    "body": "Du hast den Tür-Code der Tür mit der ID doorIDPlaceholder erfolgreich zu codePlaceholder geändert."
+                },
+                "correctCode": {
+                    "header": "Code war korrekt!",
+                    "body": "Der von dir eingegebene Code war korrekt! Die Tür ist jetzt für dich geöffnet."
+                },
+                "wrongCode": {
+                    "header": "Falscher Code",
+                    "body": "Der von dir eingegebene Code war leider falsch. Bitte versuche es erneut."
+                }
+            },
+            "group": {
+                "unknownCommand": {
+                    "header": "Unbekannter Gruppenbefehl",
+                    "body": "Du hast einen unbekannten Befehl eingegeben. Du kannst '\\group' eingeben, um eine Übersicht über alle verfügbaren Gruppenbefehle mit Beschreibung zu erhalten."
+                },
+                "unknownColor": {
+                    "header": "Unbekannte Farbe",
+                    "body": "Die eingegebene Farbe existiert nicht. Die zurzeit verfügbaren Farben sind „blue”, „red”, „green”, „yellow”, „tosca”, „purple”, „orange”, „pink”, und „white”."
+                },
+                "invalidName": {
+                    "header": "Ungültiger Gruppenname",
+                    "body": "Der eingegebene Gruppenname ist schon vergeben. Bitte versuche es erneut."
+                },
+                "notExists": {
+                    "header": "Gruppe existiert nicht",
+                    "body": "Es existiert keine Gruppe mit diesem Namen. Bitte versuche es erneut."
+                },
+                "deletedAll": {
+                    "header": "Alle Gruppen gelöscht",
+                    "body": "Alle existierenden Gruppen wurden erfolgreich gelöscht."
+                },
+                "created": {
+                    "header": "Gruppe erstellt",
+                    "body": "Die Gruppe groupNamePlaceholder wurde erfolgreich erstellt."
+                },
+                "deleted": {
+                    "header": "Gruppe gelöscht",
+                    "body": "Die Gruppe groupNamePlaceholder wurde erfolgreich gelöscht."
+                },
+                "addedUsers": {
+                    "header": "Nutzer hinzugefügt",
+                    "body": "Die Nutzer wurden erfolgreich zur Gruppe groupNamePlaceholder hinzugefügt."
+                },
+                "removedUsers": {
+                    "header": "Nutzer entfernt",
+                    "body": "Die Nutzer wurden erfolgreich von der Gruppe groupNamePlaceholder entfernt."
+                },
+                "youJoined": {
+                    "header": "Gruppe beigetreten",
+                    "body": "Du bist der Gruppe groupNamePlaceholder beigetreten."
+                },
+                "youLeft": {
+                    "header": "Gruppe verlassen",
+                    "body": "Du hast die Gruppe groupNamePlaceholder verlassen."
+                },
+                "noGroupsExist": {
+                    "header": "Keine Gruppen",
+                    "body": ["Im Moment existieren keine Gruppen.",
+                        "Du kannst '\\group' eingeben, um eine Übersicht über alle verfügbaren Gruppenbefehle zu erhalten."]
+                }
+            },
+            "port": {
+                "unknownCommand": {
+                    "header": "Unbekannter Port-Befehl",
+                    "body": "Du hast einen unbekannten Befehl eingegeben. Du kannst '\\port' eingeben, um eine Übersicht über alle verfügbaren Port-Befehle mit Beschreibung zu erhalten."
+                },
+                "success": {
+                    "header": "Erfolgreicher Teleport",
+                    "body": "Der Teleport war erfolgreich."
+                },
+                "userPortFail": {
+                    "header": "Teleport gescheitert",
+                    "body": "Der Teleport ist gescheitert. Bitte überprüfe die übergebenen Parameter. Es könnte sein, dass es eine Kollision an der übergebenen Position gibt."
+                },
+                "groupPortFail": {
+                    "header": "Teleport gescheitert",
+                    "body": "Der Teleport ist gescheitert. Bitte überprüfe die übergebenen Parameter. Es könnte sein, dass es eine Kollision an der übergebenen Position gibt, der übergebene Gruppenname falsch ist oder kein Gruppenmitglied derzeit online ist."
+                },
+                "portToUserFail": {
+                    "header": "Teleport gescheitert",
+                    "body": "Der Teleport ist gescheitert. Bitte überprüfe den übergebenen Nutzernamen." 
+                },
+                "invalidUserPort": {
+                    "header": "Ungültiger Nutzer Port-Befehl",
+                    "body": ["Ungültiger Nutzer Port-Befehl. Gültige Befehle:",
+                            "\\port user <username> topos <roomID> <cordX> <cordY>",
+                            "\\port user <username1> touser <username2>"]
+                },
+                "invalidGroupPort": {
+                    "header": "Ungültiger Gruppen Port-Befehl",
+                    "body": ["Ungültiger Gruppen Port-Befehl. Gültige Befehle:",
+                            "\\port group <groupname> topos <roomID> <cordX> <cordY>",
+                            "\\port group <groupname> touser <username>"]
+                }
+            },
+            "msgParts": {
+                "userLogHeader": "Liste aller aktiven Teilnehmer",
+                "room": {
+                    "userLogHeader": "Liste aller aktiven Teilnehmer in Raum roomNamePlaceholder",
+                    "roomLogHeader": "Liste aller existierenden Räume",
+                    "roomLogBodyPart": "roomNamePlaceholder hat ID roomIDPlaceholder."
+                },
+                "door": {
+                    "doorLogHeader": "Liste aller existierenden Türen",
+                    "doorLogBodyPartLectureDoorWithCode": "Tür in roomNamePlaceholder ist eine LectureDoor und hat die ID doorIDPlaceholder. Die Tür ist gerade openStatusPlaceholder und hat den Code codePlaceholder um sie zu öffnen.",
+                    "doorLogBodyPartLectureDoorNoCode": "Tür in roomNamePlaceholder ist eine LectureDoor und hat die ID doorIDPlaceholder. Die Tür ist gerade openStatusPlaceholder und hat keinen Code um sie zu öffnen.",
+                    "doorLogBodyPartNormalDoorWithCode": "Tür in roomName1Placeholder zu roomName2Placeholder hat die ID doorIDPlaceholder. Die Tür is gerade openStatusPlaceholder und hat den Code codePlaceholder um sie zu öffnen.",
+                    "doorLogBodyPartNormalDoorNoCode": "Tür in roomName1Placeholder zu roomName2Placeholder hat die ID doorIDPlaceholder. Die Tür ist gerade openStatusPlaceholder und hat keinen Code um sie zu öffnen.",
+                    "closed": "verschlossen",
+                    "open": "geöffnet"
+                },
+                "group": {
+                    "groupLogHeader": "Liste aller existierenden Gruppen",
+                    "groupLogBodyPart": "Gruppe groupNamePlaceholder hat Gruppenfarbe colorPlaceholder."
+                },
+                "usersThatWereNotFound": " Nutzer die nicht gefunden wurden: "
+            }
+        }
     }
 }

@@ -23,9 +23,10 @@ class LectureView extends WindowView {
      * Creates an instance of LectureView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for lecture view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!LectureView.instance) {
             return LectureView.instance;
@@ -35,6 +36,7 @@ class LectureView extends WindowView {
 
         this.eventManager = eventManager;
         this.lectureStatus = LectureStatus.PENDING;
+        $('#lectureChatText').text(this.languageData.lectureChat);
 
         /* sets functions when document is ready, without this it is not possible to assign functions to
           appended buttons */
@@ -152,7 +154,7 @@ class LectureView extends WindowView {
         if (this.hasToken && !this.isOrator && !this.isModerator) {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
-                    <p style="text-align: center">You can ask questions in this chat after the lecture.</p>
+                    <p style="text-align: center">${this.languageData.questionsAfterLecture}</p>
                 </div>
             `);
         }
@@ -161,7 +163,7 @@ class LectureView extends WindowView {
         else if (!this.hasToken && !this.isOrator && !this.isModerator) {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
-                    <p style="text-align: center">This chat will be opened after the lecture.</p>
+                    <p style="text-align: center">${this.languageData.chatAfterLecture}</p>
                 </div>
             `);
         }
@@ -170,7 +172,7 @@ class LectureView extends WindowView {
         else {
             $('#lectureChatMessages').append(`
                 <div id="pendingLectureChatMessage">
-                    <p style="text-align: center">You have the right to close the lecture or to ban participants after the lecture.</p>
+                    <p style="text-align: center">${this.languageData.moderatorRights}</p>
                 </div>
             `);
         }
@@ -204,8 +206,8 @@ class LectureView extends WindowView {
             $('#lectureVideo').append(`
                 <div id="lecturePending" style="top: 0; left: 0; position: absolute; width: 100%; height: 100%; background: black; z-index: 1080; padding: 15%;" class="text-center">
                     <div id="countdown"></div>
-                    <div>seconds left till the</div>
-                    <div>presentation starts</div>
+                    <div>${this.languageData.secondsTill}</div>
+                    <div>${this.languageData.presentationStarts}</div>
                 </div>
             `);
 
@@ -236,7 +238,7 @@ class LectureView extends WindowView {
 
             this.lectureStatus = LectureStatus.OVER;
 
-            this.drawToken(this.hasToken, TokenMessages.TIMEOUT);
+            this.drawToken(this.hasToken, this.languageData.tokenMessages[TokenMessages.TIMEOUT]);
 
             this.video.controlsList.remove('nodownload');
             this.video.pause();
@@ -252,22 +254,22 @@ class LectureView extends WindowView {
 
             //participant with token
             if (this.hasToken && !this.isOrator && !this.isModerator)
-                shouldLeave = confirm('The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?');
+                shouldLeave = confirm(this.languageData.notOverWithToken);
 
             //orator
             else if (this.isOrator)
-                shouldLeave = confirm('The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?');
+                shouldLeave = confirm(this.languageData.notOverOrator);
 
             //participant without token or moderator
             else
-                shouldLeave = confirm('The lecture is not over! Are you sure you want to leave?');
+                shouldLeave = confirm(this.languageData.notOverWithoutToken);
 
             if (shouldLeave)
                 this.close();
         }
 
         else if (this.lectureStatus === LectureStatus.PENDING) {
-            alert('When you leave, you have 5 minutes after the lecture begins to come back. After that time, your token will expire for this lecture. Please come back on time!');
+            alert(this.languageData.comeBackOnTime);
             this.close();
         }
 
@@ -300,7 +302,7 @@ class LectureView extends WindowView {
      * @param {String} ownUsername current participant's username
      */
     appendMessage(message, ownUsername) {
-        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
+        var timestamp = new DateParser().parseOnlyTime(new Date(message.timestamp));
 
         const isOwnParticipant = message.username === ownUsername
 
@@ -342,16 +344,15 @@ class LectureView extends WindowView {
      */
     drawToken(hasToken, message) {
         this.hasToken = hasToken;
-
         $('#tokenIcon').empty();
         $('#tokenLabel').empty();
 
         if (this.hasToken) {
             if ($('#lectureChatInputGroup').is(':empty')) {
                 $('#lectureChatInputGroup').append(`
-                    <textarea id="lectureChatInput" type="text" class="form-control chatInputGroup" autocomplete="off" placeholder="Enter message ..." rows="1"></textarea>
+                    <textarea id="lectureChatInput" type="text" class="form-control chatInputGroup" autocomplete="off" placeholder="${this.languageData.enterMessage + '...'}" rows="1"></textarea>
                     <div class="input-group-append">
-                        <button id="lectureChatButton" class="btn btn-blue" type="button">Send</button>
+                        <button id="lectureChatButton" class="btn btn-blue" type="button">${this.languageData.send}</button>
                     </div>
                 `);
             }
@@ -360,7 +361,7 @@ class LectureView extends WindowView {
                 <i class="fa fa-question-circle fa-4x"></i>
             `);
 
-            $('#tokenLabel').append(TokenMessages.HASTOKEN);
+            $('#tokenLabel').append(this.languageData.tokenMessages[TokenMessages.HASTOKEN]);
         }
 
         // the input field is emptied if the user does not have a valid token
@@ -371,7 +372,7 @@ class LectureView extends WindowView {
                 <i class="fa fa-times-circle fa-4x"></i>
             `);
 
-            $('#tokenLabel').append(message);
+            $('#tokenLabel').append(this.languageData.tokenMessages[message]);
         }
     };
 }

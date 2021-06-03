@@ -15,9 +15,10 @@ class VideoMeetingView extends WindowView {
      * Creates an instance of VideoMeetingView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for videoMeeting view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!VideoMeetingView.instance) {
             return VideoMeetingView.instance;
@@ -27,6 +28,8 @@ class VideoMeetingView extends WindowView {
 
         this.eventManager = eventManager;
         this.isMinimized = false;
+
+        document.getElementById("meetingWindowMinimize").title = this.languageData.tooltips.minimizeMeeting;
 
         // Close button event, Window gets closed and Meeting is closed
         $('#meetingWindowClose').off();

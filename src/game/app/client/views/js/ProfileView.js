@@ -7,9 +7,11 @@
 class ProfileView extends WindowView {
     /**
      * Creates an instance of ProfileView
+     * 
+     * @param {json} languageData language data for profile view
      */
-    constructor() {
-        super();
+    constructor(languageData) {
+        super(languageData);
 
         if (!!ProfileView.instance) {
             return ProfileView.instance;
@@ -47,24 +49,24 @@ class ProfileView extends WindowView {
                 <table id="profile" class="center ml-auto mr-auto">
                     ${businessCard.getJob() || businessCard.getCompany() ?
                         `<tr>
-                            <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 0.9375rem" >Profession</td>
-                            <td style="padding: 0.9375rem">${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
-                                " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}</td>
+                            <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 0.9375rem" >${this.languageData.profession}</td>
+                            <td style="padding: 0.9375rem">${(businessCard.getJob() ? businessCard.getJob() : this.languageData.unknown) + 
+                                " " + this.languageData.at + " "  + (businessCard.getCompany() ? businessCard.getCompany() : this.languageData.unknown)}</td>
                         </tr>`
                     : 
                         ``
                     }
                     ${businessCard.getEmail() ?
                         `<tr>
-                            <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">Email</td>
+                            <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">${this.languageData.email}</td>
                             <td style="padding: 0.9375rem">${businessCard.getEmail()}</td>
                         </tr>`
                     : 
                         ``
                     }
                     <tr>
-                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">Role</td>
-                        <td style="padding: 0.9375rem">${isModerator ? "Moderator" : "Participant"}</td>
+                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">${this.languageData.role}</td>
+                        <td style="padding: 0.9375rem">${isModerator ? this.languageData.roles.moderator : this.languageData.roles.participant}</td>
                     </tr>
                 </table>
             </div>

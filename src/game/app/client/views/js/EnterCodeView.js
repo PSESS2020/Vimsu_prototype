@@ -12,9 +12,10 @@ class EnterCodeView extends WindowView {
      * Creates an instance of Enter Code Window View
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for enterCode view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!EnterCodeView.instance) {
             return EnterCodeView.instance;
@@ -23,6 +24,11 @@ class EnterCodeView extends WindowView {
         EnterCodeView.instance = this;
 
         this.eventManager = eventManager;
+
+        $('#enterCodeText').text(this.languageData.enterCode);
+        $('#sendCodeText').text(this.languageData.sendCode);
+        document.getElementById("codeInput").placeholder = this.languageData.enterCode + '...';
+        document.getElementById("sendCodeBtn").title = this.languageData.tooltips.sendCode;
     }
 
     /**

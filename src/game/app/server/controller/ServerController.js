@@ -11,7 +11,6 @@ const Schedule = require('../models/Schedule')
 const RankListService = require('../services/RankListService')
 const Account = require('../../../../website/models/Account.js');
 const TypeOfTask = require('../utils/TypeOfTask.js')
-const CommandMessages = require('../utils/messages/CommandMessages.js');
 const Conference = require('../models/Conference.js');
 const ChatService = require('../services/ChatService.js');
 const ParticipantService = require('../services/ParticipantService.js');
@@ -172,6 +171,10 @@ module.exports = class ServerController {
 
                 /* Informs ppant if this is a conference with or without video storage */
                 this.#io.to(socket.id).emit('isVideoConference', Settings.VIDEOSTORAGE_ACTIVATED);
+
+                /* Sends ppant selected language data to client that is relevant for view */
+                socket.messages = socket.request.session.conferenceLanguageData.messages;
+                this.#io.to(socket.id).emit('selectedLanguageData', socket.request.session.conferenceLanguageData.clientView);
 
                 //variables for creating account instance
                 const username = socket.request.session.username;
@@ -434,7 +437,7 @@ module.exports = class ServerController {
 
                     // muted ppants can't post messages into any allchat
                     if (this.#muteList.includes(socket.request.session.accountId)) {
-                        this.sendNotification(socket.id, CommandMessages.MUTE);
+                        this.sendNotification(socket.id, socket.messages.allchat.mute);
                         return;
                     }
 
@@ -658,7 +661,7 @@ module.exports = class ServerController {
                 let lecture = schedule.getLecture(lectureId);
 
                 if (lecture.isBanned(socket.request.session.accountId)) {
-                    this.sendNotification(socket.id, CommandMessages.REMOVAL);
+                    this.sendNotification(socket.id, socket.messages.lecture.removal);
                     return;
                 }
 
@@ -1920,10 +1923,12 @@ module.exports = class ServerController {
                     return;
                 }
 
+                const messages = socket.messages;
+
                 if (door.enterCodeToOpen(ppantID, enteredCode)) {
-                    this.sendNotification(socket.id, CommandMessages.CORRECTCODE);
+                    this.sendNotification(socket.id, messages.door.correctCode);
                 } else {
-                    this.sendNotification(socket.id, CommandMessages.WRONGCODE);
+                    this.sendNotification(socket.id, messages.door.wrongCode);
                 }
             });
 
@@ -2423,10 +2428,11 @@ module.exports = class ServerController {
     
                 //Emit to ppant that his mod state changed and notfiy him
                 if (modState) {
-                    this.sendNotification(socketID, CommandMessages.YOUARENOWMOD);
+                    var msg = socket.messages.mod.youAreNowMod;
                 } else {
-                    this.sendNotification(socketID, CommandMessages.YOUARENOLONGERMOD);
+                    var msg = socket.messages.mod.youAreNoLongerMod;
                 }
+                this.sendNotification(socketID, msg);
                 socket.emit('your mod state changed', modState);
 
                 //Emit to all other ppants in room that mod state of this ppant changed
@@ -2484,9 +2490,12 @@ module.exports = class ServerController {
                             
                             this.#handleChangeShirtColor(member, groupColor, socket);
                     
-                            //Notify user that he joined a new group (right now only for status bar)
+                            //Notify user that he joined a new group
                             socket.emit('join group', groupName);
-                            this.sendNotification(socketID, CommandMessages.YOUJOINEDGROUP(groupName));
+
+                            let msg = JSON.parse(JSON.stringify(socket.messages.group.youJoined));
+                            msg.body = msg.body.replace('groupNamePlaceholder', groupName);
+                            this.sendNotification(socketID, msg);
                         }
                     });
                 })    
@@ -2533,7 +2542,10 @@ module.exports = class ServerController {
 
                 //Notify user that he left a group, client changes status bar and removes groupChat from View
                 socket.emit('leave group');
-                this.sendNotification(socketID, CommandMessages.YOULEFTGROUP(groupName));
+                
+                let msg = JSON.parse(JSON.stringify(socket.messages.group.youLeft));
+                msg.body = msg.body.replace('groupNamePlaceholder', groupName);
+                this.sendNotification(socketID, msg);
             }
         });
 
@@ -2596,9 +2608,12 @@ module.exports = class ServerController {
                     
                     this.#handleChangeShirtColor(member, groupColor, socket);
 
-                    //Notify user that he joined a new group (right now only for status bar)
+                    //Notify user that he joined a new group 
                     socket.emit('join group', groupName);
-                    this.sendNotification(socketID, CommandMessages.YOUJOINEDGROUP(groupName));
+
+                    let msg = JSON.parse(JSON.stringify(socket.messages.group.youJoined));
+                    msg.body = msg.body.replace('groupNamePlaceholder', groupName);
+                    this.sendNotification(socketID, msg);
                 }
         }   
         });
@@ -2652,7 +2667,10 @@ module.exports = class ServerController {
 
                     //Notify user that he left a group, client changes status bar and removes groupChat from View
                     socket.emit('leave group');
-                    this.sendNotification(socketID, CommandMessages.YOULEFTGROUP(groupName));
+
+                    let msg = JSON.parse(JSON.stringify(socket.messages.group.youLeft));
+                    msg.body = msg.body.replace('groupNamePlaceholder', groupName);
+                    this.sendNotification(socketID, msg);
                 }
             }
         });

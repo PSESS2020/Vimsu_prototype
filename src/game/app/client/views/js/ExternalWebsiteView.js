@@ -8,9 +8,11 @@ class ExternalWebsiteView extends WindowView {
 
     /**
      * Creates an instance of ExternalWebsiteView
+     * 
+     * @param {json} languageData language data for externalWebsite view
      */
-    constructor() {
-        super();
+    constructor(languageData) {
+        super(languageData);
 
         if (!!ExternalWebsiteView.instance) {
             return ExternalWebsiteView.instance;
@@ -108,6 +110,7 @@ class ExternalWebsiteView extends WindowView {
         document.getElementById("iframe" + gameObjectID).width = '100%';
         document.getElementById("iframe" + gameObjectID).height = '100%';
         document.getElementById("iframe" + gameObjectID).scrolling = 'yes';
+        document.getElementById("fullscreenBtn" + gameObjectID).title = this.languageData.normalMode;
         $('#fullscreenBtnImage' + gameObjectID).removeClass('fa fa-window-maximize');
         $('#fullscreenBtnImage' + gameObjectID).addClass('fa fa-window-minimize');
     }
@@ -125,6 +128,7 @@ class ExternalWebsiteView extends WindowView {
         document.getElementById("iframe" + gameObjectID).width = width;
         document.getElementById("iframe" + gameObjectID).height = height;
         document.getElementById("iframe" + gameObjectID).scrolling = 'no';
+        document.getElementById("fullscreenBtn" + gameObjectID).title = this.languageData.fullscreenMode;
         $('#fullscreenBtnImage' + gameObjectID).removeClass('fa fa-window-minimize');
         $('#fullscreenBtnImage' + gameObjectID).addClass('fa fa-window-maximize');
     }
@@ -140,7 +144,7 @@ class ExternalWebsiteView extends WindowView {
                 <div class="window" id="externalWebsiteWindow${gameObjectID}" style="z-index: 1050; max-width: 100%; max-height: 100%">
                     <div class="p-3 d-flex window-header">
                         <div id="externalWebsiteWindowTitle${gameObjectID}"></div>
-                        <button id="fullscreenBtn${gameObjectID}" class="close btn ml-auto pl-2 pr-2">
+                        <button id="fullscreenBtn${gameObjectID}" title="${this.languageData.fullscreenMode}" class="close btn ml-auto pl-2 pr-2">
                             <i id="fullscreenBtnImage${gameObjectID}" class="fa fa-window-maximize" style="transform: scale(0.8);"></i>
                         </button>
                         <button id="closeBtn${gameObjectID}" class="close btn pl-1 pr-1">

@@ -13,10 +13,10 @@
         <div class="d-flex flex-column ml-4">
             <form id="allchat" action="">
                 <span><input id="allchatMessageInput" autocomplete="off" placeholder="" /></span>
-                <button id="allchatEmojiTrigger" title="Pick emojis">
+                <button id="allchatEmojiTrigger">
                     <i class="fas fa-smile-beam navbarIcons"></i>
                 </button>
-                <button style="background-color: transparent" title="Send" id="allchatSendButton">
+                <button style="background-color: transparent" id="allchatSendButton">
                     <i class="fas fa-paper-plane navbarIcons"></i>
                 </button>
             </form>
@@ -29,8 +29,8 @@
         </div>
 
         <div class="d-flex flex-column ml-auto">
-            <div class="achievementBox p-1 align-items-center text-center" style="z-index: 300" title="Your points"
-                data-toggle="tooltip" data-placement="bottom">
+            <div class="achievementBox p-1 align-items-center text-center" style="z-index: 300" 
+                data-toggle="tooltip" data-placement="bottom" id="points">
                 <i class="fa fa-product-hunt navbarIcons"></i>
                 <p class="navbarIconsText" style="display:inline-block;" id="pointBox">0</p>
             </div>
@@ -38,7 +38,7 @@
 
         <div class="d-flex flex-column">
             <div class="achievementBox p-1 align-items-center text-center" style="z-index: 300" data-toggle="tooltip"
-                data-placement="bottom" title="Your rank">
+                data-placement="bottom" id="rank">
                 <i class="fas fa-medal navbarIcons"></i>
                 <p class="navbarIconsText" style="display:inline-block;" id="rankBox">0</p>
             </div>
@@ -47,7 +47,7 @@
         <div class="d-flex flex-column ml-4">
             <div class="profileBox align-items-center text-center"
                 style="border: 0.0625rem solid antiquewhite; border-top: none; border-radius: 0rem 0rem 0.3125rem 0.3125rem; height: 3.5rem; z-index: 300">
-                <a class="action_button nav-item nav-link d-flex align-items-center" title="Profile" href="" onclick="" id="profileButton"
+                <a class="action_button nav-item nav-link d-flex align-items-center" href="" onclick="" id="profileButton"
                     data-toggle="modal">
                     <i class="fa fa-user fa-2x navbarIcons"></i>
                     <span class="navbarIconsText ml-2" id="profilePlaceholder"></span>
@@ -92,11 +92,11 @@
         <div class="d-flex flex-column ml-auto" style="width: 15.625rem;">
             <div style="z-index: 5">
                 <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="showNotifBar" onclick=""
-                    href="" style="float:right; text-align: right;"><small>Show notification (<span
+                    href="" style="float:right; text-align: right;"><small><span id="showNotificationText"></span> (<span
                             id="unreadNotif"></span>)</small>
                 </a>
                 <a class="action_button nav-item nav-link p-1 showRoomChat" role="button" id="hideNotifBar" href=""
-                    onclick="" style="float:right; text-align: right;"><small>Hide notification</small>
+                    onclick="" style="float:right; text-align: right;"><small><span id="hideNotificationText"></span></small>
                 </a>
             </div>
             <div id="notifBar"></div>
@@ -108,79 +108,75 @@
 <div class="row justify-content-center pl-1">
     <div class="d-flex flex-row col-12" style="bottom:0; position: absolute">
         <div class="d-flex flex-column" style="z-index: 300;">
-            <a class="action_button nav-item nav-link" title="Rank list of conference participants" href="" onclick=""
+            <a class="action_button nav-item nav-link" href="" onclick=""
                 id="rankListButton" data-toggle="modal">
                 <div class="d-flex flex-row justify-content-center align-items-center">
                     <i class="fa fa-globe fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
-                    Ranklist
+                    <p id="ranklistText"></p>
                 </div>
             </a>
         </div>
         <div class="d-flex flex-column" style="z-index: 300;">
             <a class="action_button nav-item nav-link align-items-center justify-content-center" href=""
-                id="achievementListButton" title="Achievement list" onclick="" data-toggle="modal">
+                id="achievementListButton" onclick="" data-toggle="modal">
                 <div class="d-flex flex-row align-items-center justify-content-center">
                     <i class="fa fa-star fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row align-items-center justify-content-center navbarIconsText">
-                    Achievements
+                    <p id="achievementsText"></p>
                 </div>
             </a>
         </div>
         <div class="d-flex flex-column" style="z-index: 300;">
-            <a href="" onclick="" id="scheduleListButton" title="Presentation schedule"
-                class="action_button nav-item nav-link" data-toggle="modal">
+            <a href="" onclick="" id="scheduleListButton" class="action_button nav-item nav-link" data-toggle="modal">
                 <div class="d-flex flex-row justify-content-center align-items-center">
                     <i class="fa fa-table fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
-                    Schedule
+                    <p id="scheduleText"></p>
                 </div>
             </a>
         </div>
         <div class="d-flex flex-column" style="z-index: 300;">
-            <a class="action_button nav-item nav-link" href="" id="meetingListButton" title="Meeting list" onclick=""
+            <a class="action_button nav-item nav-link" href="" id="meetingListButton" onclick=""
                 data-toggle="modal">
                 <div class="d-flex flex-row justify-content-center align-items-center">
                     <i class="fas fa-video fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
-                    Group Meetings
+                    <p id="meetingsText"></p>
                 </div>
             </a>
         </div>
         <div class="d-flex flex-column ml-auto" style="z-index: 300;">
-            <a class="action_button nav-item nav-link" href="" id="friendListButton"
-                title="Friend list and received friend request list" onclick="" data-toggle="modal">
+            <a class="action_button nav-item nav-link" href="" id="friendListButton" onclick="" data-toggle="modal">
                 <div class="d-flex flex-row justify-content-center align-items-center">
                     <i class="fa fa-address-book-o fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
-                    Friendlist
+                    <p id="friendListText"></p>
                 </div>
             </a>
         </div>
         <div class="d-flex flex-column" style="z-index: 300;">
-            <a class="action_button nav-item nav-link" href="" id="chatListButton" title="Chat list" onclick=""
-                data-toggle="modal">
+            <a class="action_button nav-item nav-link" href="" id="chatListButton" onclick="" data-toggle="modal">
                 <div class="d-flex flex-row justify-content-center align-items-center">
                     <i class="fa fa-comments-o fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
-                    Chats
+                    <p id="chatsText"></p>
                 </div>
             </a>
         </div>
         <div class="d-flex flex-column" style="z-index: 300;">
-            <a id="nav_leave_button" class="action_button nav-item nav-link" href="/" title="Leave conference"
-                onclick="return confirm('Are you sure you want to leave?')">
+            <a id="nav_leave_button" class="action_button nav-item nav-link" href="/">
                 <div class="d-flex flex-row justify-content-center align-items-center">
                     <i class="fa fa-sign-out fa-4x navbarIcons"></i>
                 </div>
                 <div class="d-flex flex-row justify-content-center align-items-center navbarIconsText">
-                    Leave
+                    <p id="leaveText"></p>
                 </div>
             </a>
         </div>

@@ -8,9 +8,11 @@ class NPCStoryView extends WindowView {
 
     /**
      * Creates an instance of NPCStoryView
+     * 
+     * @param {json} languageData language data for npcStory view
      */
-    constructor() {
-        super();
+    constructor(languageData) {
+        super(languageData);
 
         if (!!NPCStoryView.instance) {
             return NPCStoryView.instance;
@@ -32,7 +34,9 @@ class NPCStoryView extends WindowView {
         $('#npcStory' + npcId).empty();
         
         $(`#npcStoryModal${npcId} .modal-header`).append(`
-            <h5 class="modal-title d-inline-block" id="npcStoryTitle${npcId}">${name + " says..."}</h5>
+            <h5 class="modal-title d-inline-block" id="npcStoryTitle${npcId}">
+                ${this.languageData.replace('npcNamePlaceholder', name)}
+            </h5>
             <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                 <i class="fa fa-close"></i>
             </button>

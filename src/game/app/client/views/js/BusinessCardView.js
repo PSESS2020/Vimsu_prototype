@@ -11,9 +11,10 @@ class BusinessCardView extends WindowView {
      * Creates an instance of BusinessCardView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for businesscard view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!BusinessCardView.instance) {
             return BusinessCardView.instance;
@@ -24,8 +25,9 @@ class BusinessCardView extends WindowView {
         this.eventManager = eventManager;
 
         $('#businessCardModal').on('hidden.bs.modal', function (e) {
-            $('#businessCardModal .modal-body').empty();
-        });
+            $('#businessCardModal .modal-body').empty()
+        })
+        $('#businessCardText').text(this.languageData.businessCard);
     }
 
     /**
@@ -53,28 +55,28 @@ class BusinessCardView extends WindowView {
             <table id="${"profile" + businessCard.getParticipantId()}" style = "width:100%; margin-left: 0">
                 ${businessCard.getJob() || businessCard.getCompany() ?
                     `<tr>
-                        <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 0.9375rem">Profession</td>
-                        <td style="padding: 0.9375rem">${(businessCard.getJob() ? businessCard.getJob() : "Unknown") + 
-                            " at " + (businessCard.getCompany() ? businessCard.getCompany() : "Unknown")}</td>
+                        <td style="border-right: 1pt solid antiquewhite; text-align: right; padding: 0.9375rem" >${this.languageData.profession}</td>
+                        <td style="padding: 0.9375rem">${(businessCard.getJob() ? businessCard.getJob() : this.languageData.unknown) + 
+                            " " + this.languageData.at + " " + (businessCard.getCompany() ? businessCard.getCompany() : this.languageData.unknown)}</td>
                     </tr>`
                 : 
                     ``
                 }
                 ${isFriend || !isModerator ?
                     `<tr>
-                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">${isFriend ? "Email" : "Rank"}</td>
+                        <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">${isFriend ? this.languageData.email : this.languageData.rank}</td>
                         <td style="padding: 0.9375rem">${isFriend ? businessCard.getEmail() : rank}</td>
                     </tr>`
                 : 
                     ``
                 }
                 <tr>
-                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">Role</td>
-                    <td style="padding: 0.9375rem">${isModerator ? "Moderator" : "Participant"}</td>
+                    <td style="border-right: 1pt solid antiquewhite ; text-align: right; padding: 0.9375rem">${this.languageData.role}</td>
+                    <td style="padding: 0.9375rem">${isModerator ? this.languageData.roles.moderator : this.languageData.roles.participant}</td>
                 </tr>
             </table>
             </br>
-            <button id="${"chatnow" + businessCard.getParticipantId()}" title ="Close business card and chat now" class="btn btn-blue mx-auto d-block">Chat</button>
+            <button id="${"chatnow" + businessCard.getParticipantId()}" title ="${this.languageData.tooltips.chatNow}" class="btn btn-blue mx-auto d-block">Chat</button>
             </br>
         `);
 

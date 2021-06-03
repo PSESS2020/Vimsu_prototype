@@ -14,9 +14,10 @@ class ChatListView extends WindowView {
    * Creates an instance of ChatListView
    *
    * @param {EventManager} eventManager event manager
+   * @param {json} languageData language data for chatlist view
    */
-  constructor(eventManager) {
-    super();
+  constructor(eventManager, languageData) {
+    super(languageData);
 
     if (!!ChatListView.instance) {
       return ChatListView.instance;
@@ -32,6 +33,9 @@ class ChatListView extends WindowView {
       $('#inputGroupNameModal').modal('show');
       $('#groupNameInput').trigger('focus');
     });
+
+    $('#yourChatsText').text(this.languageData.yourChats);
+    $('#initGroupChatText').text(this.languageData.group);
   }
 
   /**
@@ -75,9 +79,9 @@ class ChatListView extends WindowView {
     let previewMessage = chat.previewMessage;
 
     if (chat.timestamp && chat.timestamp instanceof Date) {
-      timestamp = new DateParser(chat.timestamp).parse();
+      timestamp = new DateParser().parse(chat.timestamp);
     } else {
-      timestamp = "no messages";
+      timestamp = this.languageData.noMessages;
     }
 
     if (previewMessage.includes('<br/>')) {
@@ -104,7 +108,7 @@ class ChatListView extends WindowView {
     // Now we want to append each chat as a clickable element
     $("#chatListModal .modal-body .list-group").prepend(`
         <li class="list-group-item bg-transparent chatthread px-0" id="${"chatListEntry" + chat.chatId}">
-            <a class="" title="Open chat" id="${"chat" + chat.chatId}" role="button" data-toggle="modal" href="">
+            <a class="" id="${"chat" + chat.chatId}" title="${this.languageData.tooltips.openChat}" role="button" data-toggle="modal" href="">
                 <div class="d-flex flex-row px-0">
                     <div class="col-2 pr-0 my-auto">
                         <div class="d-flex flex-row justify-content-center align-items-center my-auto">
@@ -158,7 +162,7 @@ class ChatListView extends WindowView {
    */
   handleEmptyChats(chats) {
     if (chats && chats.length < 1) {
-      $("#nochat").text("No chats found. Let's connect with others!");
+      $("#nochat").text(this.languageData.noChats);
       return false;
     }
 
@@ -213,31 +217,31 @@ class ChatListView extends WindowView {
                         <h5 class="modal-title" id=${"chatThreadModalTitle" + chatID}></h5>
                         <div class="d-flex flex-row justify-content-end">
                             <div>
-                                <button id=${"chatFriendRequestButton" + chatID} class="close btn" style="display: none" title="Add friend">
+                                <button id=${"chatFriendRequestButton" + chatID} class="close btn" style="display: none" title="${this.languageData.tooltips.addFriend}">
                                     <i class="fa fa-user-plus navbarIcons" style="margin-top: 0.125rem;" aria-hidden="true"></i>
                                 </button>
                             </div>
                             <div>
-                                <button id=${"chatMeetingButton" + chatID} class="close btn" style="display: none" title="(Video) call with chat participants">
+                                <button id=${"chatMeetingButton" + chatID} class="close btn" style="display: none" title="${this.languageData.tooltips.videoCall}">
                                     <i class="fa fa-video navbarIcons" style="margin-top: 0.125rem;" aria-hidden="true"></i>
                                 </button>
                             </div>
                             <div>
-                                <a class="action_button nav-item nav-link close btn" style="display: none" title="Show chat participant list"
+                                <a class="action_button nav-item nav-link close btn" style="display: none" title="${this.languageData.tooltips.showMembers}"
                                     role="button" id=${"chatParticipantListBtn" + chatID} data-toggle="modal">
                                     <i class="fa fa-info-circle navbarIcons"
                                         style="margin-top: 0.0625rem;"></i>
                                 </a>
                             </div>
                             <div>
-                                <a class="action_button nav-item nav-link close btn" style="display: none" title="Invite friends to group chat"
+                                <a class="action_button nav-item nav-link close btn" style="display: none" title="${this.languageData.tooltips.inviteFriends}"
                                     role="button" id=${"inviteFriendsBtn" + chatID} data-toggle="modal">
                                     <i class="fa fa-plus-square navbarIcons"
                                         style="margin-top: 0.0625rem;"></i>
                                 </a>
                             </div>
                             <div>
-                                <button id=${"chatLeaveButton" + chatID} class="close btn" style="display: none" title="Leave chat">
+                                <button id=${"chatLeaveButton" + chatID} class="close btn" style="display: none" title="${this.languageData.tooltips.leaveChat}">
                                     <i class="fa fa-sign-out navbarIcons" style="margin-top: 0.125rem"></i>
                                 </button>
                             </div>
@@ -262,11 +266,11 @@ class ChatListView extends WindowView {
                         <div class="d-flex">
                             <form id=${"chatMessageInputGroup" + chatID} class="input-group mb-3 mr-2 ml-2 mt-auto flex-align-bottom">
                                 
-                                <button id=${"chatthreadEmojiTrigger" + chatID} class="mr-2" style="background: none" title="Pick emojis"><i class="fas fa-smile-beam"></i></button>
+                                <button id=${"chatthreadEmojiTrigger" + chatID} class="mr-2" style="background: none" title="${this.languageData.tooltips.emojis}"><i class="fas fa-smile-beam"></i></button>
                                 <textarea id=${"chatMessageInput" + chatID} type="text"
-                                    class="form-control chatInputGroup" placeholder="Enter message ..." autocomplete="off" rows="1"></textarea>
+                                    class="form-control chatInputGroup" placeholder="${this.languageData.enterMessage}" autocomplete="off" rows="1"></textarea>
                                 <div class="input-group-append">
-                                    <button id=${"chatMessageButton" + chatID} class="btn btn-blue" type="button">Send</button>
+                                    <button id=${"chatMessageButton" + chatID} class="btn btn-blue" type="button">${this.languageData.send}</button>
                                 </div>
                             </form>
                         </div>

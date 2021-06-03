@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class AllchatView extends Views {
+class AllchatView extends ViewWithLanguageData {
 
     lastCommands = [];
 
@@ -12,9 +12,10 @@ class AllchatView extends Views {
      * Creates an instance of Allchat View
      * 
      * @param {EventManager} eventManager event manager instance
+     * @param {json} languageData language data for allchat view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!AllchatView.instance) {
             return AllchatView.instance;
@@ -22,7 +23,10 @@ class AllchatView extends Views {
 
         AllchatView.instance = this;
 
-        $("#allchatWindow").hide();
+        document.getElementById("allchatEmojiTrigger").title = this.languageData.tooltips.emojis;
+        document.getElementById("allchatSendButton").title = this.languageData.tooltips.sendMessage;
+
+        $("#allchatWindow").hide()
 
         $('#showRoomChatDiv').on('click', (event) => {
             event.preventDefault();
@@ -103,19 +107,18 @@ class AllchatView extends Views {
      * @param {String} ownUsername current participant's username
      */
     draw(roomName, messages, ownUsername) {
-        $('#allchatMessageInput')[0].placeholder = 'Enter ' + roomName.toLowerCase() + ' chat message ...'
-        $('#allchatHeaderText').text(roomName + ' Chat');
-
+        $('#allchatMessageInput')[0].placeholder = this.languageData.enterMessage.replace('<roomName>', roomName);
+        $('#allchatHeaderText').text(roomName + ' ' + this.languageData.chat);
         $("#unreadAllchatMessage").text(0)
 
         $('#showRoomChat').empty();
         $('#showRoomChat').append(`
-            <small>Show ${roomName.toLowerCase()} chat messages</small>
-        `);
+            <small>${this.languageData.showMessages.replace('<roomName>', roomName)}</small>
+        `)
 
         $('#allchatMessages').empty();
         if (messages.length < 1) {
-            $('#noAllchat').text("The " + roomName.toLowerCase() + " chat is somehow quiet. Send some love here?")
+            $('#noAllchat').text(this.languageData.quietChat.replace('<roomName>', roomName))
             return;
         }
 
@@ -152,7 +155,7 @@ class AllchatView extends Views {
     appendMessage(message, ownUsername) {
         $('#noAllchat').empty();
 
-        var timestamp = new DateParser(new Date(message.timestamp)).parseOnlyTime();
+        var timestamp = new DateParser().parseOnlyTime(new Date(message.timestamp))
 
         const isOwnParticipant = message.username === ownUsername;
 

@@ -8,6 +8,7 @@ class GameView {
 
     updateList = [];
     gameViewInit;
+    languageData;
 
     currentMapView;
 
@@ -56,7 +57,6 @@ class GameView {
 
         //bool to check, if game view is already initialized. If not, draw is not possible
         this.gameViewInit = false;
-        this.gameEngine = new IsometricEngine();
     }
     
     /**
@@ -67,42 +67,42 @@ class GameView {
     initEventManager(clientController) {
         TypeChecker.isInstanceOf(clientController, ClientController);
         this.eventManager = new EventManager(clientController);
-
-        //initialize some Views at the very beginning
-        this.initViews();
     } 
 
     /**
-     * initializes View instances
+     * initializes View instances with language data
+     * 
+     * @param {json} languageData language data
      */
-    initViews = function () {
-        this.hudView = new HUDView(this.eventManager);
-        this.statusBar = new StatusBar();
-        this.notifBar = new NotificationBar(this.eventManager);
-        this.allchatView = new AllchatView(this.eventManager);
-        new InputGroupNameView(this.eventManager);
-        this.currentLecturesView = new CurrentLecturesView(this.eventManager);
-        this.lectureView = new LectureView(this.eventManager);
-        this.friendRequestListView = new FriendRequestListView(this.eventManager);
-        this.friendListView = new FriendListView(this.eventManager);
-        this.inviteFriendsView = new InviteFriendsView(this.eventManager);
-        this.chatListView = new ChatListView(this.eventManager);
-        this.meetingListView = new MeetingListView(this.eventManager);
-        this.videoMeetingView = new VideoMeetingView(this.eventManager);
-        this.chatThreadView = new ChatThreadView(this.eventManager);
+    initViews = function (languageData) {
+        this.gameEngine = new IsometricEngine(new LoadingView(languageData.loadingConference));
+        this.hudView = new HUDView(this.eventManager, languageData.hud);
+        this.statusBar = new StatusBar(languageData.hud.statusBar);
+        this.notifBar = new NotificationBar(this.eventManager, languageData.hud.notifBar);
+        this.allchatView = new AllchatView(this.eventManager, languageData.hud.allchat);
+        new InputGroupNameView(this.eventManager, languageData.chats);
+        this.currentLecturesView = new CurrentLecturesView(this.eventManager, languageData.currentLectures);
+        this.lectureView = new LectureView(this.eventManager, languageData.lecture);
+        this.friendRequestListView = new FriendRequestListView(this.eventManager, {friendList: languageData.friendList, businessCard: languageData.businessCard});
+        this.friendListView = new FriendListView(this.eventManager, {friendList: languageData.friendList, businessCard: languageData.businessCard});
+        this.inviteFriendsView = new InviteFriendsView(this.eventManager, {chats: languageData.chats, businessCard: languageData.businessCard});
+        this.chatListView = new ChatListView(this.eventManager, languageData.chats);
+        this.meetingListView = new MeetingListView(this.eventManager, languageData.meetings);
+        this.videoMeetingView = new VideoMeetingView(this.eventManager, languageData.meetings);
+        this.chatThreadView = new ChatThreadView(this.eventManager, languageData.chats);
         this.chatParticipantListView = new ChatParticipantListView();
-        this.scheduleListView = new ScheduleListView();
+        this.scheduleListView = new ScheduleListView(languageData.schedule);
         this.globalChatView = new GlobalChatView();
         this.largerGlobalChatView = new LargerGlobalChatView();
-        this.profileView = new ProfileView();
-        this.rankListView = new RankListView(this.eventManager);
-        this.npcStoryView = new NPCStoryView();
-        this.externalWebsiteView = new ExternalWebsiteView();
-        this.newAchievementView = new NewAchievementView();
-        this.achievementView = new AchievementView();
-        this.businessCardView = new BusinessCardView(this.eventManager);
+        this.profileView = new ProfileView(languageData.businessCard);
+        this.rankListView = new RankListView(this.eventManager, languageData.ranklist);
+        this.npcStoryView = new NPCStoryView(languageData.npcSays);
+        this.externalWebsiteView = new ExternalWebsiteView(languageData.externalWebsite);
+        this.newAchievementView = new NewAchievementView(languageData.newAchievement);
+        this.achievementView = new AchievementView(languageData.achievements);
+        this.businessCardView = new BusinessCardView(this.eventManager, languageData.businessCard);
         this.successesBar = new SuccessesBar();
-        this.enterCodeView = new EnterCodeView(this.eventManager);
+        this.enterCodeView = new EnterCodeView(this.eventManager, languageData.enterCode);
     }
 
     /**
@@ -415,7 +415,8 @@ class GameView {
      * Updates FPS
      */
     updateFPS() {
-        this.statusBar.updateFPS();
+        if (this.statusBar !== undefined)
+            this.statusBar.updateFPS();
     }
 
     /**

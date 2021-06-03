@@ -7,15 +7,16 @@
 class RankListView extends WindowView {
 
     rankList;
-    eventManager
+    eventManager;
 
     /**
      * Creates an instance of RankListView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for ranklist view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!RankListView.instance) {
             return RankListView.instance;
@@ -24,6 +25,8 @@ class RankListView extends WindowView {
         RankListView.instance = this;
 
         this.eventManager = eventManager;
+
+        $('#bestParticipantsText').text(this.languageData.bestParticipants);
     }
 
     /**
@@ -43,7 +46,7 @@ class RankListView extends WindowView {
 
         if (rankList.length < 1) {
             if (emptyRankList) {
-                $('#noranklist').text("There are no participants in this conference yet.");
+                $('#noranklist').text(this.languageData.noParticipants);
             }
             
             return;

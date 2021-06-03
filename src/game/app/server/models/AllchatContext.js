@@ -1,6 +1,5 @@
 const CommandContext = require('./CommandContext.js');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const CommandMessages = require('../utils/messages/CommandMessages.js');
 const Room = require('./Room.js');
 
 /**
@@ -56,10 +55,12 @@ module.exports = class AllchatContext extends CommandContext {
      * Gets help messages
      * @method module:AllchatContext#getHelpMessage
      * 
+     * @param {json} messages language data for messages
+     * 
      * @return {Object} help messages
      */
-    getHelpMessage() {
-        return CommandMessages.HELPALLCHAT;
+    getHelpMessage(messages) {
+        return messages.help.listOfAllchatCommands;
     };
 
     /**
@@ -131,8 +132,9 @@ module.exports = class AllchatContext extends CommandContext {
             var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
             var accountId = socket.request.session.accountId;
             if (socket != undefined && !this.#serverController.isMuted(accountId)) {
+                var muteMsg = socket.messages.allchat.mute;
                 this.#serverController.mute(accountId);
-                this.#serverController.sendNotification(socket.id, CommandMessages.MUTE);
+                this.#serverController.sendNotification(socket.id, muteMsg);
             }
         }
     };
@@ -151,8 +153,9 @@ module.exports = class AllchatContext extends CommandContext {
             var socket = this.#serverController.getSocketObject(this.#serverController.getSocketId(ppantID));
             var accountId = socket.request.session.accountId;
             if (socket != undefined && this.#serverController.isMuted(accountId)) {
+                var unmuteMsg = socket.messages.allchat.unmute;
                 this.#serverController.unmute(accountId);
-                this.#serverController.sendNotification(socket.id, CommandMessages.UNMUTE);
+                this.#serverController.sendNotification(socket.id, unmuteMsg);
             }
         };
     }

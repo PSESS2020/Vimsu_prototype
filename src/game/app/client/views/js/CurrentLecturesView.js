@@ -12,9 +12,10 @@ class CurrentLecturesView extends WindowView {
      * Creates an instance of CurrentLecturesView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for currentLectures view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!CurrentLecturesView.instance) {
             return CurrentLecturesView.instance;
@@ -29,6 +30,8 @@ class CurrentLecturesView extends WindowView {
             this.eventManager.handleClearInterval();
             $('#currentLectures').hide();
         });
+
+        $('#currentLecturesText').text(this.languageData.currentLectures);
     }
 
     /**
@@ -41,23 +44,24 @@ class CurrentLecturesView extends WindowView {
         $('#nolecture').empty();
 
         if (lectures.length < 1) {
-            $('#nolecture').text("Lectures will be shown here 10 minutes before the start. Please check the schedule and come back later.");
+            $('#nolecture').text(this.languageData.noLectures);
             $('#currentLectures').show();
             return;
         }
 
         lectures.forEach(lecture => {
-            var startingTime = new DateParser(new Date(lecture.startingTime)).parseOnlyTime();
+            var startingTime = new DateParser().parseOnlyTime(new Date(lecture.startingTime));
 
             $('#currentLecturesContainer').append(`
                 <div class="currentLecturesContainer d-flex flex-column align-items-start col-5 m-3 p-3">
                     <h5 style="display:inline">${lecture.title} </h5>
                     <div>${lecture.remarks}</div>
-                    <div class="small">${"By " + lecture.oratorName}</div>
+                    <div class="small">${this.languageData.by + " " + lecture.oratorName}</div>
                     <br>
-                    <div class="small">${"Start: " + startingTime + " || Duration: " + Math.floor(lecture.duration / 60) + " minutes" + " || Seat: " + lecture.maxParticipants + " participants"}</div>
-                    <span id="${"full" + lecture.id}" style="color: red; display:none" class="align-self-end mt-1 p-2">Lecture is currently full.</span>
-                    <button id='${"show" + lecture.id}' class="btn btn-blue m-2 align-self-end mt-auto">Enter</button>
+                    <div class="small">${this.languageData.start + ": " + startingTime + " || " + this.languageData.duration + ": " + Math.floor(lecture.duration / 60) + " " + 
+                                    this.languageData.minutes + " || " + this.languageData.seats + ": " + lecture.maxParticipants + " " + this.languageData.participants}</div>
+                    <span id="${"full" + lecture.id}" style="color: red; display:none" class="align-self-end mt-1 p-2">${this.languageData.fullLecture}</span>
+                    <button id='${"show" + lecture.id}' class="btn btn-blue m-2 align-self-end mt-auto">${this.languageData.enter}</button>
                 </div>
             `);
 

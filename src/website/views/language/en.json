@@ -123,5 +123,563 @@
         "maxParticipants": "# Participants",
         "video": "Video",
         "supportedFiles": "Supported file: .mp4 || Max. size: 50 MB"
+    },
+
+    "conference": {
+        "clientView": {
+            "hud": {
+                "ranklist": "Ranklist",
+                "achievements": "Achievements",
+                "schedule": "Schedule",
+                "meetings": "Group Meetings",
+                "friendlist": "Friendlist",
+                "chats": "Chats",
+                "leave": "Leave",
+                "showNotification": "Show notification",
+                "hideNotification": "Hide notification",
+                "confirmLeave": "Are you sure you want to leave the conference?",
+                "tooltips": {
+                    "points": "Your points",
+                    "rank": "Your rank",
+                    "profile": "Profile",
+                    "ranklist": "Ranklist of conference participants",
+                    "achievements": "Achievement list",
+                    "schedule": "Presentation schedule",
+                    "meetings": "Meeting list",
+                    "friendlist": "Friend list and received friend request list",
+                    "chats": "Chat list",
+                    "leave": "Leave conference"
+                },
+                "statusBar": {
+                    "fps": "FPS",
+                    "location": "Location",
+                    "ping": "Ping",
+                    "group": "Group",
+                    "lostConnection": "Lost connection to the server.",
+                    "reconnect": "Reconnecting to the server..."
+                },
+                "allchat": {
+                    "chat": "Chat",
+                    "showMessages": "Show <roomName> chat messages",
+                    "enterMessage": "Enter <roomName> chat message ...",
+                    "quietChat": "The <roomName> chat is somehow quiet. Send some love here?",
+                    "tooltips": {
+                        "sendMessage": "Send",
+                        "emojis": "Pick emojis"
+                    }
+                },
+                "notifBar": {
+                    "newMessage": "New message from usernamePlaceholder.",
+                    "newChat": "usernamePlaceholder init chat with you.",
+                    "newGroupChat": "usernamePlaceholder invited you to the group chat groupNamePlaceholder.",
+                    "newMeeting": "You were invited to the video meeting meetingNamePlaceholder.",
+                    "newFriendRequest": "New friend request from usernamePlaceholder.",
+                    "requestAccepted": "usernamePlaceholder accepted your friend request.",
+                    "inCall": "You are in call with meetingNamePlaceholder."
+                }
+            },
+            "days": {
+                "monday": "Monday",
+                "tuesday": "Tuesday",
+                "wednesday": "Wednesday",
+                "thursday": "Thursday",
+                "friday": "Friday",
+                "saturday": "Saturday",
+                "sunday": "Sunday"
+            },
+            "months": {
+                "january": "January",
+                "february": "February",
+                "march": "March",
+                "april": "April",
+                "may": "May",
+                "june": "June",
+                "july": "July",
+                "august": "August",
+                "september": "September",
+                "october": "October",
+                "november": "November",
+                "december": "December"
+            },
+            "achievements": {
+                "yourAchievements": "Your achievements",
+                "nextTarget": "Target: [<currentCount> / <nextTarget>]",
+                "completed": "Completed",
+                "level": "Level"
+            },
+            "ranklist": {
+                "bestParticipants": "Best Participants",
+                "noParticipants": "There are no participants in this conference yet."
+            },
+            "schedule": {
+                "noLectureFound": "Sorry, no lecture is found.",
+                "seconds": "secs",
+                "scheduleList": "Schedule",
+                "lectureTitle": "Title",
+                "oratorName": "Orator Name",
+                "startingTime": "Starting time",
+                "durationInMin": "Duration (Minutes)",
+                "seatAmount": "Seat Amount",
+                "remarks": "Remarks",
+                "status": "Status",
+                "states": {
+                    "Coming soon": "Coming soon",
+                    "Opened": "Opened",
+                    "Running": "Running",
+                    "Expired": "Expired"
+                },
+                "allExpired": "Sorry, all lectures have expired."
+            },
+            "businessCard": {
+                "businessCard": "Business Card",
+                "profession": "Profession",
+                "at": "at",
+                "unknown": "Unknown",
+                "email": "Email",
+                "rank": "Rank",
+                "role": "Role",
+                "roles": {
+                    "moderator": "Moderator",
+                    "participant": "Participant"
+                },
+                "tooltips": {
+                    "chatNow": "Close business card and chat now"
+                }
+            },
+            "chats": {
+                "yourChats": "Your chats",
+                "group": "Group",
+                "noMessages": "no messages",
+                "noChats": "No chats found. Let's connect with others!",
+                "tooltips": {
+                    "openChat": "Open chat",
+                    "addFriend": "Add friend",
+                    "videoCall": "(Video) call with chat participants",
+                    "showMembers": "Show chat participant list",
+                    "inviteFriends": "Invite friends to group chat",
+                    "leaveChat": "Leave chat",
+                    "emojis": "Pick emojis",
+                    "requestSent": "Friend request sent",
+                    "sendRequest": "Send friend request"
+                },
+                "enterMessage": "Enter message ...",
+                "send": "Send",
+                "chatParticipantList": "Chat Participant List",
+                "confirmLeaveChat": "Are you sure you want to leave from chat chat_name?",
+                "createGroupChat": "Create Group Chat",
+                "inviteFriends": "Invite Friends",
+                "enterGroupName": "Enter group name",
+                "tooManyFriends": "You may only invite limit friend(s)! Please unselect diff friend(s).",
+                "emptyGroupName": "Group name was empty",
+                "noFriends": "No friends to invite",
+                "selectAtLeastOne": "Please select at least one friend!"
+            },
+            "externalWebsite": {
+                "fullscreenMode": "Switch to fullscreen",
+                "normalMode": "Switch back to normal size"
+            },
+            "enterCode": {
+                "enterCode": "Enter code",
+                "sendCode": "Send code",
+                "tooltips": {
+                    "sendCode": "Sends the code you entered in the input field"
+                }
+            },
+            "loadingConference": "Loading Conference percentagePlaceholder . . .",
+            "currentLectures": {
+                "by": "By",
+                "start": "Start",
+                "duration": "Duration",
+                "minutes": "minutes",
+                "seats": "seats",
+                "participants": "participants",
+                "fullLecture": "Lecture is currently full.",
+                "enter": "Enter",
+                "currentLectures": "Current Lectures",
+                "noLectures": "Lectures will be shown here 10 minutes before the start. Please check the schedule and come back later."
+            },
+            "lecture": {
+                "lectureChat": "Lecture Chat",
+                "questionsAfterLecture": "You can ask questions in this chat after the lecture.",
+                "chatAfterLecture": "This chat will be opened after the lecture.",
+                "moderatorRights": "You have the right to close the lecture or to ban participants after the lecture.",
+                "secondsTill": "seconds left till the",
+                "presentationStarts": "presentation starts",
+                "notOverWithToken": "The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?",
+                "notOverOrator": "The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?",
+                "notOverWithoutToken": "The lecture is not over! Are you sure you want to leave?",
+                "comeBackOnTime": "When you leave, you have 5 minutes after the lecture begins to come back. After that time, your token will expire for this lecture. Please come back on time!",
+                "send": "Send",
+                "enterMessage": "Enter message",
+                "tokenMessages": {
+                    "revoke": "Your token was revoked by either the orator or a moderator. Therefore, you are no longer able to ask questions in the lecture chat. Please remember to follow chat etiquette.",
+                    "timeout": "You left the lecture for too long. Therefore, you will not be able to ask questions in the lecture chat.",
+                    "hasToken": "You obtained a question token!"
+                }
+            },
+            "friendList": {
+                "friendList": "Friend List",
+                "requests": "Requests",
+                "friendRequestList": "Friend Request List",
+                "sureToRemove": "Are you sure you want to remove usernamePlaceholder from your friend list?",
+                "noFriends": "No friends were found. Chat with others and send some friend requests!",
+                "noRequests": "No friend requests received.",
+                "unfriend": "Unfriend",
+                "chat": "Chat",
+                "accept": "Accept",
+                "reject": "Reject",
+                "accepted": "Accepted",
+                "rejected": "Rejected",
+                "tooltips": {
+                    "chatNow": "Close friend list and chat now",
+                    "removeFriend": "Remove from friend list",
+                    "acceptRequest": "Remove from friend request and add to friend list",
+                    "rejectRequest": "Remove from friend request and reject"
+                }
+            },
+            "meetings": {
+                "yourMeetings": "Your meetings",
+                "noMeetings": "No meetings found.",
+                "tooltips": {
+                    "openMeeting": "Open meeting",
+                    "minimizeMeeting": "Minimize meeting, voice chat will stay active"
+                }
+            },
+            "npcSays": "npcNamePlaceholder says...",
+            "newAchievement": {
+                "unlocked": "New Achievement Unlocked!",
+                "unlockedWithNameAndLevel": "titlePlaceholder Level levelPlaceholder Now Unlocked!",
+                "unlockedWithDescription": "You have unlocked a new achievement: descriptionPlaceholder"
+            }
+        },
+
+        "messages": {
+            "help": {
+                "listOfAllchatCommands": {
+                    "header": "List of Commands",
+                    "body": [ "\\ban <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and removes all of them from the conference. They will not be able to reenter the conference.\nWARNING: It is not yet possible to unban a banned user!",
+                        "\\door\nDisplays a list of all door commands and how to use them.",
+                        "\\door <command>\nExecutes door command <command>. Available commands: close, closeallfor, closefor, log, open, openallfor, openfor, setcode.",
+                        "\\global <message>\nPost a message into the global chat. It will display in every participants game-view as a pop-up.",
+                        "\\group\nDisplays a list of all group commands and how to use them.",
+                        "\\group <command>\nExecutes group command <command>. Available commands: add, create, delete, deleteall, log, rm.",
+                        "\\help\nThis command. Displays a list of all commands and how to use them.",
+                        "\\mod <username>\nSets a normal user with <username> to a moderator.",
+                        "\\unmod <username>\nSets a moderator with <username> to a normal user.",
+                        "\\msg\nDisplays a list of all allchat message commands and how to use them.",
+                        "\\msg <command>\nExecutes Allchat message command <command>. Available commands: log, rm, rmallby, showallby.",
+                        "\\mute <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and mutes them, meaning they will no longer be able to post messages into the allchat.",
+                        "\\unmute <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and unmutes them, meaning they will be able to post messages into the allchat again if they were previously muted.",
+                        "\\port\nDisplays a list of all port commands and how to use them.",
+                        "\\port <command>\nExecutes port command <command>. Available commands: group, user.",
+                        "\\room\nDisplays a list of all room commands and how to use them.",
+                        "\\room <command>\nExecutes room command <command>. Available commands: log, userlog.",
+                        "\\userlog\nDisplays a list of all participants that are currently online with their username."]
+                },
+                "listOfDoorCommands": {
+                    "header": "List of Door Commands",
+                    "body": [ "\\door close <doorID>\nCloses the door with ID <doorID> for everyone.",
+                        "\\door closeallfor <list of usernames>\nCloses all existing doors for all passed usernames in <list of usernames>, each one separated from the next one by a whitespace character.",
+                        "\\door closefor <doorID> <list of usernames>\nCloses the door with ID <doorID> for all passed usernames in <list of usernames>, each one separated from the next one by a whitespace character.",
+                        "\\door log\nWill show a log of all available doors with ID and status information.", 
+                        "\\door log <list of roomIDs>\nWill show a log of all available doors with ID and status information in rooms whose ID is in <list of roomIDs>, each roomID separated from the next one by a whitespace character.",
+                        "\\door open <doorID>\nOpens the door with ID <doorID> for everyone.", 
+                        "\\door openallfor <list of usernames>\nOpens all existing doors for all passed usernames in <list of usernames>, each one separated from the next one by a whitespace character.",
+                        "\\door openfor <doorID> <list of usernames>\nOpens the door with ID <doorID> for all passed usernames in <list of usernames, each one separated from the next one by a whitespace character.",
+                        "\\door setcode <doorID> <doorCode>\nAdds <doorCode> to door with ID <doorID>."]
+                },
+                "listOfGroupCommands": {
+                    "header": "List of Group Commands",
+                    "body": [ "\\group add <groupName> <list of usernames>\nAdds all users with username in <list of usernames> to group with name <groupName>, each username separated from the next one by a whitespace character.",
+                        "\\group create <groupName> <groupColor> <list of usernames>\nCreates a group with the unique name <groupName>. All group members will wear a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username separated from the next one by a whitespace character.",
+                        "\\group delete <groupName>\nDeletes group with the unique name <groupName>.",
+                        "\\group deleteall\nDeletes all exisiting groups.",
+                        "\\group log\nWill show a log of all existing groups with their group name and group color.",
+                        "\\group rm <groupName> <list of usernames>\nRemoves all users with username in <list of usernames> from group with name <groupName>, each username separated from the next one by a whitespace character."]
+                },
+                "listOfMessageCommands": {
+                    "header": "List of Message Commands",
+                    "body": [ "\\msg log\nWill show a log of all messages send into the allchat of the room you're currently in, including the messageID and sender username of each message.",
+                        "\\msg rm <list of msgIDs>\nTakes a list of messageIDs, each one separated from the next one by a whitespace character, and removes the corresponding messages - if they exist - from the allchat of the room you're currently in. Will also send a warning to the senders of the messages, reminding them to follow chat etiquette.",
+                        "\\msg rmallby <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and removes all messages posted by them into the allchat of the room you're currently in. Will also send a warning to these participants, reminding them to follow chat-etiquette.",
+                        "\\msg showallby <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and displays all messages send into the chat by these users."]
+                },
+                "listOfPortCommands": {
+                    "header": "List of Port Commands",
+                    "body": [  "\\port group <groupname> topos <roomID> <cordX> <cordY>\nTeleports all group members of group with groupname <groupname> to position (<cordX>, <cordY>) in room with roomID <roomID>.",
+                        "\\port group <groupname> touser <username>\nTeleports all group members of group with groupname <groupname> to user with username <username>.",
+                        "\\port user <username> topos <roomID> <cordX> <cordY>\nTeleports user with username <username> to position (<cordX>, <cordY>) in room with roomID <roomID>.",
+                        "\\port user <username1> touser <username2>\nTeleports user with username <username1> to user with username <username2>."]
+                },
+                "listOfRoomCommands": {
+                    "header": "List of Room Commands",
+                    "body": [ "\\room log\nDisplays a list of all existing rooms with their ID.",
+                        "\\room userlog <roomID>\nDisplays a list of all participants that are currently online and in room with ID <roomID> with their username."]
+                },
+                "listOfLectureCommands": {
+                    "header": "List of Lecture Commands",
+                    "body": [  "\\ban <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and removes all of them from the lecture. They will not be able to reenter the lecture.\nWARNING: It is not yet possible to revert this!",
+                        "\\close\nCloses the lecture and makes it inaccessible. Every current participant will be forcefully ejected and nobody will be able to rejoin the lecture. WARNING: this command can NOT be reversed.",
+                        "\\grant <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and grants them lecture tokens (if they are currently listening to the lecture and do not own one). They will be able to post messages into the lecture chat.",
+                         "\\help\nThis command. Displays a list of all lecture commands and how to use them.",
+                        "\\msg log\nWill show a log of all messages send into the lecture chat, including the messageID and senderID of each message.",
+                        "\\msg rm <list of msgIDs>\nTakes a list of messageIDs, each one separated from the next one by a whitespace character, and removes the corresponding messages - if they exist - from the lecture chat. Will also send a warning to the senders of the messages, reminding them to follow chat etiquette.",
+                        "\\msg rmallby <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and removes all messages posted by them into the lecture chat. Will also send a warning to these participants, reminding them to follow chat-etiquette.",
+                        "\\msg showallby <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and displays all messages send into the chat by these users.", 
+                        "\\revoke <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and revokes their lecture tokens (if they own one). They will no longer be able to post messages into the lecture chat."]
+                }
+            },
+            "general": {
+                "warning": {
+                    "header": "Warning",
+                    "body": "One of your messages was removed by a moderator. Please follow the general chat etiquette. Additional infractions may result in a permanent ban."
+                },
+                "unknownCommand": {
+                    "header": "Unrecognized command",
+                    "body": "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
+                },
+                "invalidParameters": {
+                    "header": "Invalid parameters",
+                    "body": "Invalid command parameters. Please try again and check all commands with '\\help'."
+                },
+                "unknownUsername": {
+                    "header": "Unknown username",
+                    "body": "Entered username does not exist."
+                },
+                "noUsersFound": {
+                    "header": "No users found",
+                    "body": "No users were found with this search criterion. Please try again."
+                },
+                "noUsernamePassed": {
+                    "header": "No username passed",
+                    "body": "Don't forget to pass a username!"
+                }
+            },
+            "lecture": {
+                "revoke": {
+                    "header": "Token revoked",
+                    "body": "Your token has been revoked for not following chat etiquette. You will no longer be able to post messages into the lecture chat."
+                },
+                "grant": {
+                    "header": "Token granted",
+                    "body": "You have been granted a token. You will now be able to post messages into the lecture chat. Please remember to follow the chat etiquette."
+                },
+                "removal": {
+                    "header": "Removal",
+                    "body": "You have been removed from this lecture by a moderator. Please follow the general chat etiquette."
+                },
+                "closed": {
+                    "header": "Lecture closed",
+                    "body": "The orator has closed this lecture. It is no longer accessible."
+                }
+            },
+            "allchat": {
+                "mute": {
+                    "header": "Muted",
+                    "body": "You have been muted for not following proper chat etiquette. You will no longer be able to post messages into the allchat."
+                },
+                "unmute": {
+                    "header": "Unmuted",
+                    "body": "You are no longer muted and able to post messages into the allchat again. Please remember to follow the chat etiquette."
+                },
+                "unknownCommand": {
+                    "header": "Unrecognized message command",
+                    "body": "You entered an unrecognized command. Enter '\\msg' to receive an overview of all allchat message commands and how to use them."
+                }
+            },
+            "mod": {
+                "modSet": {
+                    "header": "Mod status set successfully",
+                    "body": "usernamePlaceholder is now a moderator."
+                },
+                "unmodSet": {
+                    "header": "Mod status set successfully",
+                    "body": "usernamePlaceholder is no longer a moderator."
+                },
+                "youAreNowMod": {
+                    "header": "Your mod state changed",
+                    "body": "You are now a moderator. Type in \\help to see all commands."
+                },
+                "youAreNoLongerMod": {
+                    "header": "Your mod state changed",
+                    "body": "You are no longer a moderator."  
+                }
+            },
+            "room": {
+                "unknownCommand": {
+                    "header": "Unrecognized room command",
+                    "body": "You entered an unrecognized command. Enter '\\room' to receive an overview of all room commands and how to use them."
+                },
+                "roomNotFound": {
+                    "header": "Room not found",
+                    "body": "There is no room with the passed ID. Please try again."
+                },
+                "noRoomIDPassed": {
+                    "header": "No room ID passed",
+                    "body": "Don't forget to pass a valid room ID. See all rooms and their ID with '\\room log'."
+                }
+            },
+            "door": {
+                "unknownCoomand": {
+                    "header": "Unrecognized door command",
+                    "body": "You entered an unrecognized command. Enter '\\door' to receive an overview of all door commands and how to use them."
+                },
+                "unknownDoorID": {
+                    "header": "Unknown Door ID",
+                    "body": "You entered a wrong DoorID. Please check it again with '\\door log'."
+                },
+                "invalidDoorCode": {
+                    "header": "Invalid Door Code", 
+                    "body": "Don't forget to pass a valid door code!"
+                },
+                "openedDoor": {
+                    "header": "Successfully opened door",
+                    "body": "You successfully opened the door with the ID doorIDPlaceholder for all passed users."
+                },
+                "closedDoor": {
+                    "header": "Successfully closed door",
+                    "body": "You successfully closed the door with the ID doorIDPlaceholder for all passed users." 
+                },
+                "openedDoorForAll": {
+                    "header": "Successfully opened door",
+                    "body": "You successfully opened the door with the ID doorIDPlaceholder for all users."
+                },
+                "closedDoorForAll": {
+                    "header": "Successfully closed door",
+                    "body": "You successfully closed the door with the ID doorIDPlaceholder for all users."
+                },
+                "closedAllDoorsFor": {
+                    "header": "Successfully closed all doors",
+                    "body": "You successfully closed all doors for all passed users." 
+                },
+                "openedAllDoorsFor": {
+                    "header": "Successfully opened all doors",
+                    "body": "You successfully opened all doors for all passed users."
+                },
+                "noDoors": {
+                    "header": "No doors available",
+                    "body": "There is either no room with this ID or there are no doors."
+                },
+                "setDoorCode": {
+                    "header": "Code set successfully",
+                    "body": "You successfully set the door code of the door with the ID doorIDPlaceholder to codePlaceholder."
+                },
+                "correctCode": {
+                    "header": "Code was correct!",
+                    "body": "The code you entered was correct! The door is now open for you."
+                },
+                "wrongCode": {
+                    "header": "Wrong code",
+                    "body": "The code you entered was wrong. Try again."
+                }
+            },
+            "group": {
+                "unknownCommand": {
+                    "header": "Unrecognized group command",
+                    "body": "You entered an unrecognized command. Enter '\\group' to receive an overview of all group commands and how to use them."
+                },
+                "unknownColor": {
+                    "header": "Unknown color",
+                    "body": "Entered color does not exist. Currently available colors are blue, red, green, yellow, tosca, purple, orange, pink, and white."
+                },
+                "invalidName": {
+                    "header": "Invalid group name",
+                    "body": "The entered group name is already used by another group. Please try again."
+                },
+                "notExists": {
+                    "header": "Group does not exist",
+                    "body": "A group with this name does not exist. Please try again."
+                },
+                "deletedAll": {
+                    "header": "Successfully deleted all groups",
+                    "body": "All exisiting groups were sucessfully deleted."
+                },
+                "created": {
+                    "header": "Group successfully created",
+                    "body": "Successfully created group groupNamePlaceholder."
+                },
+                "deleted": {
+                    "header": "Group successfully deleted",
+                    "body": "Successfully deleted group groupNamePlaceholder."
+                },
+                "addedUsers": {
+                    "header": "Added users to group",
+                    "body": "Successfully added users to group groupNamePlaceholder."
+                },
+                "removedUsers": {
+                    "header": "Removed users from group",
+                    "body": "Successfully removed users from group groupNamePlaceholder."
+                },
+                "youJoined": {
+                    "header": "Group joined",
+                    "body": "You joined group groupNamePlaceholder."
+                },
+                "youLeft": {
+                    "header": "Group left",
+                    "body": "You left group groupNamePlaceholder."
+                },
+                "noGroupsExist": {
+                    "header": "No groups",
+                    "body": ["There are no existing groups at the moment.",
+                        "Enter '\\group' to receive an overview of all group commands and how to create them."]
+                }
+            },
+            "port": {
+                "unknownCommand": {
+                    "header": "Unrecognized port command",
+                    "body": "You entered an unrecognized command. Enter '\\port' to receive an overview of all port commands and how to use them."
+                },
+                "success": {
+                    "header": "Teleport success",
+                    "body": "Teleport was successful."
+                },
+                "userPortFail": {
+                    "header": "Teleport failed",
+                    "body": "Teleport failed. Please check the passed parameters again. There could be a collision at your passed position."
+                },
+                "groupPortFail": {
+                    "header": "Teleport failed",
+                    "body": "Teleport failed. Please check the passed parameters again. There could be a collision at your passed position, the passed groupname could be wrong or no group members are currently online."
+                },
+                "portToUserFail": {
+                    "header": "Teleport failed",
+                    "body": "Teleport failed. Please check the passed usernames again."     
+                },
+                "invalidUserPort": {
+                    "header": "Invalid user port command",
+                    "body": ["Invalid user port command. Valid commands:",
+                            "\\port user <username> topos <roomID> <cordX> <cordY>",
+                            "\\port user <username1> touser <username2>"]
+                },
+                "invalidGroupPort": {
+                    "header": "Invalid group port command",
+                    "body": ["Invalid group port command. Valid commands:",
+                            "\\port group <groupname> topos <roomID> <cordX> <cordY>",
+                            "\\port group <groupname> touser <username>"]
+                }
+            },
+            "msgParts": {
+                "userLogHeader": "List of all active participants",
+                "room": {
+                    "userLogHeader": "List of all active participants in room roomNamePlaceholder",
+                    "roomLogHeader": "List of all exisiting Rooms",
+                    "roomLogBodyPart": "roomNamePlaceholder has ID roomIDPlaceholder."
+                },
+                "door": {
+                    "doorLogHeader": "List of all exisiting Doors",
+                    "doorLogBodyPartLectureDoorWithCode": "Door in roomNamePlaceholder is a LectureDoor and has ID doorIDPlaceholder. Door is currently openStatusPlaceholder and has code codePlaceholder to open it.",
+                    "doorLogBodyPartLectureDoorNoCode": "Door in roomNamePlaceholder is a LectureDoor and has ID doorIDPlaceholder. Door is currently openStatusPlaceholder and has no code to open it.",
+                    "doorLogBodyPartNormalDoorWithCode": "Door in roomName1Placeholder to roomName2Placeholder and has ID doorIDPlaceholder. Door is currently openStatusPlaceholder and has code codePlaceholder to open it.",
+                    "doorLogBodyPartNormalDoorNoCode": "Door in roomName1Placeholder to roomName2Placeholder and has ID doorIDPlaceholder. Door is currently openStatusPlaceholder and has no code to open it.",
+                    "closed": "closed",
+                    "open": "open"
+                },
+                "group": {
+                    "groupLogHeader": "List of all existing groups",
+                    "groupLogBodyPart": "Group groupNamePlaceholder has group color colorPlaceholder."
+                },
+                "usersThatWereNotFound": " Users that were not found: "
+            }
+        }
     }
 }

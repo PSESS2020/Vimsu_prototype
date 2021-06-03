@@ -22,8 +22,10 @@ class IsometricEngine {
 
     /**
      * Creates an instance of IsometricEngine
+     * 
+     * @param {LoadingView} loadingView loading view
      */
-    constructor() {
+    constructor(loadingView) {
         if (!!IsometricEngine.instance) {
             return IsometricEngine.instance;
         }
@@ -33,7 +35,7 @@ class IsometricEngine {
         this.mapOriginX = 0;
         this.mapOriginY = 0;
 
-        this.loader = new LoadingView();
+        this.loader = loadingView;
     }
 
     /**

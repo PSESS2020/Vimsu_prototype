@@ -10,15 +10,21 @@ class InputGroupNameView extends WindowView {
      * Creates an instance of InputGroupNameView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for inputGroupName view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!InputGroupNameView.instance) {
             return InputGroupNameView.instance;
         }
 
         InputGroupNameView.instance = this;
+
+        $('#createGroupChatText').text(this.languageData.createGroupChat);
+        $('#createGroupChatInviteText').text(this.languageData.inviteFriends);
+        document.getElementById('inviteFriendsBtn').title = this.languageData.tooltips.inviteFriends;
+        document.getElementById('groupNameInput').placeholder = this.languageData.enterGroupName;
 
         $('#groupName').on('submit', (event) => {
             event.preventDefault();

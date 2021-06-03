@@ -3,7 +3,9 @@
     <div class="modal-dialog modal-dialog-centered mw-100" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="scheduleModalTitle">Schedule</h5>
+                <h5 class="modal-title" id="scheduleModalTitle">
+                    <span id="scheduleListText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -13,13 +15,13 @@
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Title</th>
-                            <th scope="col">Orator Name</th>
-                            <th scope="col">Starting Time</th>
-                            <th scope="col">Duration (Minutes)</th>
-                            <th scope="col">Seat Amount</th>
-                            <th scope="col">Remarks</th>
-                            <th scope="col">Status</th>
+                            <th scope="col"><span id="lectureTitleText"></span></th>
+                            <th scope="col"><span id="oratorNameText"></span></th>
+                            <th scope="col"><span id="startingTimeText"></span></th>
+                            <th scope="col"><span id="durationInMinText"></span></th>
+                            <th scope="col"><span id="seatAmountText"></span></th>
+                            <th scope="col"><span id="remarksText"></span></th>
+                            <th scope="col"><span id="statusText"></span></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -58,7 +60,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="businessCardModalTitle">Business Card</h5>
+                <h5 class="modal-title" id="businessCardModalTitle">
+                    <span id="businessCardText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -76,7 +80,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="friendListModalTitle">Friend List</h5>
+                <h5 class="modal-title" id="friendListModalTitle">
+                    <span id="yourFriendListText"></span>
+                </h5>
                 <div class="d-flex flex-row justify-content-end">
                     <div class="friendRequestListButton">
                         <a class="action_button nav-item nav-link d-flex flex-column"
@@ -84,7 +90,9 @@
                             data-toggle="modal" title="Received friend requests" href="">
                             <i class="fa fa-user-plus navbarIcons"
                                 style="transform: scale(0.6); margin-bottom: -0.4375rem; margin-top: -0.3125rem;"></i>
-                            <small style="font-size: 0.625rem;">Requests</small>
+                            <small style="font-size: 0.625rem;">
+                                <span id="requestsText"></span>
+                            </small>
                         </a>
                     </div>
                     <div>
@@ -114,7 +122,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="friendRequestListModalTitle">Friend Request List</h5>
+                <h5 class="modal-title" id="friendRequestListModalTitle">
+                    <span id="yourFriendRequestListText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -138,7 +148,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="achievementsModalTitle">Achievements</h5>
+                <h5 class="modal-title" id="achievementsModalTitle">
+                    <span id="yourAchievementsText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -163,7 +175,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="newAchievementModalTitle">New Achievement Unlocked!</h5>
+                <h5 class="modal-title" id="newAchievementModalTitle">
+                    <span id="newAchievementUnlockedText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -184,7 +198,9 @@
     <div class="modal-dialog modal-dialog-centered mw-100" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="rankListModalTitle">Best Participants</h5>
+                <h5 class="modal-title" id="rankListModalTitle">
+                    <span id="bestParticipantsText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -207,7 +223,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="meetingListModalTitle">Group Meetings</h5>
+                <h5 class="modal-title" id="meetingListModalTitle">
+                    <span id="yourMeetingsText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -232,14 +250,18 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="chatListModalTitle">Chats</h5>
+                <h5 class="modal-title" id="chatListModalTitle">
+                    <span id="yourChatsText"></span>
+                </h5>
                 <div class="d-flex flex-row justify-content-end">
                     <div class="friendRequestListButton">
                         <a class="action_button nav-item nav-link d-flex flex-column" title="Create group chat" href=""
                             style="position: absolute; top: 0.5rem; right: 2rem;" role="button" id="newGroupChat">
                             <i class="fa fa-edit navbarIcons"
                                 style="transform: scale(0.6); margin-bottom: -0.4375rem; margin-top: -0.3125rem;"></i>
-                            <small style="font-size: 0.625rem;">Group</small>
+                            <small style="font-size: 0.625rem;">
+                                <span id="initGroupChatText"></span>
+                            </small>
                         </a>
                     </div>
                     <div>
@@ -272,7 +294,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="inputGroupNameModalTitle">Create Group Chat</h5>
+                <h5 class="modal-title" id="inputGroupNameModalTitle">
+                    <span id="createGroupChatText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -282,8 +306,9 @@
                     <input id="groupNameInput" style="width: 100%; background-color: #1b1e24;"
                         placeholder="Enter group name" maxlength="64" required autocomplete="off" />
                     <button class="btn btn-blue mt-3" title="Invite friends to group chat with the input group name"
-                        style=" width: auto;">Invite
-                        Friends</button>
+                        style=" width: auto;">
+                        <span id="createGroupChatInviteText"></span>
+                    </button>
                 </form>
             </div>
         </div>
@@ -295,7 +320,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="inputEnterCodeModalTitle">Please enter your code</h5>
+                <h5 class="modal-title" id="inputEnterCodeModalTitle">
+                    <span id="enterCodeText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -304,8 +331,8 @@
                 <form id="enteredCode" action="" style="text-align: center; width: 100%">
                     <input id="codeInput" style="width: 100%; background-color: #1b1e24;"
                         placeholder="Enter code" required autocomplete="off" />
-                    <button class="btn btn-blue mt-3" title="Sends the code you entered in the input field"
-                        style=" width: auto;"> Send Code
+                    <button class="btn btn-blue mt-3" style=" width: auto;"> 
+                        <span id="sendCodeText"></span>
                     </button>
                 </form>
             </div>
@@ -318,7 +345,9 @@
     <div class="modal-dialog modal-dialog-centered mw-50" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="inviteFriendsModalTitle">Invite Friends</h5>
+                <h5 class="modal-title" id="inviteFriendsModalTitle">
+                    <span id="inviteFriendsText"></span>
+                </h5>
                 <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                     <i class="fa fa-close"></i>
                 </button>
@@ -334,11 +363,13 @@
 
                 </ul>
                 </br>
-                <div id="noinvitedfriends" style="display: none; color: red">Please select at least a friend!
+                <div id="noinvitedfriends" style="display: none; color: red">
+                    <span id="selectAtLeastOneText"></span>
                 </div>
                 <div id="toomanyinvitedfriends" style="display: none; color: red"></div>
-                <button class="btn btn-blue mt-3" style=" width: auto;" id="createGroupChat" type="button">Invite
-                    friends to group chat</button>
+                <button class="btn btn-blue mt-3" style=" width: auto;" id="createGroupChat" type="button">
+                    <span id="inviteFriendsToChatText"></span>
+                </button>
             </div>
         </div>
     </div>
@@ -366,7 +397,9 @@
         </div>
         <div id="lectureChat" class="lectureChatContainer d-flex flex-column col-4 p-1 mb-6">
             <div class="lectureChatHeader">
-                <p class="mt-2" style="text-align: center; font-size: 1.25rem;">Chat</p>
+                <p class="mt-2" style="text-align: center; font-size: 1.25rem;">
+                    <span id="lectureChatText"></span>
+                </p>
             </div>
             <div id="lectureChatMessages" style="height:18.75rem; overflow-y: auto;" class="mr-2 ml-2">
             </div>
@@ -398,7 +431,9 @@
 
 <div class="window" id="currentLectures" style="width: 100%; height: 100%">
     <div class="p-3 d-flex window-header">
-        <div>Current Lectures</div>
+        <div>
+            <span id="currentLecturesText"></span>
+        </div>
         <button id="closeCurrentLecturesButton" class="close btn ml-auto pl-1 pr-1">
             <i class="fa fa-close"></i>
         </button>
@@ -455,7 +490,7 @@
     </div>
 </div>
 
-<div class="window" id="largerGlobalChat" style="width: 60%; height: 80%; z-index: 1050">
+<div class="window" id="largerGlobalChat" style="width: 60%; height: 80%; z-index: 9999">
     <div class="p-3 d-flex window-header">
         <div id="largerGlobalChatWindowHeaderText"></div>
         <button id="closeLargerGlobalChatButton" class="close btn ml-auto">

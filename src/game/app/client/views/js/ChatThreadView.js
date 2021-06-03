@@ -15,9 +15,10 @@ class ChatThreadView extends WindowView {
      * Creates an instance of ChatThreadView
      * 
      * @param {EventManager} eventManager event manager
+     * @param {json} languageData language data for chatThread view
      */
-    constructor(eventManager) {
-        super();
+    constructor(eventManager, languageData) {
+        super(languageData);
 
         if (!!ChatThreadView.instance) {
             return ChatThreadView.instance;
@@ -164,7 +165,7 @@ class ChatThreadView extends WindowView {
     appendMessage = (message) => {
         this.eventManager.handleRemoveNewMessageNotif(message.senderUsername, this.chat.chatId);
 
-        var timestamp = new DateParser(new Date(message.timestamp)).parse();
+        var timestamp = new DateParser().parse(new Date(message.timestamp));
         var senderUsername;
         if (message.senderUsername) {
             senderUsername = message.senderUsername + ":"
@@ -209,7 +210,7 @@ class ChatThreadView extends WindowView {
         chatFriendRequestButton.disabled = true;
         chatFriendRequestButton.style.opacity = "0.5";
         chatFriendRequestButton.style.cursor = "not-allowed";
-        chatFriendRequestButton.title = "Friend request sent";
+        chatFriendRequestButton.title = this.languageData.tooltips.requestSent;
     }
 
     /**
@@ -220,7 +221,7 @@ class ChatThreadView extends WindowView {
         chatFriendRequestButton.disabled = false;
         chatFriendRequestButton.style.opacity = "1";
         chatFriendRequestButton.style.cursor = "pointer";
-        chatFriendRequestButton.title = "Send friend request";
+        chatFriendRequestButton.title = this.languageData.tooltips.sendRequest;
     }
 
     /**
@@ -256,7 +257,7 @@ class ChatThreadView extends WindowView {
         $('#chatLeaveButton' + this.chat.chatId).on('click', (event) => {
             event.preventDefault();
 
-            var result = confirm(`Are you sure you want to leave from the chat with ${this.chat.title}?`);
+            var result = confirm(`${this.languageData.confirmLeaveChat.replace("chat_name", this.chat.title)}`);
 
             if (result) {
                 $('#chatThreadModal' + this.chat.chatId).modal('hide');
@@ -335,7 +336,7 @@ class ChatThreadView extends WindowView {
                 <div class="modal-dialog modal-dialog-centered mw-50" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id=${"chatParticipantListModalTitle" + this.chat.chatId}>Chat Participant List</h5>
+                            <h5 class="modal-title" id=${"chatParticipantListModalTitle" + this.chat.chatId}>${this.languageData.chatParticipantList}</h5>
                             <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                                 <i class="fa fa-close"></i>
                             </button>
