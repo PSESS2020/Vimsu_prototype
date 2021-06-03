@@ -266,7 +266,7 @@ const Floorplan = Object.freeze({
             {type: GameObjectType.LEFTSCHEDULE, position: [5, -1], isClickable: Settings.VIDEOSTORAGE_ACTIVATED},
             {type: GameObjectType.LEFTWINDOW, position: [[22, -1], [23, -1], [24, -1]]},
             {type: GameObjectType.LEFTWINDOW, position: [8, -1], isClickable: true, onClickData: new OnClickStoryData(["Wow!", "The possiblities!"])},
-            {type: GameObjectType.LEFTWINDOW, position: [20, -1], isClickable: true, StoryData: ["Hmm...", "Somehow, the view is better from the one on the right."]},
+            {type: GameObjectType.LEFTWINDOW, position: [20, -1], isClickable: true, StoryData: ["Hmm...", "Somehow, the view is better from the left one."]},
             {type: GameObjectType.RIGHTWINDOW, position: [[25, 0], [25, 1], [25, 2], [25, 3], [25, 4], [25, 5], [25, 23]]},
             {type: GameObjectType.CONFERENCELOGO, position: [13, -1]},
             {type: GameObjectType.PICTUREFRAME, position: [25, 14]}
