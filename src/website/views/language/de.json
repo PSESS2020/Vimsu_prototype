@@ -623,6 +623,40 @@
                         "Du kannst '\\group' eingeben, um eine Übersicht über alle verfügbaren Gruppenbefehle zu erhalten."]
                 }
             },
+            "port": {
+                "unknownCommand": {
+                    "header": "Unbekannter Port-Befehl",
+                    "body": "Du hast einen unbekannten Befehl eingegeben. Du kannst '\\port' eingeben, um eine Übersicht über alle verfügbaren Port-Befehle mit Beschreibung zu erhalten."
+                },
+                "success": {
+                    "header": "Erfolgreicher Teleport",
+                    "body": "Der Teleport war erfolgreich."
+                },
+                "userPortFail": {
+                    "header": "Teleport gescheitert",
+                    "body": "Der Teleport ist gescheitert. Bitte überprüfe die übergebenen Parameter. Es könnte sein, dass es eine Kollision an der übergebenen Position gibt."
+                },
+                "groupPortFail": {
+                    "header": "Teleport gescheitert",
+                    "body": "Der Teleport ist gescheitert. Bitte überprüfe die übergebenen Parameter. Es könnte sein, dass es eine Kollision an der übergebenen Position gibt, der übergebene Gruppenname falsch ist oder kein Gruppenmitglied derzeit online ist."
+                },
+                "portToUserFail": {
+                    "header": "Teleport gescheitert",
+                    "body": "Der Teleport ist gescheitert. Bitte überprüfe den übergebenen Nutzernamen." 
+                },
+                "invalidUserPort": {
+                    "header": "Ungültiger Nutzer Port-Befehl",
+                    "body": ["Ungültiger Nutzer Port-Befehl. Gültige Befehle:",
+                            "\\port user <username> topos <roomID> <cordX> <cordY>",
+                            "\\port user <username1> touser <username2>"]
+                },
+                "invalidGroupPort": {
+                    "header": "Ungültiger Gruppen Port-Befehl",
+                    "body": ["Ungültiger Gruppen Port-Befehl. Gültige Befehle:",
+                            "\\port group <groupname> topos <roomID> <cordX> <cordY>",
+                            "\\port group <groupname> touser <username>"]
+                }
+            },
             "msgParts": {
                 "userLogHeader": "Liste aller aktiven Teilnehmer",
                 "room": {

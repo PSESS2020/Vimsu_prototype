@@ -623,6 +623,40 @@
                         "Enter '\\group' to receive an overview of all group commands and how to create them."]
                 }
             },
+            "port": {
+                "unknownCommand": {
+                    "header": "Unrecognized port command",
+                    "body": "You entered an unrecognized command. Enter '\\port' to receive an overview of all port commands and how to use them."
+                },
+                "success": {
+                    "header": "Teleport success",
+                    "body": "Teleport was successful."
+                },
+                "userPortFail": {
+                    "header": "Teleport failed",
+                    "body": "Teleport failed. Please check the passed parameters again. There could be a collision at your passed position."
+                },
+                "groupPortFail": {
+                    "header": "Teleport failed",
+                    "body": "Teleport failed. Please check the passed parameters again. There could be a collision at your passed position, the passed groupname could be wrong or no group members are currently online."
+                },
+                "portToUserFail": {
+                    "header": "Teleport failed",
+                    "body": "Teleport failed. Please check the passed usernames again."     
+                },
+                "invalidUserPort": {
+                    "header": "Invalid user port command",
+                    "body": ["Invalid user port command. Valid commands:",
+                            "\\port user <username> topos <roomID> <cordX> <cordY>",
+                            "\\port user <username1> touser <username2>"]
+                },
+                "invalidGroupPort": {
+                    "header": "Invalid group port command",
+                    "body": ["Invalid group port command. Valid commands:",
+                            "\\port group <groupname> topos <roomID> <cordX> <cordY>",
+                            "\\port group <groupname> touser <username>"]
+                }
+            },
             "msgParts": {
                 "userLogHeader": "List of all active participants",
                 "room": {
