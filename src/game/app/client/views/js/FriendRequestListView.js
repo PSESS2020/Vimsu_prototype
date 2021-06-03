@@ -67,7 +67,7 @@ class FriendRequestListView extends WindowView {
                             <i class="fa fa-user fa-5x navbarIcons"></i>
                         </div>
                     </div>
-                    <div class="col-8 pr-0 pl-4">
+                    <div class="col-7 pr-0 pl-4">
                         <div class="d-flex flex-row justify-content-start align-items-center">
                             <label class="name lead text-truncate" title="${fullname}" data-toggle="tooltip">${fullname}</label>
                         </div>
@@ -82,7 +82,7 @@ class FriendRequestListView extends WindowView {
                             }
                         </div>
                     </div>
-                    <div class="col-2 p-0 my-auto">
+                    <div class="col-3 p-0 my-auto">
                         <div class="d-flex flex-column align-items-center">
                             <h6 style="display: none;" id="${"accepted" + businessCard.getParticipantId()}">${this.languageData.friendList.accepted}</h6>
                             <button id="${"accept" + businessCard.getParticipantId()}" title="${this.languageData.friendList.tooltips.acceptRequest}" class="btn btn-blue" style="width: 100%;">
