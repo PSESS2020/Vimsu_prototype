@@ -334,7 +334,8 @@
                     "chatNow": "Freundesliste schließen und chatten",
                     "removeFriend": "Von Freundesliste entfernen",
                     "acceptRequest": "Anfrage akzeptieren und als Freund hinzufügen",
-                    "rejectRequest": "Anfrage ablehnen"
+                    "rejectRequest": "Anfrage ablehnen",
+                    "receivedRequests": "Erhaltene Freundschaftsanfragen"
                 }
             },
             "meetings": {

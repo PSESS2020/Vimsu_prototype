@@ -334,7 +334,8 @@
                     "chatNow": "Close friend list and chat now",
                     "removeFriend": "Remove from friend list",
                     "acceptRequest": "Remove from friend request and add to friend list",
-                    "rejectRequest": "Remove from friend request and reject"
+                    "rejectRequest": "Remove from friend request and reject",
+                    "receivedRequests": "Received friend requests"
                 }
             },
             "meetings": {

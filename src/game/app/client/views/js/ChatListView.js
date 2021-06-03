@@ -36,6 +36,7 @@ class ChatListView extends WindowView {
 
     $('#yourChatsText').text(this.languageData.yourChats);
     $('#initGroupChatText').text(this.languageData.group);
+    document.getElementById('newGroupChat').title = this.languageData.createGroupChat;
   }
 
   /**

@@ -37,6 +37,7 @@ class FriendListView extends WindowView {
 
         $('#yourFriendListText').text(this.languageData.friendList.friendList);
         $('#requestsText').text(this.languageData.friendList.requests);
+        document.getElementById('friendRequestList').title = this.languageData.friendList.tooltips.receivedRequests;
     }
 
     /**

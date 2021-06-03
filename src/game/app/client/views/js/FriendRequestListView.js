@@ -85,7 +85,7 @@ class FriendRequestListView extends WindowView {
                     <div class="col-2 p-0 my-auto">
                         <div class="d-flex flex-column align-items-center">
                             <h6 style="display: none;" id="${"accepted" + businessCard.getParticipantId()}">${this.languageData.friendList.accepted}</h6>
-                            <button id="${"accept" + businessCard.getParticipantId()}" title="${this.languageData.friendList.tooltips.acceptRequest}" style="width: 100%;">
+                            <button id="${"accept" + businessCard.getParticipantId()}" title="${this.languageData.friendList.tooltips.acceptRequest}" class="btn btn-blue" style="width: 100%;">
                                 ${this.languageData.friendList.accept}
                             </button>
                             <button id="${"reject" + businessCard.getParticipantId()}" title="${this.languageData.friendList.tooltips.rejectRequest}" class="btn btn-white" style="margin-top: 0.625rem; width: 100%;">
