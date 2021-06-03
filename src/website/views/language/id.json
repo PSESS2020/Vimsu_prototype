@@ -133,7 +133,7 @@
                 "schedule": "Jadwal",
                 "meetings": "Meeting Grup",
                 "friendlist": "Daftar teman",
-                "chats": "Obrolan",
+                "chats": "Chat",
                 "leave": "Keluar",
                 "showNotification": "Tunjukkan notifikasi",
                 "hideNotification": "Sembunyikan notifikasi",
@@ -159,10 +159,10 @@
                     "reconnect": "Menghubungkan kembali ke server..."
                 },
                 "allchat": {
-                    "chat": "Obrolan",
+                    "chat": "Chat",
                     "showMessages": "Tunjukkan pesan chat <roomName>",
                     "enterMessage": "Masukkan pesan chat <roomName> ...",
-                    "quietChat": "Obrolan <roomName> saat ini sepi. Mungkin tinggalkan pesan di sini?",
+                    "quietChat": "Chat <roomName> saat ini sepi. Mungkin tinggalkan pesan di sini?",
                     "tooltips": {
                         "sendMessage": "Kirim",
                         "emojis": "Pilih emoji"
