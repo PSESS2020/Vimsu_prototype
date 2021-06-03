@@ -427,6 +427,257 @@
                         "\\msg showallby <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and displays all messages send into the chat by these users.", 
                         "\\revoke <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and revokes their lecture tokens (if they own one). They will no longer be able to post messages into the lecture chat."]
                 }
+            },
+            "general": {
+                "warning": {
+                    "header": "Warning",
+                    "body": "One of your messages was removed by a moderator. Please follow the general chat etiquette. Additional infractions may result in a permanent ban."
+                },
+                "unknownCommand": {
+                    "header": "Unrecognized command",
+                    "body": "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
+                },
+                "invalidParameters": {
+                    "header": "Invalid parameters",
+                    "body": "Invalid command parameters. Please try again and check all commands with '\\help'."
+                },
+                "unknownUsername": {
+                    "header": "Unknown username",
+                    "body": "Entered username does not exist."
+                },
+                "noUsersFound": {
+                    "header": "No users found",
+                    "body": "No users were found with this search criterion. Please try again."
+                },
+                "noUsernamePassed": {
+                    "header": "No username passed",
+                    "body": "Don't forget to pass a username!"
+                }
+            },
+            "lecture": {
+                "revoke": {
+                    "header": "Token revoked",
+                    "body": "Your token has been revoked for not following chat etiquette. You will no longer be able to post messages into the lecture chat."
+                },
+                "grant": {
+                    "header": "Token granted",
+                    "body": "You have been granted a token. You will now be able to post messages into the lecture chat. Please remember to follow the chat etiquette."
+                },
+                "removal": {
+                    "header": "Removal",
+                    "body": "You have been removed from this lecture by a moderator. Please follow the general chat etiquette."
+                },
+                "closed": {
+                    "header": "Lecture closed",
+                    "body": "The orator has closed this lecture. It is no longer accessible."
+                }
+            },
+            "allchat": {
+                "mute": {
+                    "header": "Muted",
+                    "body": "You have been muted for not following proper chat etiquette. You will no longer be able to post messages into the allchat."
+                },
+                "unmute": {
+                    "header": "Unmuted",
+                    "body": "You are no longer muted and able to post messages into the allchat again. Please remember to follow the chat etiquette."
+                },
+                "unknownCommand": {
+                    "header": "Unrecognized message command",
+                    "body": "You entered an unrecognized command. Enter '\\msg' to receive an overview of all allchat message commands and how to use them."
+                }
+            },
+            "mod": {
+                "modSet": {
+                    "header": "Mod status set successfully",
+                    "body": "usernamePlaceholder is now a moderator."
+                },
+                "unmodSet": {
+                    "header": "Mod status set successfully",
+                    "body": "usernamePlaceholder is no longer a moderator."
+                },
+                "youAreNowMod": {
+                    "header": "Your mod state changed",
+                    "body": "You are now a moderator. Type in \\help to see all commands."
+                },
+                "youAreNoLongerMod": {
+                    "header": "Your mod state changed",
+                    "body": "You are no longer a moderator."  
+                }
+            },
+            "room": {
+                "unknownCommand": {
+                    "header": "Unrecognized room command",
+                    "body": "You entered an unrecognized command. Enter '\\room' to receive an overview of all room commands and how to use them."
+                },
+                "roomNotFound": {
+                    "header": "Room not found",
+                    "body": "There is no room with the passed ID. Please try again."
+                },
+                "noRoomIDPassed": {
+                    "header": "No room ID passed",
+                    "body": "Don't forget to pass a valid room ID. See all rooms and their ID with '\\room log'."
+                }
+            },
+            "door": {
+                "unknownCoomand": {
+                    "header": "Unrecognized door command",
+                    "body": "You entered an unrecognized command. Enter '\\door' to receive an overview of all door commands and how to use them."
+                },
+                "unknownDoorID": {
+                    "header": "Unknown Door ID",
+                    "body": "You entered a wrong DoorID. Please check it again with '\\door log'."
+                },
+                "invalidDoorCode": {
+                    "header": "Invalid Door Code", 
+                    "body": "Don't forget to pass a valid door code!"
+                },
+                "openedDoor": {
+                    "header": "Successfully opened door",
+                    "body": "You successfully opened the door with the ID doorIDPlaceholder for all passed users."
+                },
+                "closedDoor": {
+                    "header": "Successfully closed door",
+                    "body": "You successfully closed the door with the ID doorIDPlaceholder for all passed users." 
+                },
+                "openedDoorForAll": {
+                    "header": "Successfully opened door",
+                    "body": "You successfully opened the door with the ID doorIDPlaceholder for all users."
+                },
+                "closedDoorForAll": {
+                    "header": "Successfully closed door",
+                    "body": "You successfully closed the door with the ID doorIDPlaceholder for all users."
+                },
+                "closedAllDoorsFor": {
+                    "header": "Successfully closed all doors",
+                    "body": "You successfully closed all doors for all passed users." 
+                },
+                "openedAllDoorsFor": {
+                    "header": "Successfully opened all doors",
+                    "body": "You successfully opened all doors for all passed users."
+                },
+                "noDoors": {
+                    "header": "No doors available",
+                    "body": "There is either no room with this ID or there are no doors."
+                },
+                "setDoorCode": {
+                    "header": "Code set successfully",
+                    "body": "You successfully set the door code of the door with the ID doorIDPlaceholder to codePlaceholder."
+                },
+                "correctCode": {
+                    "header": "Code was correct!",
+                    "body": "The code you entered was correct! The door is now open for you."
+                },
+                "wrongCode": {
+                    "header": "Wrong code",
+                    "body": "The code you entered was wrong. Try again."
+                }
+            },
+            "group": {
+                "unknownCommand": {
+                    "header": "Unrecognized group command",
+                    "body": "You entered an unrecognized command. Enter '\\group' to receive an overview of all group commands and how to use them."
+                },
+                "unknownColor": {
+                    "header": "Unknown color",
+                    "body": "Entered color does not exist. Currently available colors are blue, red, green, yellow, tosca, purple, orange, pink, and white."
+                },
+                "invalidName": {
+                    "header": "Invalid group name",
+                    "body": "The entered group name is already used by another group. Please try again."
+                },
+                "notExists": {
+                    "header": "Group does not exist",
+                    "body": "A group with this name does not exist. Please try again."
+                },
+                "deletedAll": {
+                    "header": "Successfully deleted all groups",
+                    "body": "All exisiting groups were sucessfully deleted."
+                },
+                "created": {
+                    "header": "Group successfully created",
+                    "body": "Successfully created group groupNamePlaceholder."
+                },
+                "deleted": {
+                    "header": "Group successfully deleted",
+                    "body": "Successfully deleted group groupNamePlaceholder."
+                },
+                "addedUsers": {
+                    "header": "Added users to group",
+                    "body": "Successfully added users to group groupNamePlaceholder."
+                },
+                "removedUsers": {
+                    "header": "Removed users from group",
+                    "body": "Successfully removed users from group groupNamePlaceholder."
+                },
+                "youJoined": {
+                    "header": "Group joined",
+                    "body": "You joined group groupNamePlaceholder."
+                },
+                "youLeft": {
+                    "header": "Group left",
+                    "body": "You left group groupNamePlaceholder."
+                },
+                "noGroupsExist": {
+                    "header": "No groups",
+                    "body": ["There are no existing groups at the moment.",
+                        "Enter '\\group' to receive an overview of all group commands and how to create them."]
+                }
+            },
+            "port": {
+                "unknownCommand": {
+                    "header": "Unrecognized port command",
+                    "body": "You entered an unrecognized command. Enter '\\port' to receive an overview of all port commands and how to use them."
+                },
+                "success": {
+                    "header": "Teleport success",
+                    "body": "Teleport was successful."
+                },
+                "userPortFail": {
+                    "header": "Teleport failed",
+                    "body": "Teleport failed. Please check the passed parameters again. There could be a collision at your passed position."
+                },
+                "groupPortFail": {
+                    "header": "Teleport failed",
+                    "body": "Teleport failed. Please check the passed parameters again. There could be a collision at your passed position, the passed groupname could be wrong or no group members are currently online."
+                },
+                "portToUserFail": {
+                    "header": "Teleport failed",
+                    "body": "Teleport failed. Please check the passed usernames again."     
+                },
+                "invalidUserPort": {
+                    "header": "Invalid user port command",
+                    "body": ["Invalid user port command. Valid commands:",
+                            "\\port user <username> topos <roomID> <cordX> <cordY>",
+                            "\\port user <username1> touser <username2>"]
+                },
+                "invalidGroupPort": {
+                    "header": "Invalid group port command",
+                    "body": ["Invalid group port command. Valid commands:",
+                            "\\port group <groupname> topos <roomID> <cordX> <cordY>",
+                            "\\port group <groupname> touser <username>"]
+                }
+            },
+            "msgParts": {
+                "userLogHeader": "List of all active participants",
+                "room": {
+                    "userLogHeader": "List of all active participants in room roomNamePlaceholder",
+                    "roomLogHeader": "List of all exisiting Rooms",
+                    "roomLogBodyPart": "roomNamePlaceholder has ID roomIDPlaceholder."
+                },
+                "door": {
+                    "doorLogHeader": "List of all exisiting Doors",
+                    "doorLogBodyPartLectureDoorWithCode": "Door in roomNamePlaceholder is a LectureDoor and has ID doorIDPlaceholder. Door is currently openStatusPlaceholder and has code codePlaceholder to open it.",
+                    "doorLogBodyPartLectureDoorNoCode": "Door in roomNamePlaceholder is a LectureDoor and has ID doorIDPlaceholder. Door is currently openStatusPlaceholder and has no code to open it.",
+                    "doorLogBodyPartNormalDoorWithCode": "Door in roomName1Placeholder to roomName2Placeholder and has ID doorIDPlaceholder. Door is currently openStatusPlaceholder and has code codePlaceholder to open it.",
+                    "doorLogBodyPartNormalDoorNoCode": "Door in roomName1Placeholder to roomName2Placeholder and has ID doorIDPlaceholder. Door is currently openStatusPlaceholder and has no code to open it.",
+                    "closed": "closed",
+                    "open": "open"
+                },
+                "group": {
+                    "groupLogHeader": "List of all existing groups",
+                    "groupLogBodyPart": "Group groupNamePlaceholder has group color colorPlaceholder."
+                },
+                "usersThatWereNotFound": " Users that were not found: "
             }
         }
     }
