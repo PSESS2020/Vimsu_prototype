@@ -2,13 +2,8 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 const TypeOfRoom = require('../../client/shared/TypeOfRoom.js');
 const Room = require('../models/Room.js');
 const RoomDimensions = require('../utils/RoomDimensions.js');
-const FoyerRoomDecorator = require('../models/FoyerRoomDecorator.js');
-const FoodcourtRoomDecorator = require('../models/FoodcourtRoomDecorator.js');
-const ReceptionRoomDecorator = require('../models/ReceptionRoomDecorator.js');
-const EscapeRoomDecorator = require('../models/EscapeRoomDecorator.js');
 const Settings = require('../utils/' + process.env.SETTINGS_FILENAME);
 const Floorplan = require('../utils/Floorplan.js');
-const RoomDecorator = require('../models/RoomDecorator.js');
 const RoomFactory = require('../models/RoomFactory.js');
 
 /**
