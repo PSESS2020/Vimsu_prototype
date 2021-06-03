@@ -1,9 +1,9 @@
 {
-    "noJavaScript": "Browser Anda tidak mendukung JavaScript!",
+    "noJavaScript": "Browser kamu tidak mendukung JavaScript!",
 
     "underConstruction": "Ups! Halaman ini masih dibangun. Silahkan coba kembali nanti!",
 
-    "pageNotFound": "404 Error - Halaman yang Anda cari tidak ditemukan",
+    "pageNotFound": "404 Error - Halaman yang kamu cari tidak ditemukan",
 
     "privacyPolicy": "Kebijakan Pribadi",
 
@@ -29,24 +29,24 @@
 
     "accountSettings": {
         "editAccountInfo": "Informasi Akun",
-        "changeSuccess": "Perubahan yang Anda buat sudah disimpan",
-        "usernameTaken": "Nama pengguna yang Anda masukan sudah terdaftar. Silahkan coba lagi.",
-        "emailTaken": "Email yang Anda masukan sudah terdaftar. Silahkan coba lagi.",
-        "changeError": "Terjadi kesalahan saat menyimpan perubahan Anda. Silahkan coba lagi.",
-        "invalidUsername": "Nama pengguna yang Anda masukan tidak sesuai dengan kriteria kami. Silahkan coba lagi.",
-        "invalidEmail": "Email yang Anda masukan tidak valid. Silahkan coba lagi.",
+        "changeSuccess": "Perubahan yang kamu buat sudah disimpan",
+        "usernameTaken": "Nama pengguna yang kamu masukan sudah terdaftar. Silahkan coba lagi.",
+        "emailTaken": "Email yang kamu masukan sudah terdaftar. Silahkan coba lagi.",
+        "changeError": "Terjadi kesalahan saat menyimpan perubahan kamu. Silahkan coba lagi.",
+        "invalidUsername": "Nama pengguna yang kamu masukan tidak sesuai dengan kriteria kami. Silahkan coba lagi.",
+        "invalidEmail": "Email yang kamu masukan tidak valid. Silahkan coba lagi.",
         "invalidTitle": "Titel tidak valid. Silahkan pilih titel dari opsi yang kami berikan.",
         "emptyForename": "Nama depan tidak boleh kosong.",
-        "deleteAccountFail": "Terjadi kesalahan saat menghapus akun Anda. Silahkan coba lagi.",
+        "deleteAccountFail": "Terjadi kesalahan saat menghapus akun kamu. Silahkan coba lagi.",
         "requiredFields": "Harus diisi",
         "saveChanges": "Simpan perubahan",
         "deleteAccount": "Hapus akun",
         "changePassword": "Ubah Kata Sandi",
-        "changePasswordSuccess": "Kata sandi Anda sudah diubah.",
-        "oldPasswordWrong": "Kata sandi lama Anda tidak sesuai. Silahkan coba lagi.",
-        "passwordsDontMatch": "Kata sandi baru yang Anda masukan tidak sesuai. Silahkan coba lagi.",
+        "changePasswordSuccess": "Kata sandi kamu sudah diubah.",
+        "oldPasswordWrong": "Kata sandi lama kamu tidak sesuai. Silahkan coba lagi.",
+        "passwordsDontMatch": "Kata sandi baru yang kamu masukan tidak sesuai. Silahkan coba lagi.",
         "emptyPassword": "Kata sandi tidak boleh kosong.",
-        "changePasswordFail": "Terjadi kesalahan saat mengubah kata sandi Anda. Silahkan coba lagi.",
+        "changePasswordFail": "Terjadi kesalahan saat mengubah kata sandi kamu. Silahkan coba lagi.",
         "oldPassword": "Kata sandi lama",
         "newPassword": "Kata sandi baru",
         "confirmPassword": "Konfirmasi kata sandi baru"  
@@ -64,7 +64,7 @@
     },
 
     "logIn": {
-        "wrongFields": "Nama pengguna/email dan kata sandi yang Anda masukan tidak sesuai. Silahkan coba lagi.",
+        "wrongFields": "Nama pengguna/email dan kata sandi yang kamu masukan tidak sesuai. Silahkan coba lagi.",
         "emptyFields": "Isian tidak boleh kosong.",
         "forgotPassword": "Lupa kata sandi?",
         "noAccount": "Belum punya akun?",
@@ -72,19 +72,19 @@
     },
 
     "contactUs": {
-        "loveToHear": "Kami senang mendengar pendapat Anda!",
-        "reachUsAt": "Anda dapat menghubungi kami melalui email ",
+        "loveToHear": "Kami senang mendengar pendapat kamu!",
+        "reachUsAt": "Kamu dapat menghubungi kami melalui email ",
         "or": "atau...",
         "stayAnonymous": "Untuk mengirim pesan secara anonim, tinggalkan pesan dengan mengisi form di bawah ini :)",
-        "messageSent": "Kami telah menerima pesan Anda, terima kasih!",
-        "messageSentFail": "Terjadi kesalahan saat mengirim pesan Anda. Silahkan coba lagi.",
+        "messageSent": "Kami telah menerima pesan kamu, terima kasih!",
+        "messageSentFail": "Terjadi kesalahan saat mengirim pesan kamu. Silahkan coba lagi.",
         "emptyMessage": "Pesan tidak boleh kosong.",
-        "yourMessage": "Pesan Anda",
+        "yourMessage": "Pesan kamu",
         "sendMessage": "Kirim pesan"
     },
 
     "forgotPassword": {
-        "linkSent": "Kami telah mengirim link ke your_email untuk mengubah kata sandi Anda.",
+        "linkSent": "Kami telah mengirim link ke your_email untuk mengubah kata sandi kamu.",
         "resetPassword": "Ubah Kata Sandi"
     },
 
@@ -98,7 +98,7 @@
         "signUp": "Daftar",
         "success": "Kami telah mengirim link verifikasi ke your_email. Silahkan klik link tersebut untuk menyelesaikan proses registrasi.",
         "passwordsDontMatch": "Kata sandi tidak sesuai. Silahkan coba lagi.",
-        "fail": "Terjadi kesalahan saat mendaftarkan akun Anda. Silahkan coba lagi.",
+        "fail": "Terjadi kesalahan saat mendaftarkan akun kamu. Silahkan coba lagi.",
         "confirmPassword": "Konfirmasi kata sandi",
         "alreadyHaveAccount": "Sudah punya akun?",
         "signInNow": "Masuk sekarang!",
@@ -107,11 +107,11 @@
 
     "upload": {
         "createLecture": "Buat seminar",
-        "success": "Slot seminar sudah dibuat. Anda berhak meninggalkan halaman ini.",
+        "success": "Slot seminar sudah dibuat. Kamu berhak meninggalkan halaman ini.",
         "noFiles": "Belum ada file yang diunggah. Silahkan unggah video.",
         "tooLarge": "Ukuran file melebihi 50 MB. Silahkan coba lagi.",
         "wrongFileType": "Tipe file tidak didukung. Silahkan coba lagi.",
-        "wrongTypeMaxPpants": "Jumlah maksimal peserta harus berupa bilangan bulat.",
+        "wrongTypeMaxPpants": "Jumlah peserta maksimal harus berupa bilangan bulat.",
         "invalidDate": "Waktu mulai harus berupa tanggal yang valid.",
         "emptyTitle": "Judul seminar tidak boleh kosong.",
         "errorUpload": "Terjadi kesalahan saat mengunggah video. Silahkan coba lagi.",
@@ -128,236 +128,236 @@
     "conference": {
         "clientView": {
             "hud": {
-                "ranklist": "Ranklist",
-                "achievements": "Achievements",
-                "schedule": "Schedule",
-                "meetings": "Group Meetings",
-                "friendlist": "Friendlist",
-                "chats": "Chats",
-                "leave": "Leave",
-                "showNotification": "Show notification",
-                "hideNotification": "Hide notification",
-                "confirmLeave": "Are you sure you want to leave the conference?",
+                "ranklist": "Daftar Peringkat",
+                "achievements": "Pencapaian",
+                "schedule": "Jadwal",
+                "meetings": "Meeting Grup",
+                "friendlist": "Daftar teman",
+                "chats": "Obrolan",
+                "leave": "Keluar",
+                "showNotification": "Tunjukkan notifikasi",
+                "hideNotification": "Sembunyikan notifikasi",
+                "confirmLeave": "Apakah kamu yakin kamu mau keluar dari konferensi?",
                 "tooltips": {
-                    "points": "Your points",
-                    "rank": "Your rank",
-                    "profile": "Profile",
-                    "ranklist": "Ranklist of conference participants",
-                    "achievements": "Achievement list",
-                    "schedule": "Presentation schedule",
-                    "meetings": "Meeting list",
-                    "friendlist": "Friend list and received friend request list",
-                    "chats": "Chat list",
-                    "leave": "Leave conference"
+                    "points": "Poin kamu",
+                    "rank": "Peringkat kamu",
+                    "profile": "Profil",
+                    "ranklist": "Daftar peringkat peserta konferensi",
+                    "achievements": "Daftar pencapaian",
+                    "schedule": "Jadwal presentasi",
+                    "meetings": "Daftar meeting",
+                    "friendlist": "Daftar teman dan permintaan pertemanan yang diterima",
+                    "chats": "Daftar chat",
+                    "leave": "Keluar dari konferensi"
                 },
                 "statusBar": {
                     "fps": "FPS",
-                    "location": "Location",
+                    "location": "Lokasi",
                     "ping": "Ping",
-                    "group": "Group",
-                    "lostConnection": "Lost connection to the server.",
-                    "reconnect": "Reconnecting to the server..."
+                    "group": "Grup",
+                    "lostConnection": "Hilang koneksi dari server.",
+                    "reconnect": "Menghubungkan kembali ke server..."
                 },
                 "allchat": {
-                    "chat": "Chat",
-                    "showMessages": "Show <roomName> chat messages",
-                    "enterMessage": "Enter <roomName> chat message ...",
-                    "quietChat": "The <roomName> chat is somehow quiet. Send some love here?",
+                    "chat": "Obrolan",
+                    "showMessages": "Tunjukkan pesan chat <roomName>",
+                    "enterMessage": "Masukkan pesan chat <roomName> ...",
+                    "quietChat": "Obrolan <roomName> saat ini sepi. Mungkin tinggalkan pesan di sini?",
                     "tooltips": {
-                        "sendMessage": "Send",
-                        "emojis": "Pick emojis"
+                        "sendMessage": "Kirim",
+                        "emojis": "Pilih emoji"
                     }
                 },
                 "notifBar": {
-                    "newMessage": "New message from usernamePlaceholder.",
-                    "newChat": "usernamePlaceholder init chat with you.",
-                    "newGroupChat": "usernamePlaceholder invited you to the group chat groupNamePlaceholder.",
-                    "newMeeting": "You were invited to the video meeting meetingNamePlaceholder.",
-                    "newFriendRequest": "New friend request from usernamePlaceholder.",
-                    "requestAccepted": "usernamePlaceholder accepted your friend request.",
-                    "inCall": "You are in call with meetingNamePlaceholder."
+                    "newMessage": "Pesan baru dari usernamePlaceholder.",
+                    "newChat": "usernamePlaceholder menginisiasi chat dengan kamu.",
+                    "newGroupChat": "usernamePlaceholder mengundang kamu untuk bergabung ke chat grup groupNamePlaceholder.",
+                    "newMeeting": "Kamu telah diundang ke video meeting meetingNamePlaceholder.",
+                    "newFriendRequest": "Permintaan pertemanan baru dari usernamePlaceholder.",
+                    "requestAccepted": "usernamePlaceholder menerima permintaan pertemanan kamu.",
+                    "inCall": "Kamu sedang menelepon dengan meetingNamePlaceholder."
                 }
             },
             "days": {
-                "monday": "Monday",
-                "tuesday": "Tuesday",
-                "wednesday": "Wednesday",
-                "thursday": "Thursday",
-                "friday": "Friday",
-                "saturday": "Saturday",
-                "sunday": "Sunday"
+                "monday": "Senin",
+                "tuesday": "Selasa",
+                "wednesday": "Rabu",
+                "thursday": "Kamis",
+                "friday": "Jumat",
+                "saturday": "Sabtu",
+                "sunday": "Minggu"
             },
             "months": {
-                "january": "January",
-                "february": "February",
-                "march": "March",
+                "january": "Januari",
+                "february": "Februari",
+                "march": "Maret",
                 "april": "April",
-                "may": "May",
-                "june": "June",
-                "july": "July",
-                "august": "August",
+                "may": "Mei",
+                "june": "Juni",
+                "july": "Juli",
+                "august": "Agustus",
                 "september": "September",
-                "october": "October",
+                "october": "Oktober",
                 "november": "November",
-                "december": "December"
+                "december": "Desember"
             },
             "achievements": {
-                "yourAchievements": "Your achievements",
+                "yourAchievements": "Pencapaian kamu",
                 "nextTarget": "Target: [<currentCount> / <nextTarget>]",
-                "completed": "Completed",
+                "completed": "Selesai",
                 "level": "Level"
             },
             "ranklist": {
-                "bestParticipants": "Best Participants",
-                "noParticipants": "There are no participants in this conference yet."
+                "bestParticipants": "Peserta Terbaik",
+                "noParticipants": "Belum ada peserta di konferensi ini."
             },
             "schedule": {
-                "noLectureFound": "Sorry, no lecture is found.",
-                "seconds": "secs",
-                "scheduleList": "Schedule",
-                "lectureTitle": "Title",
-                "oratorName": "Orator Name",
-                "startingTime": "Starting time",
-                "durationInMin": "Duration (Minutes)",
-                "seatAmount": "Seat Amount",
-                "remarks": "Remarks",
+                "noLectureFound": "Maaf, seminar tidak ditemukan.",
+                "seconds": "detik",
+                "scheduleList": "Jadwal",
+                "lectureTitle": "Titel",
+                "oratorName": "Nama Pembicara",
+                "startingTime": "Waktu Mulai",
+                "durationInMin": "Durasi (Menit)",
+                "seatAmount": "Jumlah Tempat",
+                "remarks": "Catatan",
                 "status": "Status",
                 "states": {
-                    "Coming soon": "Coming soon",
-                    "Opened": "Opened",
-                    "Running": "Running",
-                    "Expired": "Expired"
+                    "Coming soon": "Segera akan datang",
+                    "Opened": "Dibuka",
+                    "Running": "Berlangsung",
+                    "Expired": "Kadaluarsa"
                 },
-                "allExpired": "Sorry, all lectures have expired."
+                "allExpired": "Maaf, semua seminar sudah kadaluarsa."
             },
             "businessCard": {
-                "businessCard": "Business Card",
-                "profession": "Profession",
-                "at": "at",
-                "unknown": "Unknown",
+                "businessCard": "Kartu Bisnis",
+                "profession": "Profesi",
+                "at": "di",
+                "unknown": "Tidak diketahui",
                 "email": "Email",
-                "rank": "Rank",
-                "role": "Role",
+                "rank": "Peringkat",
+                "role": "Peran",
                 "roles": {
                     "moderator": "Moderator",
-                    "participant": "Participant"
+                    "participant": "Peserta"
                 },
                 "tooltips": {
-                    "chatNow": "Close business card and chat now"
+                    "chatNow": "Tutup kartu bisnis dan chat sekarang"
                 }
             },
             "chats": {
-                "yourChats": "Your chats",
-                "group": "Group",
-                "noMessages": "no messages",
-                "noChats": "No chats found. Let's connect with others!",
+                "yourChats": "Chat kamu",
+                "group": "Grup",
+                "noMessages": "tidak ada pesan",
+                "noChats": "Chat tidak ditemukan. Ayo connect dengan yang lain!",
                 "tooltips": {
-                    "openChat": "Open chat",
-                    "addFriend": "Add friend",
-                    "videoCall": "(Video) call with chat participants",
-                    "showMembers": "Show chat participant list",
-                    "inviteFriends": "Invite friends to group chat",
-                    "leaveChat": "Leave chat",
-                    "emojis": "Pick emojis",
-                    "requestSent": "Friend request sent",
-                    "sendRequest": "Send friend request"
+                    "openChat": "Buka chat",
+                    "addFriend": "Tambah teman",
+                    "videoCall": "(Video) call dengan peserta di dalam chat",
+                    "showMembers": "Tunjukkan daftar peserta di dalam chat",
+                    "inviteFriends": "Undang teman ke dalam chat grup",
+                    "leaveChat": "Tinggalkan chat",
+                    "emojis": "Pilih emoji",
+                    "requestSent": "Permintaan pertemanan telah terkirim",
+                    "sendRequest": "Kirim permintaan pertemanan"
                 },
-                "enterMessage": "Enter message ...",
-                "send": "Send",
-                "chatParticipantList": "Chat Participant List",
-                "confirmLeaveChat": "Are you sure you want to leave from chat chat_name?",
-                "createGroupChat": "Create Group Chat",
-                "inviteFriends": "Invite Friends",
-                "enterGroupName": "Enter group name",
-                "tooManyFriends": "You may only invite limit friend(s)! Please unselect diff friend(s).",
-                "emptyGroupName": "Group name was empty",
-                "noFriends": "No friends to invite",
-                "selectAtLeastOne": "Please select at least one friend!"
+                "enterMessage": "Masukkan pesan ...",
+                "send": "Kirim",
+                "chatParticipantList": "Daftar Peserta Chat",
+                "confirmLeaveChat": "Apakah kamu yakin kamu mau meninggalkan chat chat_name?",
+                "createGroupChat": "Buat Chat Grup",
+                "inviteFriends": "Undang Teman",
+                "enterGroupName": "Masukkan nama grup",
+                "tooManyFriends": "Kamu hanya boleh mengundang limit teman! Silahkan keluarkan diff teman.",
+                "emptyGroupName": "Nama grup kosong",
+                "noFriends": "Tidak ada teman untuk diundang",
+                "selectAtLeastOne": "Silahkan pilih minimal satu teman!"
             },
             "externalWebsite": {
-                "fullscreenMode": "Switch to fullscreen",
-                "normalMode": "Switch back to normal size"
+                "fullscreenMode": "Beralih ke fullscreen",
+                "normalMode": "Kembali ke ukuran normal"
             },
             "enterCode": {
-                "enterCode": "Enter code",
-                "sendCode": "Send code",
+                "enterCode": "Masukkan kode",
+                "sendCode": "Kirim kode",
                 "tooltips": {
-                    "sendCode": "Sends the code you entered in the input field"
+                    "sendCode": "Kirim kode yang kamu masukkan"
                 }
             },
-            "loadingConference": "Loading Conference percentagePlaceholder . . .",
+            "loadingConference": "Memuat Konferesi percentagePlaceholder . . .",
             "currentLectures": {
-                "by": "By",
-                "start": "Start",
-                "duration": "Duration",
-                "minutes": "minutes",
-                "seats": "seats",
-                "participants": "participants",
-                "fullLecture": "Lecture is currently full.",
-                "enter": "Enter",
-                "currentLectures": "Current Lectures",
-                "noLectures": "Lectures will be shown here 10 minutes before the start. Please check the schedule and come back later."
+                "by": "Oleh",
+                "start": "Mulai",
+                "duration": "Durasi",
+                "minutes": "menit",
+                "seats": "tempat",
+                "participants": "peserta",
+                "fullLecture": "Seminar saat ini sudah penuh.",
+                "enter": "Masuk",
+                "currentLectures": "Seminar Berlangsung",
+                "noLectures": "Seminar akan muncul di sini 10 menit sebelum dimulai. Silahkan cek jadwal dan datang kembali nanti."
             },
             "lecture": {
-                "lectureChat": "Lecture Chat",
-                "questionsAfterLecture": "You can ask questions in this chat after the lecture.",
-                "chatAfterLecture": "This chat will be opened after the lecture.",
-                "moderatorRights": "You have the right to close the lecture or to ban participants after the lecture.",
-                "secondsTill": "seconds left till the",
-                "presentationStarts": "presentation starts",
-                "notOverWithToken": "The lecture is not over! When you leave, you have 5 minutes to come back. After that time, your token will expire for this lecture. Are you sure you want to leave?",
-                "notOverOrator": "The lecture is not over! When you leave, make sure to come back before the lecture is over. The participants will be waiting for you to answer their questions. Are you sure you want to leave?",
-                "notOverWithoutToken": "The lecture is not over! Are you sure you want to leave?",
-                "comeBackOnTime": "When you leave, you have 5 minutes after the lecture begins to come back. After that time, your token will expire for this lecture. Please come back on time!",
-                "send": "Send",
-                "enterMessage": "Enter message",
+                "lectureChat": "Chat Seminar",
+                "questionsAfterLecture": "Kamu bisa mengajukan pertanyaan di chat ini setelah seminar selesai.",
+                "chatAfterLecture": "Chat ini akan dibuka setelah seminar selesai.",
+                "moderatorRights": "Kamu punya wewenang untuk mengakhiri seminar ini atau mengeluarkan peserta setelah seminar selesai.",
+                "secondsTill": "detik sampai",
+                "presentationStarts": "presentasi dimulai",
+                "notOverWithToken": "Seminar belum selesai! Apabila kamu keluar, kamu punya 5 menit untuk datang kembali. Setelah itu, token kamu akan kadaluarsa untuk seminar ini. Apakah kamu yakin ingin keluar?",
+                "notOverOrator": "Seminar belum selesai! Apabila kamu keluar, pastikan kamu kembali sebelum seminar selesai. Peserta-peserta akan menunggu kamu untuk menjawab pertanyaan mereka. Apakah kamu yakin ingin keluar?",
+                "notOverWithoutToken": "Seminar belum selesai! Apakah kamu yakin ingin keluar?",
+                "comeBackOnTime": "Apabila kamu keluar, kamu punya 5 menit untuk datang kembali. Setelah itu, token kamu akan kadaluarsa untuk seminar ini. Silahkan kembali tepat waktu!",
+                "send": "Kirim",
+                "enterMessage": "Masukkan pesan",
                 "tokenMessages": {
-                    "revoke": "Your token was revoked by either the orator or a moderator. Therefore, you are no longer able to ask questions in the lecture chat. Please remember to follow chat etiquette.",
-                    "timeout": "You left the lecture for too long. Therefore, you will not be able to ask questions in the lecture chat.",
-                    "hasToken": "You obtained a question token!"
+                    "revoke": "Token kamu telah dicabut oleh pembicara atau moderator. Maka dari itu, kamu sudah tidak bisa mengajukan pertanyaan lagi di chat seminar ini. Harap ikuti etika chat.",
+                    "timeout": "Kamu sudah terlalu lama meninggalkan seminar ini. Maka dari itu, kamu sudah tidak bisa mengajukan pertanyaan lagi di chat seminar ini.",
+                    "hasToken": "Kamu mendapatkan token untuk bertanya!"
                 }
             },
             "friendList": {
-                "friendList": "Friend List",
-                "requests": "Requests",
-                "friendRequestList": "Friend Request List",
-                "sureToRemove": "Are you sure you want to remove usernamePlaceholder from your friend list?",
-                "noFriends": "No friends were found. Chat with others and send some friend requests!",
-                "noRequests": "No friend requests received.",
-                "unfriend": "Unfriend",
+                "friendList": "Daftar teman",
+                "requests": "Permintaan",
+                "friendRequestList": "Daftar Permintaan Pertemanan",
+                "sureToRemove": "Apakah kamu yakin kamu ingin menghapus usernamePlaceholder dari daftar teman kamu?",
+                "noFriends": "Tidak ada teman yang ditemukan. Ayo chat dengan peserta lain dan kirim permintaan pertemanan!",
+                "noRequests": "Tidak ada permintaan pertemanan yang ditemukan.",
+                "unfriend": "Hapus",
                 "chat": "Chat",
-                "accept": "Accept",
-                "reject": "Reject",
-                "accepted": "Accepted",
-                "rejected": "Rejected",
+                "accept": "Terima",
+                "reject": "Tolak",
+                "accepted": "Diterima",
+                "rejected": "Ditolak",
                 "tooltips": {
-                    "chatNow": "Close friend list and chat now",
-                    "removeFriend": "Remove from friend list",
-                    "acceptRequest": "Remove from friend request and add to friend list",
-                    "rejectRequest": "Remove from friend request and reject",
-                    "receivedRequests": "Received friend requests"
+                    "chatNow": "Tutup daftar teman dan chat sekarang",
+                    "removeFriend": "Hapus dari daftar teman",
+                    "acceptRequest": "Hapus dari daftar permintaan pertemanan dan masukkan ke dalam daftar teman",
+                    "rejectRequest": "Hapus dari daftar permintaan pertemanan dan tolak",
+                    "receivedRequests": "Permintaan pertemanan yang diterima"
                 }
             },
             "meetings": {
-                "yourMeetings": "Your meetings",
-                "noMeetings": "No meetings found.",
+                "yourMeetings": "Meeting kamu",
+                "noMeetings": "Tidak ada meeting yang ditemukan.",
                 "tooltips": {
-                    "openMeeting": "Open meeting",
-                    "minimizeMeeting": "Minimize meeting, voice chat will stay active"
+                    "openMeeting": "Buka meeting",
+                    "minimizeMeeting": "Kecilkan meeting, chat suara akan tetap aktif"
                 }
             },
-            "npcSays": "npcNamePlaceholder says...",
+            "npcSays": "npcNamePlaceholder berkata...",
             "newAchievement": {
-                "unlocked": "New Achievement Unlocked!",
-                "unlockedWithNameAndLevel": "titlePlaceholder Level levelPlaceholder Now Unlocked!",
-                "unlockedWithDescription": "You have unlocked a new achievement: descriptionPlaceholder"
+                "unlocked": "Pencapaian Terbaru",
+                "unlockedWithNameAndLevel": "titlePlaceholder Level levelPlaceholder Tercapai",
+                "unlockedWithDescription": "Kamu mendapat pencapaian baru: descriptionPlaceholder"
             }
         },
         
         "messages": {
             "help": {
                 "listOfAllchatCommands": {
-                    "header": "List of Commands",
+                    "header": "Daftar Komando",
                     "body": [ "\\ban <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and removes all of them from the conference. They will not be able to reenter the conference.\nWARNING: It is not yet possible to unban a banned user!",
                         "\\door\nDisplays a list of all door commands and how to use them.",
                         "\\door <command>\nExecutes door command <command>. Available commands: close, closeallfor, closefor, log, open, openallfor, openfor, setcode.",
@@ -378,7 +378,7 @@
                         "\\userlog\nDisplays a list of all participants that are currently online with their username."]
                 },
                 "listOfDoorCommands": {
-                    "header": "List of Door Commands",
+                    "header": "Daftar Komando Pintu",
                     "body": [ "\\door close <doorID>\nCloses the door with ID <doorID> for everyone.",
                         "\\door closeallfor <list of usernames>\nCloses all existing doors for all passed usernames in <list of usernames>, each one separated from the next one by a whitespace character.",
                         "\\door closefor <doorID> <list of usernames>\nCloses the door with ID <doorID> for all passed usernames in <list of usernames>, each one separated from the next one by a whitespace character.",
@@ -390,7 +390,7 @@
                         "\\door setcode <doorID> <doorCode>\nAdds <doorCode> to door with ID <doorID>."]
                 },
                 "listOfGroupCommands": {
-                    "header": "List of Group Commands",
+                    "header": "Daftar Komando Grup",
                     "body": [ "\\group add <groupName> <list of usernames>\nAdds all users with username in <list of usernames> to group with name <groupName>, each username separated from the next one by a whitespace character.",
                         "\\group create <groupName> <groupColor> <list of usernames>\nCreates a group with the unique name <groupName>. All group members will wear a shirt with the color <groupColor>. Adds all users with username in <list of usernames> to group, each username separated from the next one by a whitespace character.",
                         "\\group delete <groupName>\nDeletes group with the unique name <groupName>.",
@@ -399,26 +399,26 @@
                         "\\group rm <groupName> <list of usernames>\nRemoves all users with username in <list of usernames> from group with name <groupName>, each username separated from the next one by a whitespace character."]
                 },
                 "listOfMessageCommands": {
-                    "header": "List of Message Commands",
+                    "header": "Daftar Komando Pesan",
                     "body": [ "\\msg log\nWill show a log of all messages send into the allchat of the room you're currently in, including the messageID and sender username of each message.",
                         "\\msg rm <list of msgIDs>\nTakes a list of messageIDs, each one separated from the next one by a whitespace character, and removes the corresponding messages - if they exist - from the allchat of the room you're currently in. Will also send a warning to the senders of the messages, reminding them to follow chat etiquette.",
                         "\\msg rmallby <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and removes all messages posted by them into the allchat of the room you're currently in. Will also send a warning to these participants, reminding them to follow chat-etiquette.",
                         "\\msg showallby <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and displays all messages send into the chat by these users."]
                 },
                 "listOfPortCommands": {
-                    "header": "List of Port Commands",
+                    "header": "Daftar Komando Teleportasi",
                     "body": [  "\\port group <groupname> topos <roomID> <cordX> <cordY>\nTeleports all group members of group with groupname <groupname> to position (<cordX>, <cordY>) in room with roomID <roomID>.",
                         "\\port group <groupname> touser <username>\nTeleports all group members of group with groupname <groupname> to user with username <username>.",
                         "\\port user <username> topos <roomID> <cordX> <cordY>\nTeleports user with username <username> to position (<cordX>, <cordY>) in room with roomID <roomID>.",
                         "\\port user <username1> touser <username2>\nTeleports user with username <username1> to user with username <username2>."]
                 },
                 "listOfRoomCommands": {
-                    "header": "List of Room Commands",
+                    "header": "Daftar Komando Ruangan",
                     "body": [ "\\room log\nDisplays a list of all existing rooms with their ID.",
                         "\\room userlog <roomID>\nDisplays a list of all participants that are currently online and in room with ID <roomID> with their username."]
                 },
                 "listOfLectureCommands": {
-                    "header": "List of Lecture Commands",
+                    "header": "Daftar Komando Seminar",
                     "body": [  "\\ban <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and removes all of them from the lecture. They will not be able to reenter the lecture.\nWARNING: It is not yet possible to revert this!",
                         "\\close\nCloses the lecture and makes it inaccessible. Every current participant will be forcefully ejected and nobody will be able to rejoin the lecture. WARNING: this command can NOT be reversed.",
                         "\\grant <list of usernames>\nTakes a list of usernames, each one separated from the next by a whitespace-character, and grants them lecture tokens (if they are currently listening to the lecture and do not own one). They will be able to post messages into the lecture chat.",
@@ -432,45 +432,45 @@
             },
             "general": {
                 "warning": {
-                    "header": "Warning",
+                    "header": "Peringatan",
                     "body": "One of your messages was removed by a moderator. Please follow the general chat etiquette. Additional infractions may result in a permanent ban."
                 },
                 "unknownCommand": {
-                    "header": "Unrecognized command",
+                    "header": "Perintah tidak dikenal",
                     "body": "You entered an unrecognized command. Enter '\\help' to receive an overview of all commands and how to use them."
                 },
                 "invalidParameters": {
-                    "header": "Invalid parameters",
+                    "header": "Parameter tidak valid",
                     "body": "Invalid command parameters. Please try again and check all commands with '\\help'."
                 },
                 "unknownUsername": {
-                    "header": "Unknown username",
+                    "header": "Username tidak dikenal",
                     "body": "Entered username does not exist."
                 },
                 "noUsersFound": {
-                    "header": "No users found",
+                    "header": "Tidak ada user ditemukan",
                     "body": "No users were found with this search criterion. Please try again."
                 },
                 "noUsernamePassed": {
-                    "header": "No username passed",
+                    "header": "Tidak ada username yang dimasukkan",
                     "body": "Don't forget to pass a username!"
                 }
             },
             "lecture": {
                 "revoke": {
-                    "header": "Token revoked",
+                    "header": "Token dicabut",
                     "body": "Your token has been revoked for not following chat etiquette. You will no longer be able to post messages into the lecture chat."
                 },
                 "grant": {
-                    "header": "Token granted",
+                    "header": "Token diberikan",
                     "body": "You have been granted a token. You will now be able to post messages into the lecture chat. Please remember to follow the chat etiquette."
                 },
                 "removal": {
-                    "header": "Removal",
+                    "header": "Dikeluarkan",
                     "body": "You have been removed from this lecture by a moderator. Please follow the general chat etiquette."
                 },
                 "closed": {
-                    "header": "Lecture closed",
+                    "header": "Seminar ditutup",
                     "body": "The orator has closed this lecture. It is no longer accessible."
                 }
             },
