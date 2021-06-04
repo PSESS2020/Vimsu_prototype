@@ -54,6 +54,13 @@ class AchievementService {
         // TODO to implement
     }
 
+    checkForTaskIncrementation(ppant, typeOfTask, contextObject) {
+        // get all achvmnts saved for this type of task
+        // check whether their task conditions are fulfilled
+        // (also check against restrictions)
+        // but then where do we increment 
+    }
+
     /**
      * @method module:AchievementService#checkForAchievementEligibility
      */
