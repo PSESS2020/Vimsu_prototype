@@ -23,7 +23,7 @@ class AchievementFactory {
         // Deconstruct
         const { task, title, icon, description, levels, restriction: restrictions } = achvmtData
         const { typeOfTask, detail } = task
-        let achvmtId = `${Settings.CONFERENCE_ID}_${title}_${task}_${restrictions.reduce( (acc, val) => `${val}#${acc.slice(1)}`)}`
+        let achvmtId = `${Settings.CONFERENCE_ID}_${title}_${task}_${restrictions.reduce( (acc, val) => `${val}#${acc.slice(1)}` )}`
         // handle restrictions
         // handle details
         // add to AchievementService

@@ -39,10 +39,11 @@ module.exports = class Achievement {
      * @param {String} opensDoorID achieving this achievment at max level opens door with this doorID
      */
     constructor(id, title, icon, description, currentLevel, color, awardPoints, maxLevel, taskType, nextCount, opensDoorID) {
-        TypeChecker.isInt(id);
+        TypeChecker.isString(id);
         TypeChecker.isString(title);
         TypeChecker.isString(icon);
         TypeChecker.isString(description);
+        // fix Type checking
         TypeChecker.isInt(currentLevel);
         TypeChecker.isString(color);
         TypeChecker.isInt(awardPoints);

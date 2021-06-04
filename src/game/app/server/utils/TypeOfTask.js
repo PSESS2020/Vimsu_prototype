@@ -6,6 +6,14 @@
  * @version 1.0.0
  */
 module.exports = Object.freeze({
+    VISIT: "VISIT", // Enter Lecture or Room
+    IFRAME: "IFRAME", // Achievement that gets triggered on iFrame
+    INTERACT: "INTERACT", // Interact with object or npc
+    MAKEFRIEND: "MAKEFRIEND", // Make a friend
+    TALK: "TALK", // send message in a chat
+
+    // How to get task that only triggers on first chat message?
+
     RECEPTIONVISIT: "RECEPTIONVISIT",
     FOODCOURTVISIT: "FOODCOURTVISIT",
     BASICTUTORIALCLICK: "BASICTUTORIALCLICK",

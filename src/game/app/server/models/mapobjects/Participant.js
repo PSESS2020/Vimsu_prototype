@@ -69,9 +69,14 @@ module.exports = class Participant {
         TypeChecker.isInstanceOf(receivedRequestList, FriendList);
         TypeChecker.isInstanceOf(sentRequestList, FriendList);
         if (achievementList) {
+            // TODO
+            // Move some of this to TypeChecker
+            // also, do not load achievements from other
+            // conferences & once that are no longer known
             TypeChecker.isInstanceOf(achievementList, Array);
             achievementList.forEach(achievement => {
-                TypeChecker.isInstanceOf(achievement, Achievement);
+                if ( !( achievement.hasOwnProperty(achvmtId) && achievement.hasOwnProperty(level) ) ) { throw new Error("not properly defined achievement") }
+                else { TypeChecker.isInt(achievement.level); TypeChecker.isString(id) }
             });
         }
         TypeChecker.isBoolean(isMod);
@@ -187,7 +192,7 @@ module.exports = class Participant {
      * Gets list of achievements
      * @method module:Participant#getAchievements
      * 
-     * @return {Achievement[]} achievements
+     * @return {Object[]} achievements
      */
     getAchievements() {
         return this.#achievementList;
