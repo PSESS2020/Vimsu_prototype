@@ -31,7 +31,7 @@ module.exports = class Participant {
     #meetingList
     #sentRequestList;
     #isMod;
-    #taskTypeMapping;
+    #taskCounters;
     #achievementList;
     #awardPoints;
     #chatList;
@@ -51,13 +51,13 @@ module.exports = class Participant {
      * @param {FriendList} receivedRequestList list of received friend requests
      * @param {FriendList} sentRequestList list of sent friend requests
      * @param {Meeting[]} meetingList List of jitsi meetings
-     * @param {Object[]} achievementList list of achievements
-     * @param {Task[]} taskMapping list of tasks and its counts
+     * @param {String[]} achievementList list of achievements
+     * @param {Task[]} taskCounters list of tasks and its counts
      * @param {boolean} isMod moderator status
      * @param {number} awardPoints participant's points
      * @param {Chat[]} chatList list of chats
      */
-    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievementList, taskMapping, isMod, awardPoints, chatList, meetingList) {
+    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievementList, taskCounters, isMod, awardPoints, chatList, meetingList) {
         //Typechecking
 
         TypeChecker.isString(id);
@@ -98,7 +98,7 @@ module.exports = class Participant {
         this.#friendList = friendList;
         this.#receivedRequestList = receivedRequestList;
         this.#sentRequestList = sentRequestList;
-        this.#taskTypeMapping = taskMapping;
+        this.#taskCounters = taskCounters;
         this.#achievementList = achievementList;
         this.#isMod = isMod;
         this.#awardPoints = awardPoints;
@@ -516,7 +516,7 @@ module.exports = class Participant {
      * @return {Task[]} taskTypeMapping
      */
     getTaskTypeMappingCounts() {
-        return this.#taskTypeMapping;
+        return this.#taskCounters;
     }
 
     /**
@@ -527,7 +527,7 @@ module.exports = class Participant {
      * @return {Task} task
      */
     getTaskTypeMappingCount(taskType) {
-        return this.#taskTypeMapping[taskType];
+        return this.#taskCounters[taskType];
     }
 
     /**
@@ -540,7 +540,7 @@ module.exports = class Participant {
         TypeChecker.isInstanceOf(task, Task);
 
         // increase the task counter and assign award points accordingly
-        this.#taskTypeMapping[task.getTaskType()] = this.#taskTypeMapping[task.getTaskType()] + 1;
+        this.#taskCounters[task.getTaskType()] = this.#taskCounters[task.getTaskType()] + 1;
         this.addAwardPoints(task.getAwardPoints());
     }
 

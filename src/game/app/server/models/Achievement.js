@@ -10,6 +10,15 @@ const TypeOfTask = require("../utils/TypeOfTask");
  */
 module.exports = class Achievement {
 
+    #id; #task; #title; #icon; #description; #levels;
+    #amountLevels; #isSilent; #isHidden
+
+    constructor (id, task, title, icon, description, levels, isSilent, isHidden) {
+        this.#id = id; this.#title = title; this.#icon = icon;
+        this.#description = description; this.#levels = levels;
+        this.#isSilent = isSilent; this.#isHidden = isHidden;
+    }
+
     #id
     #title;
     #icon;

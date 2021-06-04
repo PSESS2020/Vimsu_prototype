@@ -35,7 +35,7 @@ const AchievementDefinitions = Object.freeze({
             { count: 10, color: AchvmtConstants.gold, points: 100 }
         ],
         restrictions: [],
-        isSilent: false
+        visibilityModifiers: { isSilent: false, isHidden: false }
     },
 
     ach3: {
@@ -47,7 +47,7 @@ const AchievementDefinitions = Object.freeze({
             { count: 1, color: AchvmtConstants.gold, points: 10 },
         ],
         restrictions: [],
-        isSilent: false,
+        visibilityModifiers: { isSilent: false, isHidden: false },
     },
 
     ach4: {
@@ -59,7 +59,7 @@ const AchievementDefinitions = Object.freeze({
             { count: 1, color: AchvmtConstants.gold, points: 10 },
         ],
         restrictions: [],
-        isSilent: false,
+        visibilityModifiers: { isSilent: false, isHidden: false },
     },
 
     ach5: {
@@ -71,11 +71,11 @@ const AchievementDefinitions = Object.freeze({
             { count: 1, color: AchvmtConstants.gold, points: 10 },
         ],
         restrictions: [],
-        isSilent: true,
+        visibilityModifiers: { isSilent: true },
     },
 
     ach6: {
-        task: { typeOfTask: TypeOfTask.VISIT, detail: "$lecture" },
+        task: { typeOfTask: TypeOfTask.VISIT, detail: "$Lecture" },
         title: "Good Listener",
         icon: "headphones",
         description: "Visit lectures and stay until the end to gain this achievment.",
@@ -84,7 +84,7 @@ const AchievementDefinitions = Object.freeze({
             { count: 5, color: AchvmtConstants.gold, points: 200 }
         ],
         restrictions: [],
-        isSilent: false,
+        visibilityModifiers: { isSilent: false, isHidden: false },
     },
  
     ach7: {
@@ -96,8 +96,8 @@ const AchievementDefinitions = Object.freeze({
             { count: 5, color: AchvmtConstants.silver, points: 50 },
             { count: 10, color: AchvmtConstants.gold, points: 50 }
         ],
-        restrictions: ["$ppant.isModerator==false"],
-        isSilent: false,
+        restrictions: ["$ppant.isModerator=={ isSilent: false, isHidden: false }"],
+        visibilityModifiers: { isSilent: false, isHidden: false },
     },
 
     ach8: {
@@ -109,7 +109,7 @@ const AchievementDefinitions = Object.freeze({
             { count: 1, color: AchvmtConstants.gold, points: 15 },
         ],
         restrictions: [],
-        isSilent: false,
+        visibilityModifiers: { isSilent: false, isHidden: false },
     },
 
     ach9: {
@@ -121,7 +121,7 @@ const AchievementDefinitions = Object.freeze({
             { count: 1, color: AchvmtConstants.gold, points: 15 },
         ],
         restrictions: [],
-        isSilent: false,
+        visibilityModifiers: { isSilent: false, isHidden: false },
     },
 
     ach10: {
@@ -133,8 +133,24 @@ const AchievementDefinitions = Object.freeze({
             { count: 1, color: AchvmtConstants.gold, points: 15 },
         ],
         restrictions: [],
-        isSilent: false,
+        visibilityModifiers: { isSilent: false, isHidden: false },
     },
+
+    ach11: {
+        task: [
+            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==BasicTutorial", "$NPC.position==[Settings.RECEPTION_ID, 11, 6]"] },
+            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==Chef", "NPC.position==[Settings.FOODCOURT_ID, 18, 9]"] },
+            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==FoyerHelper", "NPC.position==[Settings.FOYER_ID, 0, 0]"] }
+        ],
+        title: "Socialite",
+        icon: "globe",
+        description: "Talk to every NPC to get this achievement.",
+        levels: [
+            { count: [1, 1, 1], color: AchvmtConstants.gold, points: 50 }
+        ],
+        restrictions: [],
+        isHidden
+    }
 })
 
 if (typeof module === 'object' && typeof exports === 'object') {
