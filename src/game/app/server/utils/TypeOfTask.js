@@ -11,6 +11,7 @@ module.exports = Object.freeze({
     INTERACT: "INTERACT", // Interact with object or npc
     MAKEFRIEND: "MAKEFRIEND", // Make a friend
     TALK: "TALK", // send message in a chat
+    CREATE: "CREATE", // create something. maybe a group or chat.
 
     // How to get task that only triggers on first chat message?
 

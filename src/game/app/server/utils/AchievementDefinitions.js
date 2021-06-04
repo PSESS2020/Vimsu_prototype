@@ -150,7 +150,49 @@ const AchievementDefinitions = Object.freeze({
         ],
         restrictions: [],
         isHidden
-    }
+    },
+
+    testAch01: {
+        title: "Around the world, around the world",
+        icon: "globe",
+        description: "Test Achievment. Tests each level having its own task. Tests no parallel counting.",
+        task: [
+            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==BasicTutorial", "$NPC.position==[Settings.RECEPTION_ID, 11, 6]"] },
+            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==FoyerHelper", "NPC.position==[Settings.FOYER_ID, 0, 0]"] },
+            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==Chef", "NPC.position==[Settings.FOODCOURT_ID, 18, 9]"] },       
+        ],
+        levels: [
+            { count: 1, color: AchvmtConstants.gold, points: 15 },
+            { count: 1, color: AchvmtConstants.gold, points: 15 },
+            { count: 1, color: AchvmtConstants.gold, points: 15 },
+        ],
+        parallelCounting: false,
+        // visibilityModifiers: NONE
+        // restrictions: NONE
+    },
+
+    testAch02: {
+        title: "Around the world in any order.",
+        icon: "globe",
+        description: "Test Achievment. Tests each level having its own task. Tests allowing  parallel counting.",
+        task: [
+            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==BasicTutorial", "$NPC.position==[Settings.RECEPTION_ID, 11, 6]"] },
+            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==FoyerHelper", "NPC.position==[Settings.FOYER_ID, 0, 0]"] },
+            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==Chef", "NPC.position==[Settings.FOODCOURT_ID, 18, 9]"] },       
+        ],
+        levels: [
+            { count: 1, color: AchvmtConstants.gold, points: 15 },
+            { count: 1, color: AchvmtConstants.gold, points: 15 },
+            { count: 1, color: AchvmtConstants.gold, points: 15 },
+        ],
+        parallelCounting: true,
+        // visibilityModifiers: NONE
+        // restrictions: NONE
+    },
+
+    // One that tests AND of tasks
+    // One that tests OR of tasks
+
 })
 
 if (typeof module === 'object' && typeof exports === 'object') {

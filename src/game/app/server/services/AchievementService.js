@@ -44,17 +44,35 @@ class AchievementService {
     #initAllAchievements = function () {
         for (const [achvmtName, achvmtData] of Object.entries(AchievementDefinitions)) {
             var achvmt = this.#achievementFactory.createAchievement(achvmtName, achvmtData)
-            const { task } = achvmtData
-            if (Array.isArray(task)) {
-                task.forEach( taskData => {
-                    const { typeOfTask } = taskData
-                    this.#achievementsByTask.get(typeOfTask).push(achvmt)
-                })
-            } else {
-                Object.defineProperty(this.#achievementsById, achvmt.getId(), { value: achvmt })
-            }
+            Object.defineProperty(this.#achievementsById, achvmt.getId(), { value: achvmt })
+            achvmt.getTaskList().forEach( taskType => this.#achievementsByTask.get(taskType).push(achvmt) )
         }
     }
+
+
+    #calculatePoints = function (ppant) {
+        // TODO to implement
+    }
+
+    /**
+     * @method module:AchievementService#checkForAchievementEligibility
+     */
+    checkForAchievementEligibility (ppant, typeOfTask, object) {
+        // object is the thing ppant "interacted" (clicked on, created etc.)
+        // with when upping his task-counter. still need to find a
+        // better name
+
+        let achvmntsToCheck = this.#achievementsByTask.get(typeOfTask)
+        // TODO reduce out the ones ppant has already completed
+
+        achvmntsToCheck.forEach( achvmt => {
+
+        })
+
+    }
+
+    // HOW TO DO TASK CHECKING?
+
 
     /**
      * Gets achievement definition based on task type
