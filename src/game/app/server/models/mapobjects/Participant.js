@@ -9,7 +9,7 @@ const Task = require('../Task.js');
 const OneToOneChat = require('../OneToOneChat.js');
 const TypeOfTask = require('../../utils/TypeOfTask');
 const ShirtColor = require('../../../client/shared/ShirtColor.js');
-const Settings = require('../../utils/Settings.js');
+const Settings = require(`../../utils/${process.env.SETTINGS_FILENAME}`);
 const Meeting = require('../Meeting.js');
 
 /**
@@ -32,7 +32,7 @@ module.exports = class Participant {
     #sentRequestList;
     #isMod;
     #taskTypeMapping;
-    #achievements;
+    #achievementList;
     #awardPoints;
     #chatList;
     #isVisible;
@@ -51,13 +51,13 @@ module.exports = class Participant {
      * @param {FriendList} receivedRequestList list of received friend requests
      * @param {FriendList} sentRequestList list of sent friend requests
      * @param {Meeting[]} meetingList List of jitsi meetings
-     * @param {Achievement[]} achievements list of achievements
+     * @param {Object[]} achievementList list of achievements
      * @param {Task[]} taskMapping list of tasks and its counts
      * @param {boolean} isMod moderator status
      * @param {number} awardPoints participant's points
      * @param {Chat[]} chatList list of chats
      */
-    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievements, taskMapping, isMod, awardPoints, chatList, meetingList) {
+    constructor(id, accountId, businessCard, position, direction, friendList, receivedRequestList, sentRequestList, achievementList, taskMapping, isMod, awardPoints, chatList, meetingList) {
         //Typechecking
 
         TypeChecker.isString(id);
@@ -68,9 +68,9 @@ module.exports = class Participant {
         TypeChecker.isInstanceOf(friendList, FriendList);
         TypeChecker.isInstanceOf(receivedRequestList, FriendList);
         TypeChecker.isInstanceOf(sentRequestList, FriendList);
-        if (achievements) {
-            TypeChecker.isInstanceOf(achievements, Array);
-            achievements.forEach(achievement => {
+        if (achievementList) {
+            TypeChecker.isInstanceOf(achievementList, Array);
+            achievementList.forEach(achievement => {
                 TypeChecker.isInstanceOf(achievement, Achievement);
             });
         }
@@ -94,7 +94,7 @@ module.exports = class Participant {
         this.#receivedRequestList = receivedRequestList;
         this.#sentRequestList = sentRequestList;
         this.#taskTypeMapping = taskMapping;
-        this.#achievements = achievements;
+        this.#achievementList = achievementList;
         this.#isMod = isMod;
         this.#awardPoints = awardPoints;
         this.#chatList = chatList;
@@ -190,7 +190,7 @@ module.exports = class Participant {
      * @return {Achievement[]} achievements
      */
     getAchievements() {
-        return this.#achievements;
+        return this.#achievementList;
     }
 
     /**
@@ -562,7 +562,7 @@ module.exports = class Participant {
             TypeChecker.isInstanceOf(achievement, Achievement);
         })
 
-        this.#achievements = achievements;
+        this.#achievementList = achievements;
     }
 
     /**
@@ -620,7 +620,7 @@ module.exports = class Participant {
      */
     addAchievement(achievement) {
         TypeChecker.isInstanceOf(achievement, Achievement);
-        this.#achievements.push(achievement);
+        this.#achievementList.push(achievement);
     }
 
     /**
@@ -632,13 +632,13 @@ module.exports = class Participant {
     removeAchievement(achievementId) {
         TypeChecker.isInt(achievementId);
 
-        let index = this.#achievements.findIndex(ach => ach.getId() === achievementId);
+        let index = this.#achievementList.findIndex(ach => ach.getId() === achievementId);
 
         if (index < 0) {
             throw new Error(achievementId + " not found in list of achievements")
         }
 
-        this.#achievements.splice(index, 1);
+        this.#achievementList.splice(index, 1);
     }
 
     /**

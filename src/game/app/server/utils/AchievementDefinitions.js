@@ -10,15 +10,15 @@ const AchievementDefinitions = Object.freeze({
 
     ach1: { 
         id: 1, // generate during runtime instead
-        TypeOfTask: TypeOfTask.ASKQUESTIONINLECTURE, // Type + additional data
+        task: { typeOfTask: TypeOfTask.ASKQUESTIONINLECTURE, detail: "$POST:"}, // Type + additional data
         title: "Inquisitive", 
         icon: "question", // font-awesome
         description: "Ask questions in lectures to gain this achievement.", 
-        levelData: [
+        levels: [
             { count: 5, color: '#D7D7D7', points: 15 },
             { count: 10, color: '#C9B037', points: 15 }
         ], 
-        opensDoor: undefined // will be removed
+        restrictions: ['$room.id==val', '$group.name==val'] //make it so the amout of equals signs only needs be >= 1
     },
  
     /*

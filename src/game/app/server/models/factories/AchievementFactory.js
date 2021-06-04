@@ -1,4 +1,6 @@
 const AchievementService = require("../../services/AchievementService");
+const Achievement = require("../Achievement");
+const Settings = require(`../../utils/${process.env.SETTINGS_FILENAME}`);
 
 class AchievementFactory {
 
@@ -17,7 +19,17 @@ class AchievementFactory {
         this.#AchievementService = new AchievementService()
     }
 
-    
+    createAchievement (achvmtData) {
+        // Deconstruct
+        const { task, title, icon, description, levels, restriction: restrictions } = achvmtData
+        const { typeOfTask, detail } = task
+        let achvmtId = `${Settings.CONFERENCE_ID}_${title}_${task}_${restrictions.reduce( (acc, val) => `${val}#${acc.slice(1)}`)}`
+        // handle restrictions
+        // handle details
+        // add to AchievementService
+        // add observers for door opening
+        return new Achievement(achvmtId, title, icon, description, typeOfTask, detail, levels, restrictions)
+    }
 
 
 }
