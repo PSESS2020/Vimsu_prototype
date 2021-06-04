@@ -1,5 +1,4 @@
 const RoomDecorator = require('../models/RoomDecorator.js');
-<<<<<<< HEAD:src/game/app/server/models/EscapeRoomDecorator.js
 const GameObjectService = require('../services/GameObjectService.js');
 const NPCService = require('../services/NPCService.js');
 const Direction = require('../../client/shared/Direction.js');
@@ -10,18 +9,6 @@ const Room = require('./Room');
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const DoorClosedMessages = require('../utils/messages/DoorClosedMessages.js');
 const RoomDimensions = require('../utils/RoomDimensions.js');
-=======
-const GameObjectService = require('../src/game/app/server/services/GameObjectService.js');
-const NPCService = require('../src/game/app/server/services/NPCService.js');
-const Direction = require('../src/game/app/client/shared/Direction.js');
-const Settings = require('../src/game/app/server/utils/Settings.js');
-const DoorService = require('../src/game/app/server/services/DoorService.js');
-const Position = require('../src/game/app/server/models/Position.js');
-const Room = require('../src/game/app/server/models/Room');
-const TypeChecker = require('../src/game/app/client/shared/TypeChecker.js');
-const DoorClosedMessages = require('../src/game/app/server/utils/messages/DoorClosedMessages.js');
-const RoomDimensions = require('../src/game/app/server/utils/RoomDimensions.js');
->>>>>>> 90cd9097 (removed unused room decorator inputs):archive/EscapeRoomDecorator.js
 
 /**
  * The Escape Room Decorator Model
