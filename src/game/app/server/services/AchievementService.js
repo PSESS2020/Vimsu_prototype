@@ -55,10 +55,29 @@ class AchievementService {
     }
 
     checkForTaskIncrementation(ppant, typeOfTask, contextObject) {
-        // get all achvmnts saved for this type of task
-        // check whether their task conditions are fulfilled
-        // (also check against restrictions)
-        // but then where do we increment 
+        // test if this would work as intended
+        // we probably need to make sure that, if there are two achvmts
+        // that depend on the same task, these two achmts save references
+        // to the same task object
+        // also, make this more efficient for later variable reuse
+        let tasksToIncrement = new Set()
+        let achvmntsByTask = this.#achievementsByTask.get(typeOfTask)
+        achvmntsByTask.map( 
+                achvmt => achvmt.getPerformedTasks(typeOfTask, contextObject) 
+            ).filter( 
+                taskList => !taskList.isEmpty() 
+            ).flat().forEach(
+                task => tasksToIncrement.add(task)
+            )
+        
+        if (tasksToIncrement.isEmpty) { return }
+        else {
+            tasksToIncrement.values().forEach( task => {
+                if (!ppant.isKnownTask(task)) { ppant.trackNewTask(task) }
+                ppant.incrTaskCounter(task)
+            })
+            this.checkForAchievementEligibility(ppant, /* TODO: pass a list of achvmts to check */)
+        }
     }
 
     /**
