@@ -1,3 +1,5 @@
+const Settings = require('../../client/utils/Settings');
+const OneToOneChat = require('../models/OneToOneChat');
 const TypeOfTask = require('./TypeOfTask');
 
 /**
@@ -12,9 +14,13 @@ const AchvmtConstants = Object.freeze({
 })
 
 const AchievementDefinitions = Object.freeze({
+    // Redo the detail for all of these
 
     ach1: {
-        task: { typeOfTask: TypeOfTask.TALK, detail: "$POST:"}, // Type + additional data
+        task: { 
+            typeOfTask: TypeOfTask.TALK, 
+            detail: { class: "LectureChat" }
+        }, // Type + additional data
         title: "Inquisitive", 
         icon: "question", // font-awesome
         description: "Ask questions in lectures to gain this achievement.", 
@@ -39,7 +45,10 @@ const AchievementDefinitions = Object.freeze({
     },
 
     ach3: {
-        task: { typeOfTask: TypeOfTask.VISIT, detail:"$Room.id==Settings.FOODCOURT_ID" },
+        task: { 
+            typeOfTask: TypeOfTask.VISIT, 
+            detail: { class: "Room", id: Settings.FOODCOURT_ID }
+        },
         title: "Coffee Time!",
         icon: "coffee",
         description: "Visit food court to gain this achievement.",
@@ -51,7 +60,10 @@ const AchievementDefinitions = Object.freeze({
     },
 
     ach4: {
-        task: { typeOfTask: TypeOfTask.VISIT, detail: "$Room.id==Settings.FOYER_ID" },
+        task: { 
+            typeOfTask: TypeOfTask.VISIT, 
+            detail: { class: "Room", id: Settings.FOYER_ID }
+        },
         title: "New World",
         icon: "globe",
         description: "Visit foyer to gain this achievement.",
@@ -63,7 +75,10 @@ const AchievementDefinitions = Object.freeze({
     },
 
     ach5: {
-        task: { typeOfTask: TypeOfTask.VISIT, detail: "$Room.id==Settings.RECEPTION_ID" },
+        task: { 
+            typeOfTask: TypeOfTask.VISIT, 
+            detail: { class: "Room", id: Settings.RECEPTION_ID }
+        },
         title: "Back to the Start...",
         icon: "user",
         description: "Re-visit the reception room to gain this achievement.",
@@ -75,7 +90,10 @@ const AchievementDefinitions = Object.freeze({
     },
 
     ach6: {
-        task: { typeOfTask: TypeOfTask.VISIT, detail: "$Lecture" },
+        task: { 
+            typeOfTask: TypeOfTask.VISIT, 
+            detail: { class: "Lecture" }
+        },
         title: "Good Listener",
         icon: "headphones",
         description: "Visit lectures and stay until the end to gain this achievment.",
@@ -88,7 +106,10 @@ const AchievementDefinitions = Object.freeze({
     },
  
     ach7: {
-        task: { typeOfTask: TypeOfTask.TALK, detail: ["$chat.type==oneonone", "$chat.messages.count==0"] },
+        task: { 
+            typeOfTask: TypeOfTask.TALK, 
+            detail: { class: "OneToOneChat", amountOfMessages: 0 } 
+        },
         title: "Walky Talky",
         icon: "comment",
         description: "Start a private conversation with others to gain this achievement.",
@@ -101,7 +122,10 @@ const AchievementDefinitions = Object.freeze({
     },
 
     ach8: {
-        task: { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==BasicTutorial", "$NPC.position==[Settings.RECEPTION_ID, 11, 6]"] },
+        task: { 
+            typeOfTask: TypeOfTask.INTERACT, 
+            detail: { class: "NPC", name: "BasicTutorial", position: [Settings.RECEPTION_ID, 11, 6] } 
+        },
         title: "Welcome!",
         icon: "info",
         description: "Talk to the NPC in the reception room to gain this achievement.",
@@ -113,7 +137,10 @@ const AchievementDefinitions = Object.freeze({
     },
 
     ach9: {
-        task: { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==Chef", "NPC.position==[Settings.FOODCOURT_ID, 18, 9]"] },
+        task: { 
+            typeOfTask: TypeOfTask.INTERACT, 
+            detail: { class: "NPC", name: "Chef", position: [Settings.FOODCOURT_ID, 18, 9] } 
+        },
         title: "Let's do Lunch!",
         icon: "utensils",
         description: "Talk to the NPC in the food court to gain this achievment.",
@@ -125,7 +152,10 @@ const AchievementDefinitions = Object.freeze({
     },
 
     ach10: {
-        task: { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==FoyerHelper", "NPC.position==[Settings.FOYER_ID, 0, 0]"] },
+        task: { 
+            typeOfTask: TypeOfTask.INTERACT, 
+            detail: { class: "NPC", name: "FoyerHelper", position: [Settings.FOYER_ID, 0, 0] } 
+        },
         title: "Learn about Lectures",
         icon: "book",
         description: "Talk to the NPC in the foyer to gain this achievment.",
@@ -136,30 +166,17 @@ const AchievementDefinitions = Object.freeze({
         visibilityModifiers: { isSilent: false, isHidden: false },
     },
 
-    ach11: {
-        task: [
-            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==BasicTutorial", "$NPC.position==[Settings.RECEPTION_ID, 11, 6]"] },
-            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==Chef", "NPC.position==[Settings.FOODCOURT_ID, 18, 9]"] },
-            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==FoyerHelper", "NPC.position==[Settings.FOYER_ID, 0, 0]"] }
-        ],
-        title: "Socialite",
-        icon: "globe",
-        description: "Talk to every NPC to get this achievement.",
-        levels: [
-            { count: [1, 1, 1], color: AchvmtConstants.gold, points: 50 }
-        ],
-        restrictions: [],
-        isHidden
-    },
-
     testAch01: {
         title: "Around the world, around the world",
         icon: "globe",
         description: "Test Achievment. Tests each level having its own task. Tests no parallel counting.",
         task: [
-            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==BasicTutorial", "$NPC.position==[Settings.RECEPTION_ID, 11, 6]"] },
-            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==FoyerHelper", "NPC.position==[Settings.FOYER_ID, 0, 0]"] },
-            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==Chef", "NPC.position==[Settings.FOODCOURT_ID, 18, 9]"] },       
+            { typeOfTask: TypeOfTask.INTERACT,
+              detail: { class: "NPC", name: "BasicTutorial", position: [Settings.RECEPTION_ID, 11, 6] } },
+            { typeOfTask: TypeOfTask.INTERACT, 
+              detail: { class: "NPC", name: "Chef", position: [Settings.FOODCOURT_ID, 18, 9] } },
+            { typeOfTask: TypeOfTask.INTERACT, 
+              detail: { class: "NPC", name: "FoyerHelper", position: [Settings.FOYER_ID, 0, 0] } },
         ],
         levels: [
             { count: 1, color: AchvmtConstants.gold, points: 15 },
@@ -176,9 +193,12 @@ const AchievementDefinitions = Object.freeze({
         icon: "globe",
         description: "Test Achievment. Tests each level having its own task. Tests allowing  parallel counting.",
         task: [
-            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==BasicTutorial", "$NPC.position==[Settings.RECEPTION_ID, 11, 6]"] },
-            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==FoyerHelper", "NPC.position==[Settings.FOYER_ID, 0, 0]"] },
-            { typeOfTask: TypeOfTask.INTERACT, detail: ["$NPC.name==Chef", "NPC.position==[Settings.FOODCOURT_ID, 18, 9]"] },       
+            { typeOfTask: TypeOfTask.INTERACT,
+              detail: { class: "NPC", name: "BasicTutorial", position: [Settings.RECEPTION_ID, 11, 6] } },
+            { typeOfTask: TypeOfTask.INTERACT, 
+              detail: { class: "NPC", name: "Chef", position: [Settings.FOODCOURT_ID, 18, 9] } },
+            { typeOfTask: TypeOfTask.INTERACT, 
+              detail: { class: "NPC", name: "FoyerHelper", position: [Settings.FOYER_ID, 0, 0] } },
         ],
         levels: [
             { count: 1, color: AchvmtConstants.gold, points: 15 },
@@ -190,8 +210,46 @@ const AchievementDefinitions = Object.freeze({
         // restrictions: NONE
     },
 
-    // One that tests AND of tasks
     // One that tests OR of tasks
+    testAch03: {
+        title: "Around the world, around the world",
+        icon: "globe",
+        description: "Test Achievment. Tests one level having tree tasks, combined via OR.",
+        task: { 
+            typeOfTask: [ TypeOfTask.INTERACT, TypeOfTask.INTERACT, TypeOfTask.INTERACT ],
+            detail: [
+                { class: "NPC", name: "BasicTutorial", position: [Settings.RECEPTION_ID, 11, 6] },
+                { class: "NPC", name: "Chef", position: [Settings.FOODCOURT_ID, 18, 9] },
+                { class: "NPC", name: "FoyerHelper", position: [Settings.FOYER_ID, 0, 0] } 
+            ]
+        },
+        levels: [
+            { count: [ 1, 1, 1 ], color: AchvmtConstants.gold, points: 15 },
+        ],
+        //  parallelCounting: NOT NECESSARY,
+        // visibilityModifiers: NONE
+        // restrictions: NONE
+    },
+    // One that tests AND of tasks
+    testAch03: {
+        title: "Around the world, around the world",
+        icon: "globe",
+        description: "Test Achievment. Tests one level having tree tasks, combined via AND.",
+        task: { 
+            typeOfTask: [ [ TypeOfTask.INTERACT, TypeOfTask.INTERACT, TypeOfTask.INTERACT ] ],
+            detail: [ [
+                { class: "NPC", name: "BasicTutorial", position: [Settings.RECEPTION_ID, 11, 6] },
+                { class: "NPC", name: "Chef", position: [Settings.FOODCOURT_ID, 18, 9] },
+                { class: "NPC", name: "FoyerHelper", position: [Settings.FOYER_ID, 0, 0] } 
+            ] ]
+        },
+        levels: [
+            { count: [ [ 1, 1, 1 ] ], color: AchvmtConstants.gold, points: 15 },
+        ],
+        //  parallelCounting: NOT NECESSARY,
+        // visibilityModifiers: NONE
+        // restrictions: NONE
+    },
 
 })
 

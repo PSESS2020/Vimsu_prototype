@@ -61,4 +61,8 @@ module.exports = class Task {
     getAwardPoints() {
         return this.#awardPoints;
     }
+
+    checkDetail(contextObject) {
+        // Empty method that will be written by factory
+    }
 }

@@ -1,11 +1,15 @@
 const TypeChecker = require("../../../client/shared/TypeChecker");
 const AchievementService = require("../../services/AchievementService");
+const TaskService = require("../../services/TaskService");
 const Achievement = require("../Achievement");
+const TaskFactory = require("./TaskFactory");
 const Settings = require(`../../utils/${process.env.SETTINGS_FILENAME}`);
 
 class AchievementFactory {
 
     #AchievementService
+    #taskService
+    #taskFactory
 
     /**
      * @constructor attemtps to create an instance of AchievementFactory.
@@ -16,8 +20,11 @@ class AchievementFactory {
         if (!!AchievementFactory.instance) {
             return AchievementFactory.instance;
         }
-        AchievementFactory.instance = this;
+        
         this.#AchievementService = new AchievementService()
+        this.#taskService = new TaskService()
+        this.#taskFactory = new TaskFactory()
+        AchievementFactory.instance = this;
     }
 
     createAchievement (achvmtName, achvmtData) {

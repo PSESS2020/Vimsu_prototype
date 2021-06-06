@@ -87,6 +87,17 @@ module.exports = class Chat {
     }
 
     /**
+     * Get amount of messages
+     * @method module:Chat#getAmountOfMessages
+     * 
+     * @returns {int} The number of messages that have been posted
+     *                into the chat         
+     */
+    getAmountOfMessages() {
+        return this.#messageList.length
+    }
+
+    /**
      * Gets list of chat participants
      * @method module:Chat#getParticipantList
      * 

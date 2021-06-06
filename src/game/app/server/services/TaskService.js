@@ -9,8 +9,9 @@ const TypeOfTask = require('../utils/TypeOfTask')
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-module.exports = class TaskService {
-    #tasks;
+class TaskService {
+    #taskSet;
+    #taskLibrary;
 
     /**
      * Creates an instance of TaskService
@@ -21,56 +22,17 @@ module.exports = class TaskService {
             return TaskService.instance;
         }
 
-        this.#tasks = [];
-        this.#initAllTasks();
-        TaskService.instance = this;
+        this.#taskSet = new Set()
+        this.#taskLibrary = []
     }
 
-    /**
-     * Gets all tasks
-     * @method module:TaskService#getAllTasks
-     * 
-     * @return {Task[]} tasks array
-     */
-    getAllTasks() {
-        return this.#tasks;
+    addNewTask(task) {
+        // needs to check if task is already tracked and, if yes,
+        // return the original one so achvmnts depending on the same
+        // task actually depend on the same task
     }
+}
 
-    /**
-     * Gets task by its task type
-     * @method module:TaskService#getTaskByType
-     * 
-     * @param {TypeOfTask} taskType type of task
-     * 
-     * @return {Task} Task instance
-     */
-    getTaskByType(taskType) {
-        TypeChecker.isEnumOf(taskType, TypeOfTask);
-
-        let index = this.#tasks.findIndex(task => task.getTaskType() === taskType);
-
-        if (index < 0) {
-            throw new Error(taskType + " is not in list of tasks")
-        }
-
-        return this.#tasks[index];
-    }
-
-    /**
-     * @private Initializes all tasks
-     * @method module:TaskService#initAllTasks
-     */
-    #initAllTasks = function () {
-        var id = 1;
-        this.#tasks.push(new Task(id++, TypeOfTask.ASKQUESTIONINLECTURE, 2));
-        this.#tasks.push(new Task(id++, TypeOfTask.BASICTUTORIALCLICK, 0));
-        this.#tasks.push(new Task(id++, TypeOfTask.BEFRIENDOTHER, 15));
-        this.#tasks.push(new Task(id++, TypeOfTask.FOODCOURTVISIT, 0));
-        this.#tasks.push(new Task(id++, TypeOfTask.FOYERVISIT, 0));
-        this.#tasks.push(new Task(id++, TypeOfTask.INITPERSONALCHAT, 5));
-        this.#tasks.push(new Task(id++, TypeOfTask.LECTUREVISIT, 30));
-        this.#tasks.push(new Task(id++, TypeOfTask.RECEPTIONVISIT, 0));
-        this.#tasks.push(new Task(id++, TypeOfTask.FOYERHELPERCLICK, 0));
-        this.#tasks.push(new Task(id++, TypeOfTask.CHEFCLICK, 0));
-    }
-} 
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = TaskService;
+}
