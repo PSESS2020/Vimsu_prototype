@@ -2,7 +2,7 @@ const TypeChecker = require('../../client/shared/TypeChecker.js');
 const AchievementDefinition = require('../models/AchievementDefinition.js');
 const TypeOfTask = require('../utils/TypeOfTask');
 const Participant = require('../models/mapobjects/Participant');
-const Achievement = require('../models/Achievement');
+const Achievement = require('../models/rewards/Achievement');
 const AchievementFactory = require('../models/factories/AchievementFactory.js');
 const AchievementDefinitions = require('../utils/AchievementDefinitions.js');
 
@@ -54,36 +54,11 @@ class AchievementService {
         // TODO to implement
     }
 
-    checkForTaskIncrementation(ppant, typeOfTask, contextObject) {
-        // test if this would work as intended
-        // we probably need to make sure that, if there are two achvmts
-        // that depend on the same task, these two achmts save references
-        // to the same task object
-        // also, make this more efficient for later variable reuse
-
-        // maybe do like a quick "meets known task" check for participant
-        // here
-
-        // ALSO THERE NEEDS TO BE HANDLING FOR ACHIEVEMENTS WITH NOT PARALLEL
-        // COUNTING
-        let tasksToIncrement = new Set()
-        let achvmntsByTask = this.#achievementsByTask.get(typeOfTask)
-        achvmntsByTask.map( 
-                achvmt => achvmt.getTasksToPerfom(typeOfTask, contextObject) 
-            ).filter( 
-                taskList => !taskList.isEmpty() 
-            ).flat().forEach(
-                task => tasksToIncrement.add(task)
-            )
-        
-        if (tasksToIncrement.isEmpty) { return }
-        else {
-            tasksToIncrement.values().forEach( task => {
-                if (!ppant.isKnownTask(task)) { ppant.trackNewTask(task) }
-                ppant.incrTaskCounter(task)
-            })
-            this.checkForAchievementEligibility(ppant, /* TODO: pass a list of achvmts to check */)
+    getAchievementByTitle(title) {
+        for (const achvmt of Object.values(this.#achievementsById)) {
+            if (achvmt.getTitle() === title) { return achvmt }
         }
+        return undefined      
     }
 
     /**
@@ -91,7 +66,7 @@ class AchievementService {
      */
     checkForAchievementEligibility (ppant, /* the appropriate task count of the participant */ achvmntsToCheck) {
         achvmntsToCheck.filter( achvmt => achvmt.fulfillsRestrictions(ppant) ).forEach( achvmt => {
-            
+
         })
 
     }

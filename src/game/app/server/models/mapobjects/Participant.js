@@ -3,9 +3,9 @@ const TypeChecker = require('../../../client/shared/TypeChecker.js');
 const Direction = require('../../../client/shared/Direction')
 const BusinessCard = require('../BusinessCard.js');
 const FriendList = require('../FriendList.js');
-const Achievement = require('../Achievement.js');
+const Achievement = require('../rewards/Achievement.js');
 const Chat = require('../Chat.js');
-const Task = require('../Task.js');
+const Task = require('../rewards/Task.js');
 const OneToOneChat = require('../OneToOneChat.js');
 const TypeOfTask = require('../../utils/TypeOfTask');
 const ShirtColor = require('../../../client/shared/ShirtColor.js');
@@ -51,8 +51,8 @@ module.exports = class Participant {
      * @param {FriendList} receivedRequestList list of received friend requests
      * @param {FriendList} sentRequestList list of sent friend requests
      * @param {Meeting[]} meetingList List of jitsi meetings
-     * @param {String[]} achievementList list of achievements
-     * @param {Task[]} taskCounters list of tasks and its counts
+     * @param {Map[]} achievementList list of achievements
+     * @param {Map[]} taskCounters list of tasks and its counts
      * @param {boolean} isMod moderator status
      * @param {number} awardPoints participant's points
      * @param {Chat[]} chatList list of chats
@@ -73,12 +73,13 @@ module.exports = class Participant {
             // Move some of this to TypeChecker
             // also, do not load achievements from other
             // conferences & once that are no longer known
-            TypeChecker.isInstanceOf(achievementList, Array);
+            TypeChecker.isInstanceOf(achievementList, Map);
             achievementList.forEach(achievement => {
                 if ( !( achievement.hasOwnProperty(achvmtId) && achievement.hasOwnProperty(level) ) ) { throw new Error("not properly defined achievement") }
                 else { TypeChecker.isInt(achievement.level); TypeChecker.isString(id) }
             });
         }
+        // also add TypeChecking for TaskCounter
         TypeChecker.isBoolean(isMod);
         TypeChecker.isInt(awardPoints);
         TypeChecker.isInstanceOf(chatList, Array);

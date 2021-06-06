@@ -1,5 +1,5 @@
-const TypeChecker = require('../../client/shared/TypeChecker.js');
-const TypeOfTask = require('../utils/TypeOfTask')
+const TypeChecker = require('../../../client/shared/TypeChecker.js');
+const TypeOfTask = require('../../utils/TypeOfTask')
 
 /**
  * The Task Model
@@ -23,7 +23,7 @@ module.exports = class Task {
      * @param {number} awardPoints task award points
      */
     constructor(id, taskType, awardPoints) {
-        TypeChecker.isInt(id);
+        TypeChecker.isString(id);
         TypeChecker.isEnumOf(taskType, TypeOfTask);
         TypeChecker.isInt(awardPoints);
 

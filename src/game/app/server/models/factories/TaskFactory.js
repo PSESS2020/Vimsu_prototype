@@ -1,7 +1,7 @@
 const TypeChecker = require("../../../client/shared/TypeChecker");
 const CodeLibrary = require("../../utils/AlgoLibrary");
 const TypeOfTask = require("../../utils/TypeOfTask");
-const Task = require("../Task");
+const Task = require("../rewards/Task");
 const Settings = require(`../../utils/${process.env.SETTINGS_FILENAME}`);
 
 class TaskFactory {
@@ -17,11 +17,11 @@ class TaskFactory {
         // TODO handle array combinations that are possible in taskData
         // these will be handled in AchievementFactory
         var taskToReturn = new Task(taskId, typeOfTask, points)
-        this.#writeCheckIfWasPerformedMethodOfTask(taskToReturn, detail)
+        this.#writeCheckIfWasPerformedMethod(taskToReturn, detail)
         return taskToReturn
     }
 
-    #writeCheckIfWasPerformedMethodOfTask(task, detail) {
+    #writeCheckIfWasPerformedMethod(task, detail) {
         // maybe add another safety check to guarantee that contextObject
         // has getState() method
         var funBody = `if (this.getTypeOfTask() !== typeOfTask) { return false };\n`

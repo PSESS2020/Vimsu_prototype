@@ -2,7 +2,7 @@ const TypeChecker = require("../../../client/shared/TypeChecker");
 const AchievementService = require("../../services/AchievementService");
 const TaskService = require("../../services/TaskService");
 const AlgoLibrary = require("../../utils/AlgoLibrary");
-const Achievement = require("../Achievement");
+const Achievement = require("../rewards/Achievement");
 const TaskFactory = require("./TaskFactory");
 const Settings = require(`../../utils/${process.env.SETTINGS_FILENAME}`);
 

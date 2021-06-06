@@ -1,6 +1,6 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
 const TaskFactory = require('../models/factories/TaskFactory.js');
-const Task = require('../models/Task.js');
+const Task = require('../models/rewards/Task.js');
 const AlgoLibrary = require('../utils/AlgoLibrary.js');
 const TypeOfTask = require('../utils/TypeOfTask')
 
