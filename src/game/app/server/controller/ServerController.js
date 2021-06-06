@@ -54,9 +54,9 @@ module.exports = class ServerController {
     #rooms;
     #allDoors;
     #roomService;
+    #achvmtService
     #interval;
     #currentLecturesData;
-    #roomFactory;
 
     //map from socket-id to ppant-id
     #socketMap;
@@ -98,6 +98,9 @@ module.exports = class ServerController {
         this.#DEBUGMODE = false;
 
         this.#socketMap = new Map();
+
+        // init all achievements
+        this.#achvmtService = new AchievementService()
 
         //Init all rooms
         this.#roomService = new RoomService();
@@ -3564,23 +3567,29 @@ module.exports = class ServerController {
      * 
      * @param {String} participantId participant ID
      * @param {TypeOfTask} taskType task type
+     * @param {Object} contextObject an object (or class instance) that provides
+     *                               additional information about the context
+     *                               in which the task was performed
      */
-    #applyTaskAndAchievement = async (participantId, taskType) => {
+    #applyTaskAndAchievement = async (participantId, taskType, contextObject) => {
         TypeChecker.isString(participantId);
         TypeChecker.isEnumOf(taskType, TypeOfTask);
 
-        var participant = this.#ppants.get(participantId);
+        var ppant = this.#ppants.get(participantId);
         var task = new TaskService().getTaskByType(taskType);
 
-        if (participant) {
+        if (ppant) {
             //participant is online
 
-            participant.addTask(task);
+            this.#achvmtService.checkForTaskIncrementation(ppant, taskType, contextObject)
 
-            ParticipantService.updateTaskCounts(participantId, Settings.CONFERENCE_ID, participant.getTaskTypeMappingCounts(), this.#db);
+            ppant.addTask(task);
+
+            // TODO update
+            ParticipantService.updateTaskCounts(participantId, Settings.CONFERENCE_ID, ppant.getTaskTypeMappingCounts(), this.#db);
 
             // computes achievements, updates participants, and returns newly unlocked achievements
-            var newAchievements = new AchievementService().computeAchievements(participant);
+            var newAchievements = new AchievementService().computeAchievements(ppant);
 
             newAchievements.forEach(ach => {
                 var achData = {
@@ -3605,9 +3614,9 @@ module.exports = class ServerController {
                 ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.getId(), ach.getCurrentLevel(), this.#db);
             });
 
-            this.#io.to(this.getSocketId(participantId)).emit('updatePoints', participant.getAwardPoints());
+            this.#io.to(this.getSocketId(participantId)).emit('updatePoints', ppant.getAwardPoints());
 
-            await ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, participant.getAwardPoints(), this.#db);
+            await ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, ppant.getAwardPoints(), this.#db);
 
             //updates the rank of all active participants
             Promise.all([...this.#ppants.keys()].map(async ppantId => {

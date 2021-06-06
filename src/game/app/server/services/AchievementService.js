@@ -60,10 +60,16 @@ class AchievementService {
         // that depend on the same task, these two achmts save references
         // to the same task object
         // also, make this more efficient for later variable reuse
+
+        // maybe do like a quick "meets known task" check for participant
+        // here
+
+        // ALSO THERE NEEDS TO BE HANDLING FOR ACHIEVEMENTS WITH NOT PARALLEL
+        // COUNTING
         let tasksToIncrement = new Set()
         let achvmntsByTask = this.#achievementsByTask.get(typeOfTask)
         achvmntsByTask.map( 
-                achvmt => achvmt.getPerformedTasks(typeOfTask, contextObject) 
+                achvmt => achvmt.getTasksToPerfom(typeOfTask, contextObject) 
             ).filter( 
                 taskList => !taskList.isEmpty() 
             ).flat().forEach(
@@ -83,16 +89,9 @@ class AchievementService {
     /**
      * @method module:AchievementService#checkForAchievementEligibility
      */
-    checkForAchievementEligibility (ppant, typeOfTask, object) {
-        // object is the thing ppant "interacted" (clicked on, created etc.)
-        // with when upping his task-counter. still need to find a
-        // better name
-
-        let achvmntsToCheck = this.#achievementsByTask.get(typeOfTask)
-        // TODO reduce out the ones ppant has already completed
-
-        achvmntsToCheck.forEach( achvmt => {
-
+    checkForAchievementEligibility (ppant, /* the appropriate task count of the participant */ achvmntsToCheck) {
+        achvmntsToCheck.filter( achvmt => achvmt.fulfillsRestrictions(ppant) ).forEach( achvmt => {
+            
         })
 
     }

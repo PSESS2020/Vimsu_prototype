@@ -89,11 +89,14 @@ class GameObjectFactory {
      */
     createGameObject (roomId, objData) {
         // Destructuring the object for easier reference and a more flexible
-        // method. The last two lines don't need to be separate, it's just
+        // method. These three lines don't need to be separate, it's just
         // to signify that these are two different "levels" of customization.
-        const { type, position: [xPos, yPos] }           = objData  // mandatory
-        var { variation, isClickable, onClickData }      = objData  // optional
-        var { width, length, isSolid, assetSet, offset } = objData  // custom
+        // MANDATORY
+        const { type, position: [xPos, yPos] }                      = objData
+        // OPTIONAL
+        var { variation, isClickable, onClickData, flipDimensions } = objData
+        // CUSTOM (overwrite default options)
+        var { width, length, isSolid, assetSet, offset }            = objData
 
         if (!GameObjectInfo.isKnownObject(type)) {
             throw new TypeError(`${type} is not a known type of object!`)
@@ -131,6 +134,9 @@ class GameObjectFactory {
         if (isSolid  === undefined) { isSolid  = GameObjectInfo.getInfo(type, "isSolid") }
         if (assetSet === undefined) { assetSet = GameObjectInfo.getAsset(type, variation) }
         if (offset   === undefined) { offset   = GameObjectInfo.getOffset(type, variation) }
+
+        // if the flag is set, swap length and width
+        if (flipDimensions) { let tmp = width; width = length; length = tmp }
         
         let i = 0
         let isOffsetArray = Array.isArray(offset)
