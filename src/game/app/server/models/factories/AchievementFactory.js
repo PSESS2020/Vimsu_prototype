@@ -1,6 +1,7 @@
 const TypeChecker = require("../../../client/shared/TypeChecker");
 const AchievementService = require("../../services/AchievementService");
 const TaskService = require("../../services/TaskService");
+const AlgoLibrary = require("../../utils/AlgoLibrary");
 const Achievement = require("../Achievement");
 const TaskFactory = require("./TaskFactory");
 const Settings = require(`../../utils/${process.env.SETTINGS_FILENAME}`);
@@ -20,8 +21,6 @@ class AchievementFactory {
         if (!!AchievementFactory.instance) {
             return AchievementFactory.instance;
         }
-        
-        this.#AchievementService = new AchievementService()
         this.#taskService = new TaskService()
         this.#taskFactory = new TaskFactory()
         AchievementFactory.instance = this;
@@ -29,57 +28,56 @@ class AchievementFactory {
 
     createAchievement (achvmtName, achvmtData) {
         // Deconstruct
+        // might need some type-checking here
         const { task, title, icon, description, levels, restrictions } = achvmtData
         const { typeOfTask, detail } = task
-        let achvmtId = this.#calculateAchvmtID(task, restrictions)
-        // handle restrictions
-        // handle details
-        // add to AchievementService
-        // add observers for door opening
-        return new Achievement(achvmtId, title, icon, description, typeOfTask, detail, levels)
-    }
-
-    #calculateAchvmtID = function (task, restrictions) {
-        // TODO redo
-
-        // maybe add name in here as well
-        this.#taskToHexString(`${this.#convertToHashCode(Settings.CONFERENCE_ID)}_`, task)
-
-        const { title, task: { typeOfTask, detail }, restrictions } = achvmtData
-        let detailString = ( (detail instanceof String) ? detail : detail.reverse().reduce( (acc, val) => `${val}#${acc.slice(1)}` ) )
-        let restrictionString = restrictions.reverse().reduce( (acc, val) => `${val}#${acc.slice(1)}` )
-        return `${Settings.CONFERENCE_ID}_${title}_${typeOfTask}_${detailString}&&${restrictionString}` 
-    }
-
-    #taskToHashCode = function (acc, task) {
-        if (Array.isArray(task)) {
-            task.forEach( task => this.#taskToHexString(acc, task) )
-        } else {
-            const { typeOfTask, detail } = task
-            // if typeOfTask is array, detail needs to be one
-            // of equal length
-            if (Array.isArray(typeOfTask)) {
-                for (i in [...Array(typeOfTask.length)]) {
-                    acc += `#${this.#convertToHashCode(typeOfTask[i])}_${this.#convertToHashCode(detail[i])}`
-                }
-            } else {
-                let temp = (Array.isArray(detail)) ? `${detail.reduce( (acc, val) => `${acc}${this.#convertToHashCode(val)}+`, "" )}` : this.#convertToHashCode(detail)
-                acc += `#${this.#convertToHashCode(typeOfTask[i])}_`
-
+        var taskList = []
+        // add handling for achvmnts with different tasks for
+        // different levels
+        if (Array.isArray(typeOfTask)) {
+            // make sure level and task structure match
+            if (!( (typeOfTask.length === levels.length) && (typeOfTask.length === detail.length) )) {
+                throw new Error("When creating an achievement, the structure of the typeOfTask-field, the detail field and the count-field must match for every level!")
             }
+            for (i in [...Array(typeOfTask.length)]) {
+                // handle arrays in arrays
+                let taskData = { typeOfTask: typeOfTask[i], detail: detail[i] }
+                taskList.push(this.#taskService.getMatchingTask(taskData))
+            }
+        } else {
+            taskList.push(this.#taskService.getMatchingTask(task))
         }
-        return acc;
+        var achvmtId = this.#calculateAchvmtID(title, taskList, levels, restrictions)
+        // add observers for door opening (will be done at later point & somewhere else)
+        var achvmtToReturn = new Achievement(achvmtId, title, icon, description, taskList, levels)
+        this.#writeCheckRestrictionMethod(achvmtToReturn, restrictions)
+        return achvmtToReturn
     }
 
-    #convertToHashCode = function (string) {
-        TypeChecker.isString(string)
-        var hash = 0
-        for (i in  [...Array(string.length)]) {
-            hash = ((hash << 5) - hash) + string.charCodeAt(i)
-            hash = hash & hash
+    #calculateAchvmtID = function (title, taskList, levels, restrictions) {
+        let taskString = taskList.reduce( task => `#${task.getId().split("_")[2]}` )
+        let levelString = levels.reduce( level => `${AlgoLibrary.dataObjectToHashCode(level)}` )
+        // change how restriction string is calculated to better
+        // account for no restrictions
+        return `${Settings.CONFERENCE_ID}_${AlgoLibrary.convertToHashCode(title)}_${taskString}_${levelString}_**${AlgoLibrary.dataObjectToHashCode(restrictions)}` 
+    }
+
+    #writeCheckRestrictionMethod(achvmt, restrictions) {
+        var funBody = "TypeChecker.isInstanceOf(ppant, Participant);\n" 
+        + "let ppantState = ppant.getState();\n"
+        + "let checkResult = true;\n"
+        for (const [key, val] of Object.entries(restrictions)) {
+            funBody += `if (ppantState.hasOwnProperty("${key}") { \n`
+            if (typeof val === 'string') {
+                funBody += `checkResult = (checkResult && (ppantState.${key} === "${val}"));\n`
+            } else {
+                funBody += `checkResult = (checkResult && (ppantState.${key} === ${val}));\n`
+            }
+            funBody += "}\n" 
         }
-        return parseInt(hash, 10).toString(36)
-    } 
+        funBody += "return checkResult;\n"
+        Object.defineProperty(achvmt, "fulfillsRestrictions", { value: new Function('ppant', funBody) })
+    }
 }
 
 if (typeof module === 'object' && typeof exports === 'object') {

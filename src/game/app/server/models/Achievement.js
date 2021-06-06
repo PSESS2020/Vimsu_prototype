@@ -1,5 +1,6 @@
 const TypeChecker = require("../../client/shared/TypeChecker");
 const TypeOfTask = require("../utils/TypeOfTask");
+const Participant = require("./mapobjects/Participant");
 
 /**
  * The Achievement Model

@@ -9,7 +9,11 @@ class AlgoLibrary {
             hash = hash & hash
         }
         return parseInt(hash, 10).toString(36)
-    } 
+    }
+    
+    static dataObjectToHashCode (obj) {
+        // TO implement
+    }
 }
 
 if (typeof module === 'object' && typeof exports === 'object') {
