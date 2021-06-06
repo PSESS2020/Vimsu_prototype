@@ -17,14 +17,14 @@ class TaskFactory {
         // TODO handle array combinations that are possible in taskData
         // these will be handled in AchievementFactory
         var taskToReturn = new Task(taskId, typeOfTask, points)
-        this.#writeCheckDetailMethodOfTask(taskToReturn, typeOfTask, detail)
+        this.#writeCheckIfWasPerformedMethodOfTask(taskToReturn, detail)
         return taskToReturn
     }
 
-    #writeCheckDetailMethodOfTask(task, typeOfTask, detail) {
+    #writeCheckIfWasPerformedMethodOfTask(task, detail) {
         // maybe add another safety check to guarantee that contextObject
         // has getState() method
-        var funBody = `if (this.getTypeOfTask() !== "${typeOfTask}") { return false };\n`
+        var funBody = `if (this.getTypeOfTask() !== typeOfTask) { return false };\n`
         +  "let contextObjectState = contextObject.getState();\n"
         +  "let checkResult = true;\n"
         for (const [key, val] of Object.entries(detail)) {
@@ -41,7 +41,7 @@ class TaskFactory {
             }
         }
         funBody += "return checkResult;\n"
-        Object.defineProperty(task, "checkDetail", { value: new Function('contextObject', funBody) })
+        Object.defineProperty(task, "checkIfWasPerformed", { value: new Function('typeOfTask', 'contextObject', funBody) })
     }
 }
 

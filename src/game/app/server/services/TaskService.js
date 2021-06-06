@@ -1,4 +1,5 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
+const TaskFactory = require('../models/factories/TaskFactory.js');
 const Task = require('../models/Task.js');
 const AlgoLibrary = require('../utils/AlgoLibrary.js');
 const TypeOfTask = require('../utils/TypeOfTask')
@@ -12,6 +13,7 @@ const TypeOfTask = require('../utils/TypeOfTask')
  */
 class TaskService {
     #taskLibrary;
+    #taskFactory;
 
     /**
      * Creates an instance of TaskService
@@ -21,22 +23,33 @@ class TaskService {
         if (!!TaskService.instance) {
             return TaskService.instance;
         }
-        this.#taskLibrary = []
+        this.#taskLibrary = new Map()
+        this.#taskFactory = new TaskFactory()
+        TaskService.instance = this;
     }
 
     getMatchingTask(taskData) {
-        // needs to check if task is already tracked and, if yes,
-        // return the original one so achvmnts depending on the same
-        // task actually depend on the same task
         const { typeOfTask, detail } = taskData
         TypeChecker.isEnumOf(typeOfTask, TypeOfTask)
-        if (detail === undefined) { detail = {} }
+        if (detail === undefined || detail === "") { detail = {} }
         const { points } = detail
         if (points === undefined) { points = 0 }
         var taskId = this.#calculateTaskID(typeOfTask, detail, points)
-        // check if task with this id already exists
-        // if yes, return it
-        if (this.#taskAlreadyKnown(taskId)) { }
+        if (this.#taskLibrary.has(taskId)) { return this.#taskLibrary.get(taskId) }
+        else {
+            var newTask = this.#taskFactory(taskId, typeOfTask, detail, points)
+            this.#taskLibrary.set(taskId, newTask)
+            return newTask
+        }
+    }
+
+    checkForAndPerformTaskIncr(ppant, typeOfTask, contextObject) {
+        let tasksToIncrement = this.#taskLibrary.filter( task => task.checkIfWasPerformed(typeOfTask, contextObject) )
+        tasksToIncrement.forEach( task => {
+            if (!ppant.isKnownTask(task)) { ppant.trackNewTask(task) }
+            ppant.incrTaskCounter(task)
+        })
+        return tasksToIncrement
     }
 
     #calculateTaskID(typeOfTask, detail, points) {  
