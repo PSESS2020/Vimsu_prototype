@@ -44,7 +44,7 @@ class ExternalWebsiteView extends WindowView {
 
         $('#externalWebsiteWindowBody' + gameObjectID).append(`
             <iframe id="iframe${gameObjectID}" class="iframeclass" frameborder="1" src=${iFrameData.url} width=${width} height=${height} 
-                allowfullscreen scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-presentation"></iframe>
+                allowfullscreen scrolling="yes" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-presentation"></iframe>
         `);
 
         const handleClose = () => {
@@ -109,7 +109,6 @@ class ExternalWebsiteView extends WindowView {
         document.getElementById("externalWebsiteWindow" + gameObjectID).style.height = '100%';
         document.getElementById("iframe" + gameObjectID).width = '100%';
         document.getElementById("iframe" + gameObjectID).height = '100%';
-        document.getElementById("iframe" + gameObjectID).scrolling = 'yes';
         document.getElementById("fullscreenBtn" + gameObjectID).title = this.languageData.normalMode;
         $('#fullscreenBtnImage' + gameObjectID).removeClass('fa fa-window-maximize');
         $('#fullscreenBtnImage' + gameObjectID).addClass('fa fa-window-minimize');
@@ -127,7 +126,6 @@ class ExternalWebsiteView extends WindowView {
         document.getElementById("externalWebsiteWindow" + gameObjectID).style.height = '';
         document.getElementById("iframe" + gameObjectID).width = width;
         document.getElementById("iframe" + gameObjectID).height = height;
-        document.getElementById("iframe" + gameObjectID).scrolling = 'no';
         document.getElementById("fullscreenBtn" + gameObjectID).title = this.languageData.fullscreenMode;
         $('#fullscreenBtnImage' + gameObjectID).removeClass('fa fa-window-minimize');
         $('#fullscreenBtnImage' + gameObjectID).addClass('fa fa-window-maximize');
