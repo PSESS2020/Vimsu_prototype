@@ -29,5 +29,9 @@ module.exports = Object.freeze({
     LOGGROUPS: {
         string: "log",
         method: "logAllGroups"
+    },
+    USERLOG: {
+        string: "userlog",
+        method: "logGroupMembers"
     }
 });

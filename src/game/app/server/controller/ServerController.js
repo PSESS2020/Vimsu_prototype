@@ -2028,7 +2028,7 @@ module.exports = class ServerController {
     };
 
     /**
-     * Gets ID of username based on its username. Only returns an ID if user is currently online
+     * Gets ID of participant based on its username. Only returns an ID if user is currently online
      * @method module:ServerController#getIdOfOnlineParticipant
      * 
      * @param {String} username username
@@ -2048,7 +2048,7 @@ module.exports = class ServerController {
     };
 
     /**
-     * Gets ID of username based on its username. It doesn't matter if user is online or not
+     * Gets ID of participant based on its username. It doesn't matter if user is online or not
      * @method module:ServerController#getIdOfParticipant
      * 
      * @param {String} username username
@@ -2070,6 +2070,29 @@ module.exports = class ServerController {
     }
 
     /**
+     * Gets username of participant based on its ID. It doesn't matter if user is online or not
+     * @method module:ServerController#getUsernameOfParticipant
+     * 
+     * @param {String} ppantID participant ID
+     * 
+     * @return {String|boolean} username, if user exists. False otherwise
+     */
+    async getUsernameOfParticipant(ppantID) {
+        TypeChecker.isString(ppantID);
+
+        let socketID = this.getSocketId(ppantID);
+
+        if (socketID !== undefined) {
+            let socket = this.getSocketObject(socketID);
+            return socket.username;
+
+        //User is currently offline or does not exist, try to get username from DB. Will return false if user was not found
+        } else {
+            return ParticipantService.getUsername(ppantID, Settings.CONFERENCE_ID, this.#db);
+        }
+    }
+
+    /**
      * Gets all rooms of current conference
      * @method module:ServerController#getRooms
      * 
@@ -2085,12 +2108,30 @@ module.exports = class ServerController {
      * @method module:ServerController#getGroups
      * 
      * @return {Group[]} groups
-     * 
      */
     getGroups() {
         return Array.from(this.#groups.values());
     }
 
+    /**
+     * Gets group instance with passed groupName 
+     * @method module:ServerController#getGroup
+     * 
+     * @param {String} groupName group name
+     * 
+     * @return {?Group} group, if group with passed name exists. Undefined otherwise
+     */
+    getGroup(groupName) {
+        TypeChecker.isString(groupName);
+        let groups = Array.from(this.#groups.values());
+        for (let i = 0; i < groups.length; i++) {
+            let group = groups[i];
+            if (group.getName() === groupName) {
+                return group;
+            }
+        }
+    }
+    
     /**
      * Gets all participant instances that are currently online
      * @method module:ServerController#getOnlineParticipants

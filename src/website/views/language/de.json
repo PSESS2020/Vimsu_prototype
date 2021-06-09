@@ -363,7 +363,7 @@
                         "\\door <command>\nFührt Türbefehl <command> aus. Verfügbare Befehle: close, closeallfor, closefor, log, open, openallfor, openfor, setcode.",
                         "\\global <message>\nSchickt eine Nachricht in den Global Chat. Diese Nachricht wird jedem Teilnehmer als Pop-Up angezeigt.",
                         "\\group\nZeigt eine Liste aller Gruppenbefehle mit Beschreibung an.",
-                        "\\group <command>\nFührt Gruppenbefehl <command> aus. Verfügbare Befehle: add, create, delete, deleteall, log, rm.",
+                        "\\group <command>\nFührt Gruppenbefehl <command> aus. Verfügbare Befehle: add, create, delete, deleteall, log, rm, userlog.",
                         "\\help\nDieser Befehl. Zeigt eine Liste aller Befehle mit Beschreibung an.",
                         "\\mod <username>\nSetzt einen normalen Nutzer mit Nutzernamen <username> als Moderator.",
                         "\\unmod <username>\nSetzt einen Moderator mit Nutzernamen <username> zu einem normalen Nutzer.",
@@ -396,7 +396,8 @@
                         "\\group delete <groupName>\nLöscht die Gruppe mit dem eindeutigen Namen <groupName>.",
                         "\\group deleteall\nLöscht alle derzeit existierenden Gruppen.",
                         "\\group log\nGibt einen Log aller existierenden Gruppen mit Gruppenname und Gruppenfarbe zurück.",
-                        "\\group rm <groupName> <list of usernames>\nEntfernt alle Nutzer mit Nutzername in <list of usernames> aus der Gruppe <groupName>, alle Nutzernamen getrennt durch ein Leerzeichen."]
+                        "\\group rm <groupName> <list of usernames>\nEntfernt alle Nutzer mit Nutzername in <list of usernames> aus der Gruppe <groupName>, alle Nutzernamen getrennt durch ein Leerzeichen.",
+                        "\\group userlog <groupName>\nZeigt eine Liste aller Gruppenmitglieder der Gruppe <groupName> mit ihrem Nutzernamen an."]
                     },
                 "listOfMessageCommands": {
                     "header": "Liste aller Message-Befehle",
@@ -587,6 +588,10 @@
                     "header": "Ungültiger Gruppenname",
                     "body": "Der eingegebene Gruppenname ist schon vergeben. Bitte versuche es erneut."
                 },
+                "noNamePassed": {
+                    "header": "Kein Gruppenname übergeben",
+                    "body": "Vergiss nicht einen Gruppennamen zu übergeben. Bitte versuche es erneut."
+                },
                 "notExists": {
                     "header": "Gruppe existiert nicht",
                     "body": "Es existiert keine Gruppe mit diesem Namen. Bitte versuche es erneut."
@@ -676,6 +681,7 @@
                     "open": "geöffnet"
                 },
                 "group": {
+                    "userLogHeader": "Liste aller Teilnehmer in Gruppe groupNamePlaceholder",
                     "groupLogHeader": "Liste aller existierenden Gruppen",
                     "groupLogBodyPart": "Gruppe groupNamePlaceholder hat Gruppenfarbe colorPlaceholder."
                 },

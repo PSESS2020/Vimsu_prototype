@@ -363,7 +363,7 @@
                         "\\door <command>\nExecutes door command <command>. Available commands: close, closeallfor, closefor, log, open, openallfor, openfor, setcode.",
                         "\\global <message>\nPost a message into the global chat. It will display in every participants game-view as a pop-up.",
                         "\\group\nDisplays a list of all group commands and how to use them.",
-                        "\\group <command>\nExecutes group command <command>. Available commands: add, create, delete, deleteall, log, rm.",
+                        "\\group <command>\nExecutes group command <command>. Available commands: add, create, delete, deleteall, log, rm, userlog.",
                         "\\help\nThis command. Displays a list of all commands and how to use them.",
                         "\\mod <username>\nSets a normal user with <username> to a moderator.",
                         "\\unmod <username>\nSets a moderator with <username> to a normal user.",
@@ -396,7 +396,8 @@
                         "\\group delete <groupName>\nDeletes group with the unique name <groupName>.",
                         "\\group deleteall\nDeletes all exisiting groups.",
                         "\\group log\nWill show a log of all existing groups with their group name and group color.",
-                        "\\group rm <groupName> <list of usernames>\nRemoves all users with username in <list of usernames> from group with name <groupName>, each username separated from the next one by a whitespace character."]
+                        "\\group rm <groupName> <list of usernames>\nRemoves all users with username in <list of usernames> from group with name <groupName>, each username separated from the next one by a whitespace character.",
+                        "\\group userlog <groupName>\nDisplays a list of all members of group <groupName> with their username."]
                 },
                 "listOfMessageCommands": {
                     "header": "List of Message Commands",
@@ -587,6 +588,10 @@
                     "header": "Invalid group name",
                     "body": "The entered group name is already used by another group. Please try again."
                 },
+                "noNamePassed": {
+                    "header": "No group name passed",
+                    "body": "Don't forget to pass a group name. Please try again."
+                },
                 "notExists": {
                     "header": "Group does not exist",
                     "body": "A group with this name does not exist. Please try again."
@@ -676,6 +681,7 @@
                     "open": "open"
                 },
                 "group": {
+                    "userLogHeader": "List of all participants in group groupNamePlaceholder",
                     "groupLogHeader": "List of all existing groups",
                     "groupLogBodyPart": "Group groupNamePlaceholder has group color colorPlaceholder."
                 },

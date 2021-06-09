@@ -1204,6 +1204,45 @@ module.exports = class CommandHandler {
     }
 
     /**
+     * Gives a list of member usernames that are part of group with passed groupname to Moderator
+     * @method module:CommandHandler#logGroupMembers
+     * 
+     * @param {?SocketIO} socket socket instance
+     * @param {CommandContext} context context instance
+     * @param {String[]} commandArgs command arguments
+     */
+    async logGroupMembers(socket, context, commandArgs) {
+        this.#checkParamTypes(context, commandArgs);
+        const messages = socket.messages;
+
+        let groupName = commandArgs[0];
+        if (groupName === undefined) {
+            this.#serverController.sendNotification(socket.id, messages.group.noNamePassed);
+            return;
+        }
+        let group = this.#serverController.getGroup(groupName);
+
+        if (group === undefined) {
+            this.#serverController.sendNotification(socket.id, messages.group.notExists);
+            return;
+        }
+
+        let memberIDs = group.getGroupMemberIDs();
+        let allUsernames = [];
+        for (let i = 0; i < memberIDs.length; i++) {
+            let username = await this.#serverController.getUsernameOfParticipant(memberIDs[i]);
+            if (username) {
+                allUsernames.push(username);
+            }   
+        }
+
+        this.#serverController.sendNotification(socket.id, {
+            header: messages.msgParts.group.userLogHeader.replace('groupNamePlaceholder', groupName), 
+            body: allUsernames
+        });
+    }
+
+    /**
      * Sends notification on unknown command
      * @method module:CommandHandler#unknownCommand
      * 
