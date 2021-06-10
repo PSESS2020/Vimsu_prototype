@@ -91,22 +91,22 @@ module.exports = class Participant {
             TypeChecker.isInstanceOf(meeting, Meeting);
         })
 
-        this.#id = id;
-        this.#accountId = accountId;
-        this.#businessCard = businessCard;
-        this.#position = position;
-        this.#direction = direction;
-        this.#friendList = friendList;
+        this.#id                  = id;
+        this.#accountId           = accountId;
+        this.#businessCard        = businessCard;
+        this.#position            = position;
+        this.#direction           = direction;
+        this.#friendList          = friendList;
         this.#receivedRequestList = receivedRequestList;
-        this.#sentRequestList = sentRequestList;
-        this.#taskCounters = taskCounters;
-        this.#achievementList = achievementList;
-        this.#isMod = isMod;
-        this.#awardPoints = awardPoints;
-        this.#chatList = chatList;
-        this.#meetingList = meetingList;
-        this.#isVisible = true;
-        this.#shirtColor = Settings.DEFAULT_SHIRTCOLOR_PPANT;
+        this.#sentRequestList     = sentRequestList;
+        this.#taskCounters        = taskCounters;
+        this.#achievementList     = achievementList;
+        this.#isMod               = isMod;
+        this.#awardPoints         = awardPoints;
+        this.#chatList            = chatList;
+        this.#meetingList         = meetingList;
+        this.#isVisible           = true;
+        this.#shirtColor          = Settings.DEFAULT_SHIRTCOLOR_PPANT;
     }
 
     /**
@@ -511,52 +511,6 @@ module.exports = class Participant {
     }
 
     /**
-     * Gets tasks and its count
-     * @method module:Participant#getTaskTypeMappingCounts
-     * 
-     * @return {Task[]} taskTypeMapping
-     */
-    getTaskTypeMappingCounts() {
-        return this.#taskCounters;
-    }
-
-    /**
-     * Gets a task based on the task type
-     * @method module:Participant#getTaskTypeMappinCount
-     * @param {TypeOfTask} taskType task type
-     * 
-     * @return {Task} task
-     */
-    getTaskTypeMappingCount(taskType) {
-        return this.#taskCounters[taskType];
-    }
-
-    /**
-     * Called if a task is fulfilled to increase the counter and the points
-     * @method module:Participant#addTask
-     * 
-     * @param {Task} task task instance
-     */
-    addTask(task) {
-        TypeChecker.isInstanceOf(task, Task);
-
-        // increase the task counter and assign award points accordingly
-        this.#taskCounters[task.getTaskType()] = this.#taskCounters[task.getTaskType()] + 1;
-        this.addAwardPoints(task.getAwardPoints());
-    }
-
-    /**
-     * Adds points of participant
-     * @method module:Participant#addAwardPoints
-     * 
-     * @param {number} awardPoints points
-     */
-    addAwardPoints(awardPoints) {
-        TypeChecker.isInt(awardPoints);
-        this.#awardPoints += awardPoints;
-    }
-
-    /**
      * Sets achievements
      * @method module:Participant#setAchievements
      * 
@@ -619,35 +573,6 @@ module.exports = class Participant {
     };
 
     /**
-     * Adds an achievement to the list of achievements
-     * @method module:Participant#addAchievement
-     * 
-     * @param {Achievement} achievement achievement
-     */
-    addAchievement(achievement) {
-        TypeChecker.isInstanceOf(achievement, Achievement);
-        this.#achievementList.push(achievement);
-    }
-
-    /**
-     * Removes an achievement from the list of achievements
-     * @method module:Participant#removeAchievement
-     * 
-     * @param {number} achievementId achievement ID
-     */
-    removeAchievement(achievementId) {
-        TypeChecker.isInt(achievementId);
-
-        let index = this.#achievementList.findIndex(ach => ach.getId() === achievementId);
-
-        if (index < 0) {
-            throw new Error(achievementId + " not found in list of achievements")
-        }
-
-        this.#achievementList.splice(index, 1);
-    }
-
-    /**
      * Check if this ppant has a 1:1 chat with chatPartnerID
      * @method module:Participant#hasChatWith
      * 
@@ -683,6 +608,10 @@ module.exports = class Participant {
     isInRoom(roomId) {
         return (this.getPosition().getRoomId() === roomId)
     }
+
+    trackNewTask(task) { this.#taskCounters.set(task, 0) }
+
+    incrTaskCounter(task) { this.#taskCounters.set(task, this.#taskCounters.get(task) + 1) }
 
     getStateForSelf() {
         return Object.freeze({

@@ -12,7 +12,8 @@ const TypeOfTask = require('../utils/TypeOfTask')
  * @version 1.0.0
  */
 class TaskService {
-    #taskLibrary;
+    #taskLibraryById;
+    #taskLibraryByType;
     #taskFactory;
 
     /**
@@ -23,9 +24,10 @@ class TaskService {
         if (!!TaskService.instance) {
             return TaskService.instance;
         }
-        this.#taskLibrary = new Map()
-        this.#taskFactory = new TaskFactory()
-        TaskService.instance = this;
+        this.#taskLibraryById   = new Map()
+        this.#taskLibraryByType = new Map()
+        this.#taskFactory       = new TaskFactory()
+        TaskService.instance    = this;
     }
 
     getMatchingTask(taskData) {
@@ -35,16 +37,20 @@ class TaskService {
         const { points } = detail
         if (points === undefined) { points = 0 }
         var taskId = this.#calculateTaskID(typeOfTask, detail, points)
-        if (this.#taskLibrary.has(taskId)) { return this.#taskLibrary.get(taskId) }
+        if (this.#taskLibraryById.has(taskId)) { return this.#taskLibraryById.get(taskId) }
         else {
             var newTask = this.#taskFactory(taskId, typeOfTask, detail, points)
-            this.#taskLibrary.set(taskId, newTask)
+            this.#taskLibraryById.set(taskId, newTask)
+            if (this.#taskLibraryByType.has(typeOfTask)) {
+                // probably overkill
+                this.#taskLibraryByType.set(typeOfTask, [...this.#taskLibraryByType.get(typeOfTask), newTask])
+            } else { this.#taskLibraryByType.set(typeOfTask, [newTask]) }
             return newTask
         }
     }
 
     checkForAndPerformTaskIncr(ppant, typeOfTask, contextObject) {
-        let tasksToIncrement = this.#taskLibrary.filter( task => task.checkIfWasPerformed(typeOfTask, contextObject) )
+        let tasksToIncrement = this.#taskLibraryByType.get(typeOfTask).filter( task => task.checkIfWasPerformed(typeOfTask, contextObject) )
         tasksToIncrement.forEach( task => {
             if (!ppant.isKnownTask(task)) { ppant.trackNewTask(task) }
             ppant.incrTaskCounter(task)

@@ -10,7 +10,7 @@ const Participant = require("../mapobjects/Participant");
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-module.exports = class Achievement {
+class Achievement {
 
     #id; #task; #title; #icon; #description; #levels;
     #amountLevels; #restrictions; #isSilent; #isHidden
@@ -20,6 +20,23 @@ module.exports = class Achievement {
         this.#description = description; this.#levels = levels;
         this.#restrictions = restrictions; this.#isSilent = isSilent; 
         this.#isHidden = isHidden;
+    }
+
+    getState() {
+
+    }
+
+    checkEligibleToUnlockLevel (ppant) {
+
+    }
+
+    checkIfFulfillsRestrictions (ppant) {
+        TypeChecker.isInstanceOf(ppant, Participant)
+        return AlgoLibrary.checkObjectMeetsSpecs(ppant, this.#restrictions)
+    }
+
+    getPropertyOfLevel (propName, levelNumber) {
+        // TODO
     }
 
     #id
@@ -247,9 +264,8 @@ module.exports = class Achievement {
         TypeChecker.isInstanceOf(achievement, Achievement);
         return this.#taskType === achievement.getTaskType() && this.#currentLevel === achievement.getCurrentLevel();
     }
+}
 
-    checkIfFulfillsResrictions (ppant) {
-        TypeChecker.isInstanceOf(ppant, Participant)
-        return AlgoLibrary.checkObjectMeetsSpecs(ppant, this.#restrictions)
-    }
+if (typeof module === 'object' && typeof exports === 'object') {
+    module.exports = Achievement;
 }

@@ -33,6 +33,8 @@ class AlgoLibrary {
         // maybe allow for keys in specs and keys in obj to be
         // slightly different and still match (different capitalozation
         // etc.)
+        
+        // type checking if obj has getState() method
         let objState = obj.getState()
         for (const [key, val] of Object.entries(specs)) {
             if (key.toLowerCase() === 'class') {
