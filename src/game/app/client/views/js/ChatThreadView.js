@@ -168,12 +168,12 @@ class ChatThreadView extends WindowView {
         var timestamp = new DateParser().parse(new Date(message.timestamp));
         var senderUsername;
         if (message.senderUsername) {
-            senderUsername = message.senderUsername + ":"
+            senderUsername = message.senderUsername + ":";
         } else {
             senderUsername = "";
         }
 
-        let messageDiv = ``
+        let messageDiv = ``;
 
         if (message.senderUsername === this.ownUsername) {
             messageDiv =

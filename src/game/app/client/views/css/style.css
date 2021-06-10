@@ -249,14 +249,14 @@ form button:hover {
   background-color: #1b1e24 !important; 
   color: var(--white-color);
   border-color: var(--white-color);
-  border-radius: 5px 0px 0px 5px !important;
+  border-radius: 0.3125rem 0rem 0rem 0.3125rem !important;
 }
 
 .chatInputGroup {
   background-color: #1b1e24 !important; 
   color: antiquewhite !important; 
   border-color: antiquewhite !important; 
-  border-radius: 5px 0px 0px 5px !important;
+  border-radius: 0.3125rem 0rem 0rem 0.3125rem !important;
 }
 
 .navbarIcons {
@@ -456,15 +456,15 @@ button:disabled {
 
 .table thead tr th{
   border-top: none;
-  border-bottom: 2pt solid var(--white-color)
+  border-bottom: 0.125rem solid var(--white-color)
 }
 
 .table tbody tr th{
-  border-bottom: 1pt solid var(--white-color);
+  border-bottom: 0.0625rem solid var(--white-color);
 }
 
 .table tbody tr td{
-  border-bottom: 1pt solid var(--white-color);
+  border-bottom: 0.0625rem solid var(--white-color);
 }
 
 .table tbody tr:last-child th {
