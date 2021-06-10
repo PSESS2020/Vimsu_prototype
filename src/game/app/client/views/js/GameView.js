@@ -1027,13 +1027,14 @@ class GameView {
      * Adds new chat to chat list
      * 
      * @param {Object} chat chat
-     * @param {*} openNow ture if open window now, otherwise false
+     * @param {boolean} openNow true if open window now, otherwise false
+     * @param {String} ownUsername current participant's username
      */
-    addNewChat(chat, openNow) {
+    addNewChat(chat, openNow, ownUsername) {
         if ($('#chatListModal').is(':visible')) {
             this.chatListView.addNewChat(chat);
         }
-        this.initChatThreadView(chat, openNow);
+        this.initChatThreadView(chat, openNow, ownUsername);
     };
 
     /**

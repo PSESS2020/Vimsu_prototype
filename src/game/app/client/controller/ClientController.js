@@ -1079,7 +1079,7 @@ class ClientController {
      * @param {boolean} openNow true if chat thread should be opened now, otherwise false
      */
     handleFromServerNewChat = function (chat, openNow) {
-        this.gameView.addNewChat(chat, openNow);
+        this.gameView.addNewChat(chat, openNow, this.ownBusinessCard.getUsername());
     };
 
     /**
