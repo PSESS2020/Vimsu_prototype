@@ -16,9 +16,15 @@ class TaskFactory {
     createTask (taskId, typeOfTask, detail, points) {
         // TODO handle array combinations that are possible in taskData
         // these will be handled in AchievementFactory
-        var taskToReturn = new Task(taskId, typeOfTask, points)
-        this.#writeCheckIfWasPerformedMethod(taskToReturn, detail)
-        return taskToReturn
+        var creationDetail
+        // sanitizing detail and deleting the points field from it
+        // this will prevent the checkIfWasPerformed method from failing
+        // from the contextObject not having a "points" field
+        if (detail.hasOwnProperty(points)) {
+            creationDetail = Object.assign({}, detail)
+            delete creationDetail.points
+        } else { creationDetail = detail }
+        return new Task(taskId, typeOfTask, creationDetail, points)
     }
 
     #writeCheckIfWasPerformedMethod(task, detail) {

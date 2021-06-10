@@ -12,7 +12,40 @@ class AlgoLibrary {
     }
     
     static dataObjectToHashCode (obj) {
-        // TO implement
+        return Object.entries(obj).reduce( ([key, val]) => {
+            // TODO handle different cases
+        }, "")
+    }
+
+    static arrayToHashCode (arr) {
+        return arr.reduce( val => {
+            if (typeof val === 'string') {
+                return AlgoLibrary.convertToHashCode(val)
+            } else if (Array.isArray(val)) {
+                return AlgoLibrary.arrayToHashCode(val)
+            } 
+            // add handling for objects and numbers
+        }, "")
+    }
+
+    static checkObjectMeetsSpecs (obj, specs) {
+        // type-checking needs to be done by caller!!!
+        // maybe allow for keys in specs and keys in obj to be
+        // slightly different and still match (different capitalozation
+        // etc.)
+        let objState = obj.getState()
+        for (const [key, val] of Object.entries(specs)) {
+            if (key.toLowerCase() === 'class') {
+                if (obj.constructor.name !== val) {
+                    return false
+                }
+            } else {
+                if (objState.hasOwnProperty(key)) {
+                    if (objState[key] !== val) { return false }
+                } else { return false }
+            }
+        }
+        return true
     }
 }
 

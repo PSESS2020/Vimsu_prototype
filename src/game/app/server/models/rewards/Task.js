@@ -1,4 +1,5 @@
 const TypeChecker = require('../../../client/shared/TypeChecker.js');
+const AlgoLibrary = require('../../utils/AlgoLibrary.js');
 const TypeOfTask = require('../../utils/TypeOfTask')
 
 /**
@@ -13,6 +14,7 @@ module.exports = class Task {
     #id;
     #taskType;
     #awardPoints;
+    #detail;
 
     /**
      * Creates a Task instance
@@ -22,14 +24,15 @@ module.exports = class Task {
      * @param {TypeOfTask} taskType task type
      * @param {number} awardPoints task award points
      */
-    constructor(id, taskType, awardPoints) {
+    constructor(id, taskType, detail, points) {
         TypeChecker.isString(id);
         TypeChecker.isEnumOf(taskType, TypeOfTask);
         TypeChecker.isInt(awardPoints);
 
         this.#id = id;
         this.#taskType = taskType;
-        this.#awardPoints = awardPoints;
+        this.#detail = detail;
+        this.#awardPoints = points;
     }
 
     /**
@@ -60,6 +63,11 @@ module.exports = class Task {
      */
     getAwardPoints() {
         return this.#awardPoints;
+    }
+
+    checkIfWasPerformed(typeOfTask, contextObj) {
+        if (this.#taskType !== typeOfTask) { return false }
+        else { return AlgoLibrary.checkObjectMeetsSpecs(contextObj, this.#detail) }
     }
 
 }
