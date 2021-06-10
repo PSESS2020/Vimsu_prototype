@@ -29,8 +29,17 @@ class AchievementFactory {
     createAchievement (achvmtName, achvmtData) {
         // Deconstruct
         // might need some type-checking here
-        const { task, title, icon, description, levels, restrictions } = achvmtData
+        const { task, title, icon, description, levels, restrictions, visibilityModifiers: visMods } = achvmtData
         const { typeOfTask, detail } = task
+        var isSilentFlag 
+        var isHiddenFlag
+        if (visMods === undefined) { 
+            isSilentFlag = false; isHiddenFlag = false 
+        } else {
+            const { isSilent, isHidden } = visMods
+            isSilentFlag = (isSilent !== undefined) ? isSilent : false
+            isHiddenFlag = (isSilentFlag || isHidden)
+        }
         var taskList = []
         // add handling for achvmnts with different tasks for
         // different levels
@@ -49,9 +58,7 @@ class AchievementFactory {
         }
         var achvmtId = this.#calculateAchvmtID(title, taskList, levels, restrictions)
         // add observers for door opening (will be done at later point & somewhere else)
-        var achvmtToReturn = new Achievement(achvmtId, title, icon, description, taskList, levels)
-        this.#writeCheckRestrictionMethod(achvmtToReturn, restrictions)
-        return achvmtToReturn
+       return new Achievement(achvmtId, title, icon, description, taskList, levels, restrictions, isSilentFlag, isHiddenFlag)
     }
 
     #calculateAchvmtID = function (title, taskList, levels, restrictions) {
@@ -60,23 +67,6 @@ class AchievementFactory {
         // change how restriction string is calculated to better
         // account for no restrictions
         return `${Settings.CONFERENCE_ID}_${AlgoLibrary.convertToHashCode(title)}_${taskString}_${levelString}_**${AlgoLibrary.dataObjectToHashCode(restrictions)}` 
-    }
-
-    #writeCheckRestrictionMethod(achvmt, restrictions) {
-        var funBody = "TypeChecker.isInstanceOf(ppant, Participant);\n" 
-        + "let ppantState = ppant.getState();\n"
-        + "let checkResult = true;\n"
-        for (const [key, val] of Object.entries(restrictions)) {
-            funBody += `if (ppantState.hasOwnProperty("${key}") { \n`
-            if (typeof val === 'string') {
-                funBody += `checkResult = (checkResult && (ppantState.${key} === "${val}"));\n`
-            } else {
-                funBody += `checkResult = (checkResult && (ppantState.${key} === ${val}));\n`
-            }
-            funBody += "}\n" 
-        }
-        funBody += "return checkResult;\n"
-        Object.defineProperty(achvmt, "fulfillsRestrictions", { value: new Function('ppant', funBody) })
     }
 }
 

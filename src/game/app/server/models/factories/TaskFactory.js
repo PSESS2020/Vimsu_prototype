@@ -1,8 +1,5 @@
-const TypeChecker = require("../../../client/shared/TypeChecker");
-const CodeLibrary = require("../../utils/AlgoLibrary");
 const TypeOfTask = require("../../utils/TypeOfTask");
 const Task = require("../rewards/Task");
-const Settings = require(`../../utils/${process.env.SETTINGS_FILENAME}`);
 
 class TaskFactory {
 
@@ -16,38 +13,16 @@ class TaskFactory {
     createTask (taskId, typeOfTask, detail, points) {
         // TODO handle array combinations that are possible in taskData
         // these will be handled in AchievementFactory
-        var creationDetail
+        
         // sanitizing detail and deleting the points field from it
         // this will prevent the checkIfWasPerformed method from failing
         // from the contextObject not having a "points" field
+        var creationDetail
         if (detail.hasOwnProperty(points)) {
             creationDetail = Object.assign({}, detail)
             delete creationDetail.points
         } else { creationDetail = detail }
         return new Task(taskId, typeOfTask, creationDetail, points)
-    }
-
-    #writeCheckIfWasPerformedMethod(task, detail) {
-        // maybe add another safety check to guarantee that contextObject
-        // has getState() method
-        var funBody = `if (this.getTypeOfTask() !== typeOfTask) { return false };\n`
-        +  "let contextObjectState = contextObject.getState();\n"
-        +  "let checkResult = true;\n"
-        for (const [key, val] of Object.entries(detail)) {
-            if (key.toLowerCase() === "class") {
-                funBody += `if (contextObject.constructor.name === "${val}") { return false; }\n`
-            } else {
-                funBody += `if (contextObjectState.hasOwnProperty("${key}") { \n`
-                if (typeof val === 'string') {
-                    funBody += `checkResult = (checkResult && (contextObjectState.${key} === "${val}"));\n`
-                } else {
-                    funBody += `checkResult = (checkResult && (contextObjectState.${key} === ${val}));\n`
-                }
-                funBody += "}\n"
-            }
-        }
-        funBody += "return checkResult;\n"
-        Object.defineProperty(task, "checkIfWasPerformed", { value: new Function('typeOfTask', 'contextObject', funBody) })
     }
 }
 

@@ -1,4 +1,5 @@
 const TypeChecker = require("../../../client/shared/TypeChecker");
+const AlgoLibrary = require("../../utils/AlgoLibrary");
 const TypeOfTask = require("../../utils/TypeOfTask");
 const Participant = require("../mapobjects/Participant");
 
@@ -12,12 +13,13 @@ const Participant = require("../mapobjects/Participant");
 module.exports = class Achievement {
 
     #id; #task; #title; #icon; #description; #levels;
-    #amountLevels; #isSilent; #isHidden
+    #amountLevels; #restrictions; #isSilent; #isHidden
 
-    constructor (id, task, title, icon, description, levels, isSilent, isHidden) {
+    constructor (id, task, title, icon, description, levels, , restrictions, isSilent, isHidden) {
         this.#id = id; this.#title = title; this.#icon = icon;
         this.#description = description; this.#levels = levels;
-        this.#isSilent = isSilent; this.#isHidden = isHidden;
+        this.#restrictions = restrictions; this.#isSilent = isSilent; 
+        this.#isHidden = isHidden;
     }
 
     #id
@@ -244,5 +246,10 @@ module.exports = class Achievement {
     equals(achievement) {
         TypeChecker.isInstanceOf(achievement, Achievement);
         return this.#taskType === achievement.getTaskType() && this.#currentLevel === achievement.getCurrentLevel();
+    }
+
+    checkIfFulfillsResrictions (ppant) {
+        TypeChecker.isInstanceOf(ppant, Participant)
+        return AlgoLibrary.checkObjectMeetsSpecs(ppant, this.#restrictions)
     }
 }
