@@ -69,7 +69,7 @@ class FriendRequestListView extends WindowView {
                     </div>
                     <div class="col-7 pr-0 pl-4">
                         <div class="d-flex flex-row justify-content-start align-items-center">
-                            <label class="name lead text-truncate" title="${fullname}" data-toggle="tooltip">${fullname}</label>
+                            <label class="name lead text-truncate" title="${fullname}">${fullname}</label>
                         </div>
                         <div class="d-flex flex-row justify-content-start align-items-center">
                             ${businessCard.getJob() || businessCard.getCompany() ?
@@ -103,6 +103,8 @@ class FriendRequestListView extends WindowView {
                 </div>
             </li>
         `);
+
+        $('[title="' + fullname + '"]').tooltip(Settings.TOOLTIP_TOP);
 
         $('#accept' + businessCard.getParticipantId()).off();
         $('#accept' + businessCard.getParticipantId()).on('click', (event) => {

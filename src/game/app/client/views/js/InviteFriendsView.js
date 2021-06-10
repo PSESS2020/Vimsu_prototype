@@ -79,7 +79,7 @@ class InviteFriendsView extends WindowView {
                                 </div>
                                 <div class="col-9 pr-0 pl-4">
                                     <div class="d-flex flex-row justify-content-start align-items-center">
-                                        <label class="name lead text-truncate" title="${fullname}" data-toggle="tooltip">${fullname}</label>
+                                        <label class="name lead text-truncate" title="${fullname}">${fullname}</label>
                                     </div>
                                     <div class="d-flex flex-row justify-content-start align-items-center">
                                         ${businessCard.getJob() || businessCard.getCompany() ?
@@ -116,6 +116,8 @@ class InviteFriendsView extends WindowView {
                         </li>
                     </ul>
                 `);
+
+                $('[title="' + fullname + '"]').tooltip(Settings.TOOLTIP_TOP);
 
                 $('#invite' + businessCard.getParticipantId()).on('click', () => {
                     this.invitedFriends.push(businessCard.getParticipantId());

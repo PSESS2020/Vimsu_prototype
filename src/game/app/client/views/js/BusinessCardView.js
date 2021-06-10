@@ -48,7 +48,7 @@ class BusinessCardView extends WindowView {
 
         $('#businessCardModal .modal-body').append(`
                 
-            <h5 style="background-color: rgba(24, 30, 32, 0.699); padding: 0.3125rem; text-align: center">
+            <h5 style="background-color: rgba(24, 30, 32, 0.699); padding: 0.3125rem; text-align: center" title="${fullname}">
             <i class="fa fa-user-circle pr-2 navbarIcons" style="transform: scale(1)"></i>
             ${fullname}</h5>
             </br>
@@ -79,6 +79,8 @@ class BusinessCardView extends WindowView {
             <button id="${"chatnow" + businessCard.getParticipantId()}" title ="${this.languageData.tooltips.chatNow}" class="btn btn-blue mx-auto d-block">Chat</button>
             </br>
         `);
+
+        $('[title="' + fullname + '"]').tooltip(Settings.TOOLTIP_TOP);
 
         $('#chatnow' + businessCard.getParticipantId()).off();
         $('#chatnow' + businessCard.getParticipantId()).on('click', () => {

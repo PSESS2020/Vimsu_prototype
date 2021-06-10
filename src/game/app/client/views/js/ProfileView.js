@@ -37,12 +37,14 @@ class ProfileView extends WindowView {
                        (" (@" + businessCard.getUsername() + ")");
 
         $('#profileModal .modal-header').append(`
-            <h5 class="modal-title d-inline-block" id="profileModalTitle">
+            <h5 class="modal-title d-inline-block" id="profileModalTitle" title="${fullname}">
             <i class="fa fa-user-circle pr-2 navbarIcons mr-1" style="transform: scale(1)"></i>${fullname}</h5>
             <button type="button" class="close btn" data-dismiss="modal" aria-label="Close">
                 <i class="fa fa-close"></i>
             </button>
         `);
+
+        $('[title="' + fullname + '"]').tooltip(Settings.TOOLTIP_TOP);
 
         $('#profileModal .modal-body').append(`
             <div class="d-flex" style="overflow-x: auto">

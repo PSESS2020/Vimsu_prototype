@@ -71,7 +71,7 @@ class FriendListView extends WindowView {
                             </div>
                             <div class="col-9 pr-0 pl-4">
                                 <div class="d-flex flex-row justify-content-start align-items-center">
-                                    <label class="name lead text-truncate" title="${fullname}" data-toggle="tooltip">${fullname}</label>
+                                    <label class="name lead text-truncate" title="${fullname}">${fullname}</label>
                                 </div>
                                 <div class="d-flex flex-row justify-content-start align-items-center">
                                     ${businessCard.getJob() || businessCard.getCompany() ?
@@ -98,7 +98,7 @@ class FriendListView extends WindowView {
                                     <a class="action_button nav-item nav-link" href="" onclick = "" role="button" id="dropdownFriendOption" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fa fa-sort-desc fa-2x navbarIcons"></i>
                                     </a>
-                                    <div class="dropdown-menu dropdown-menu-right" style="min-width: 0.3125rem; background-color: rgba(34, 43, 46, 0) !important; border: 0rem;" aria-labelledby="dropdownFriendOption">
+                                    <div class="dropdown-menu dropdown-menu-right" style="min-width: 0.3125rem; background-color: transparent; border: 0rem;" aria-labelledby="dropdownFriendOption">
                                         <button class="dropdown-item btn btn-blue" id="${"chatfriend" + businessCard.getParticipantId()}" title="${this.languageData.friendList.tooltips.chatNow}" type="button">
                                             ${this.languageData.friendList.chat}
                                         </button>
@@ -111,6 +111,8 @@ class FriendListView extends WindowView {
                     </div>
                 </li>
             `);
+
+            $('[title="' + fullname + '"]').tooltip(Settings.TOOLTIP_TOP);
 
             $('#chatfriend' + businessCard.getParticipantId()).off();
             $('#chatfriend' + businessCard.getParticipantId()).on('click', () => {

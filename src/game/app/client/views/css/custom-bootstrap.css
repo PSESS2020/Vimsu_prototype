@@ -212,9 +212,20 @@ button:focus {
   height: 3.125rem;
 }
 
+.tooltip {
+  overflow: hidden;
+}
+
 .tooltip-inner {
   background: none;
   color: var(--white-color);
+  max-width: 19.5rem;
+  max-height: 42vh;
+}
+
+.tooltip-top {
+  padding: 0 !important;
+  background: var(--black-color);
 }
 
 .carousel-control-prev-icon,

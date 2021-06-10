@@ -59,6 +59,12 @@ const Settings = Object.freeze({
     //constants for div element toggle speed
     TOGGLE_SPEED: 200,
 
+    TOOLTIP_TOP: {
+        toggle: "tooltip",
+        placement: "top",
+        boundary: "window",
+        template: '<div class="tooltip tooltip-top" role="tooltip"><div class="tooltip-inner"></div></div>'
+    },
 });
 
 if (typeof module === 'object' && typeof exports === 'object') {
