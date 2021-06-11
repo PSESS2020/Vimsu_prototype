@@ -2123,13 +2123,8 @@ module.exports = class ServerController {
      */
     getGroup(groupName) {
         TypeChecker.isString(groupName);
-        let groups = Array.from(this.#groups.values());
-        for (let i = 0; i < groups.length; i++) {
-            let group = groups[i];
-            if (group.getName() === groupName) {
-                return group;
-            }
-        }
+        
+        return this.#groups.get(groupName);
     }
     
     /**
