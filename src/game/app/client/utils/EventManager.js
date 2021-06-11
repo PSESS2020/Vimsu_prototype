@@ -225,24 +225,6 @@ class EventManager {
     }
 
     /**
-     * called from view when a meeting is minimized
-     * 
-     * @param {Object} meeting minimized meeting
-     */
-     handleAddMinimizedMeetingNotif(meeting) {
-        this.clientController.handleFromViewAddMinimizedMeetingNotif(meeting);
-    }
-
-    /**
-     * called from view when a meeting is no more minimized
-     * 
-     * @param {String} meetingId previous minimized meeting id
-     */
-    handleRemoveMinimizedMeetingNotif(meetingId) {
-        this.clientController.handleFromViewRemoveMinimizedMeetingNotif(meetingId);
-    }
-
-    /**
      * called from view when a message is read
      * 
      * @param {String} senderUsername message sender username

@@ -343,7 +343,8 @@
                 "noMeetings": "Kein Meeting gefunden.",
                 "tooltips": {
                     "openMeeting": "Meeting öffnen",
-                    "minimizeMeeting": "Meeting minmieren, Sprachchat bleibt aktiv"
+                    "minimizeMeeting": "Meeting minmieren, Sprachchat bleibt aktiv",
+                    "maximizeMeeting": "Meeting maximieren"
                 }
             },
             "npcSays": "npcNamePlaceholder sagt...",

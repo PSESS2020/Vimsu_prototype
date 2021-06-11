@@ -343,7 +343,8 @@
                 "noMeetings": "Tidak ada meeting yang ditemukan.",
                 "tooltips": {
                     "openMeeting": "Buka meeting",
-                    "minimizeMeeting": "Kecilkan meeting, chat suara akan tetap aktif"
+                    "minimizeMeeting": "Kecilkan meeting, chat suara akan tetap aktif",
+                    "maximizeMeeting": "Maksimalkan meeting"
                 }
             },
             "npcSays": "npcNamePlaceholder berkata...",

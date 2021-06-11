@@ -29,7 +29,7 @@ class VideoMeetingView extends WindowView {
         this.eventManager = eventManager;
         this.isMinimized = false;
 
-        document.getElementById("meetingWindowMinimize").title = this.languageData.tooltips.minimizeMeeting;
+        document.getElementById("meetingMinimizeBtn").title = this.languageData.tooltips.minimizeMeeting;
 
         // Close button event, Window gets closed and Meeting is closed
         $('#meetingWindowClose').off();
@@ -38,17 +38,18 @@ class VideoMeetingView extends WindowView {
 
             this.jitsi.dispose();
             $('#meetingWindow').hide();
-            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id);
         });
 
         // Minimize button event, Window gets closed but Meeting stays active, so voice chat stays active
-        $('#meetingWindowMinimize').off();
-        $('#meetingWindowMinimize').on('click', (event) => {
+        $('#meetingMinimizeBtn').off();
+        $('#meetingMinimizeBtn').on('click', (event) => {
             event.preventDefault();
 
-            this.isMinimized = true;
-            $('#meetingWindow').hide();
-            this.eventManager.handleAddMinimizedMeetingNotif(this.currentMeeting);
+            if (!this.isMinimized) {
+                this.minimizeMeeting();
+            } else {
+                this.maximizeMeeting();
+            }
         });
     }
 
@@ -62,21 +63,12 @@ class VideoMeetingView extends WindowView {
         $('#meetingWindowWait').hide();
 
         if (this.currentMeeting) {
-            //Meeting was only minimized
-            if (this.currentMeeting.id === meeting.id && this.isMinimized) {
-                this.isMinimized = false;
-                this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id);
-                return;
-            }
-
             //Another meeting was minimized before, that should be closed now
             if (this.currentMeeting.id !== meeting.id && this.isMinimized) {
-                this.isMinimized = false;
                 this.jitsi.dispose();
-                this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id);
             }
         }
-
+        
         $("#meetingWindowTitle").empty();
         $("#meetingWindowTitle").text(meeting.name);
 
@@ -94,10 +86,14 @@ class VideoMeetingView extends WindowView {
             configOverwrite: { 
                 startWithAudioMuted: true,
                 startWithVideoMuted: true
-            },
+            }
         });
-
+    
         this.currentMeeting = meeting;
+
+        if (this.isMinimized) {
+            this.maximizeMeeting();
+        }
 
         // set new password for channel
         this.jitsi.addEventListener('participantRoleChanged', function(event) {
@@ -125,10 +121,50 @@ class VideoMeetingView extends WindowView {
      */
     close(meetingId) {
         if (this.currentMeeting.id === meetingId) {
-            this.isMinimized = false;
             this.jitsi.dispose();
             $('#meetingWindow').hide();
-            this.eventManager.handleRemoveMinimizedMeetingNotif(this.currentMeeting.id);
         }
+    }
+
+    /**
+     * Minimizes meeting window
+     */
+    minimizeMeeting() {
+        let meetingWindow = document.getElementById("meetingWindow");
+        let meetingContent = document.getElementById("meetingWindowContent");
+        let minimizeBtn = document.getElementById("meetingMinimizeBtn");
+        let iframe = this.jitsi.getIFrame();
+        
+        this.isMinimized = true;
+        meetingWindow.style.left = '87%';
+        meetingWindow.style.top = '65%';
+        meetingWindow.style.width = '25%';
+        meetingWindow.style.height = '33%';
+        meetingContent.style.height = '85%';
+        minimizeBtn.title = this.languageData.tooltips.maximizeMeeting;
+        iframe.style.height = window.innerHeight * 0.85 * 0.33;
+        $('#meetingMinimizeBtnImage').removeClass('fa fa-window-minimize');
+        $('#meetingMinimizeBtnImage').addClass('fa fa-window-maximize');
+    }
+    
+    /**
+     * Maximizes meeting window
+     */
+    maximizeMeeting() {
+        let meetingWindow = document.getElementById("meetingWindow");
+        let meetingContent = document.getElementById("meetingWindowContent");
+        let minimizeBtn = document.getElementById("meetingMinimizeBtn");
+        let iframe = this.jitsi.getIFrame();
+
+        this.isMinimized = false;
+        meetingWindow.style.left = '50%';
+        meetingWindow.style.top = '50%';
+        meetingWindow.style.width = '100%';
+        meetingWindow.style.height = '100%';
+        meetingContent.style.height = '90%';
+        minimizeBtn.title = this.languageData.tooltips.minimizeMeeting;
+        iframe.style.height = window.innerHeight * 0.85;
+        $('#meetingMinimizeBtnImage').removeClass('fa fa-window-maximize');
+        $('#meetingMinimizeBtnImage').addClass('fa fa-window-minimize');
     }
 }

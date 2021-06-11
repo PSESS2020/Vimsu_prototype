@@ -218,32 +218,6 @@ class NotificationBar extends ViewWithLanguageData {
     }
 
     /**
-     * Gets minimized meeting notif id
-     * 
-     * @param {String} meetingId meeting id
-     * @returns minimized meeting notif id
-     */
-    getMinimizedMeetingId(meetingId) {
-        return 'runningMeeting' + meetingId;
-    }
-
-    /**
-     * Draws minimized meeting notification
-     * 
-     * @param {Object} meeting minimizedmeeting
-     */
-    drawMinimizedMeeting(meeting) {
-        const id = this.getMinimizedMeetingId(meeting.id);
-        this.addNewNotificationDiv(id, `${this.languageData.inCall.replace('meetingNamePlaceholder', meeting.name)}`, false);
-
-        $('#' + id).on('click', (e) => {
-            $('#meetingWindow').show();
-            $('#meetingWindowWait').show();
-            return this.eventManager.handleMeetingJoined(meeting);
-        });
-    }
-
-    /**
      * Adds new notification div to the notif bar
      * 
      * @param {String} id notification id

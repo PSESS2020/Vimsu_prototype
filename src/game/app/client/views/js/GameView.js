@@ -1324,32 +1324,6 @@ class GameView {
     }
 
     /**
-     * Draws minimized meeting notification
-     * 
-     * @param {Object} meeting minimized meeting
-     */
-    drawMinimizedMeetingNotif(meeting) {
-        TypeChecker.isInstanceOf(meeting, Object);
-        TypeChecker.isString(meeting.id);
-        TypeChecker.isString(meeting.domain);
-        TypeChecker.isString(meeting.name);
-        TypeChecker.isString(meeting.password);
-
-        this.notifBar.drawMinimizedMeeting(meeting);
-    }
-
-    /**
-     * Removes minimized meeting notification
-     * 
-     * @param {String} meetingId previous minimized meeting id
-     */
-     removeMinimizedMeetingNotif(meetingId) {
-        TypeChecker.isString(meetingId);
-
-        this.notifBar.removeNotifDiv(this.notifBar.getMinimizedMeetingId(meetingId));
-    }
-
-    /**
      * Removes new message notif
      * 
      * @param {String} senderUsername message sender username

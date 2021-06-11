@@ -343,7 +343,8 @@
                 "noMeetings": "No meetings found.",
                 "tooltips": {
                     "openMeeting": "Open meeting",
-                    "minimizeMeeting": "Minimize meeting, voice chat will stay active"
+                    "minimizeMeeting": "Minimize meeting, voice chat will stay active",
+                    "maximizeMeeting": "Maximize meeting"
                 }
             },
             "npcSays": "npcNamePlaceholder says...",
