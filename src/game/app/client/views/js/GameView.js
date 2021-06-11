@@ -146,37 +146,46 @@ class GameView {
         $('#avatarCanvas').on('mousemove', (e) => {
 
             //Translates the current mouse position to the mouse position on the canvas.
-            var newPosition = this.gameEngine.translateMouseToCanvasPos(canvas, e);
+            let newPosition = this.gameEngine.translateMouseToCanvasPos(canvas, e);
 
-            var selectedTileCords = this.gameEngine.translateMouseToTileCord(newPosition);
+            let selectedTileCords = this.gameEngine.translateMouseToTileCord(newPosition);
 
-            if (selectedTileCords !== undefined && this.currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
-                canvas.style.cursor = (this.currentMapView.checkTileOrObjectIsClickable(selectedTileCords)) ? "pointer" : "default";
+            if (selectedTileCords !== undefined && this.currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y))
+            {
+                if (!this.currentMapView.selectionOnMap)
+                    this.currentMapView.selectionOnMap = true;
 
-                this.npcAvatarViews.forEach(npcView => {
-                    if (npcView.getGridPosition().getCordX() === selectedTileCords.x
-                        && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
-                        canvas.style.cursor = "pointer";
-                    }
-                });
+                this.currentMapView.updateSelectedTile(selectedTileCords);
 
-                this.getAnotherParticipantAvatarViews().forEach(ppantView => {
-                    if (ppantView.getGridPosition().getCordX() === selectedTileCords.x
-                        && ppantView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH) {
-                        canvas.style.cursor = "pointer";
-                    }
-                });
+                if (this.currentMapView.findClickableTileOrObject(selectedTileCords, false))
+                    return canvas.style.cursor = 'pointer';
 
-                this.currentMapView.selectionOnMap = true;
-            } else if (this.currentMapView.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
-                this.currentMapView.selectionOnMap = false;
-                this.currentMapView.findClickableElementOutsideMap(newPosition, false, canvas);
-            } else {
-                this.currentMapView.selectionOnMap = false;
-                canvas.style.cursor = "default";
+                for (let i = 0, len = this.npcAvatarViews.length; i < len; i++)
+                {
+                    let npcView = this.npcAvatarViews[i];
+                    if (npcView.getGridPosition().getCordX() === selectedTileCords.x && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH)
+                        return canvas.style.cursor = 'pointer';
+                }
+
+                for (let i = 0, len = this.anotherParticipantAvatarViews.length; i < len; i++)
+                {
+                    let ppantView = this.anotherParticipantAvatarViews[i];
+                    if (ppantView.getGridPosition().getCordX() === selectedTileCords.x && ppantView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH)
+                        return canvas.style.cursor = 'pointer';
+                }
             }
+            else
+            if (this.currentMapView.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y))
+            {
+                if (this.currentMapView.selectionOnMap)
+                    this.currentMapView.selectionOnMap = false;
+                if (this.currentMapView.findClickableElementOutsideMap(newPosition, false))
+                    return canvas.style.cursor = 'pointer';
+            }
+            else
+                this.currentMapView.selectionOnMap = false;
 
-            this.currentMapView.updateSelectedTile(selectedTileCords);
+            canvas.style.cursor = 'default';
         });
 
         //Handles mouse click on canvas
@@ -196,7 +205,6 @@ class GameView {
 
             clearTimeout(timeout);
             if (tapLength < 500 && tapLength > 0) {
-                this.currentMapView.selectionOnMap = true;
                 e.pageX = e.changedTouches[e.changedTouches.length-1].pageX;
                 e.pageY = e.changedTouches[e.changedTouches.length-1].pageY;
 
@@ -229,7 +237,7 @@ class GameView {
         if (this.currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
          
             //first check if click is on door or clickable object in room (not existing at this point)
-            this.currentMapView.findAndClickTileOrObject(selectedTileCords, true, canvas);
+            this.currentMapView.findClickableTileOrObject(selectedTileCords, true);
 
             //then, check if there is an avatar at this position
             this.getAnotherParticipantAvatarViews().forEach(ppantView => {
@@ -248,7 +256,7 @@ class GameView {
             });
         }//check if clicked tile is outside the walkable area
         else if (this.currentMapView.isCursorOutsidePlayGround(selectedTileCords.x, selectedTileCords.y)) {
-            this.currentMapView.findClickableElementOutsideMap(newPosition, true, canvas);
+            this.currentMapView.findClickableElementOutsideMap(newPosition, true);
         }
     }
 
@@ -266,6 +274,8 @@ class GameView {
 
         //check if clicked tile is a valid walkable tile
         if (this.currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
+            if (!this.currentMapView.selectionOnMap) this.currentMapView.selectionOnMap = true;
+
             //update Position of tile selection marker. Needed for double touch event.
             this.currentMapView.updateSelectedTile(selectedTileCords);
 

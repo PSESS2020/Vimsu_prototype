@@ -29,8 +29,6 @@ class ScheduleView extends GameMapElementView {
     onclick(mousePos) {
 
         if (super.getClickMapValueWithGridCoords(mousePos) === 1) {
-            //This Event fires multiple times because of three parallel schedule images.
-            //Not sure how to prevent this.
             $('#noschedule').empty();
             $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
             $('#scheduleModal').modal('show');
