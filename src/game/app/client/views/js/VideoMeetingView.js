@@ -63,6 +63,12 @@ class VideoMeetingView extends WindowView {
         $('#meetingWindowWait').hide();
 
         if (this.currentMeeting) {
+            //The meeting was only minimized, do nothing but maximize meeting again
+            if (this.currentMeeting.id === meeting.id && this.isMinimized) {
+                this.maximizeMeeting();
+                return;
+            }
+            
             //Another meeting was minimized before, that should be closed now
             if (this.currentMeeting.id !== meeting.id && this.isMinimized) {
                 this.jitsi.dispose();
