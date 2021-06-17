@@ -613,6 +613,8 @@ module.exports = class Participant {
 
     incrTaskCounter(task) { this.#taskCounters.set(task, this.#taskCounters.get(task) + 1) }
 
+    getTaskCounterValue(task) { return this.#taskCounters.get(task) }
+
     getStateForSelf() {
         return Object.freeze({
             id: this.getId(),

@@ -15,12 +15,30 @@ class Achievement {
     #id; #task; #title; #icon; #description; #levels;
     #amountLevels; #restrictions; #isSilent; #isHidden
 
-    constructor (id, task, title, icon, description, levels, , restrictions, isSilent, isHidden) {
-        this.#id = id; this.#title = title; this.#icon = icon;
-        this.#description = description; this.#levels = levels;
-        this.#restrictions = restrictions; this.#isSilent = isSilent; 
-        this.#isHidden = isHidden;
+    constructor (id, task, title, icon, description, levels, restrictions, isSilent, isHidden) {
+        TypeChecker.isString(id);
+        TypeChecker.isString(title);
+        TypeChecker.isString(icon);
+        TypeChecker.isString(description);
+        TypeChecker.isInstanceOf(levels, Array)
+        levels.forEach( level => TypeChecker.isInstanceOf(level, Level) )
+        // no typechecking for restrictions possible
+        TypeChecker.isBoolean(isSilent)
+        TypeChecker.isBoolean(isHidden)
+        this.#id           = id; 
+        this.#title        = title; 
+        this.#icon         = icon; 
+        this.#description  = description; 
+        this.#levels       = levels; 
+        this.#amountLevels = levels.length; 
+        this.#restrictions = restrictions; 
+        this.#isSilent     = isSilent; 
+        this.#isHidden     = isHidden;
     }
+
+    isSilent() { return this.#isSilent }
+
+    isHidden() { return this.#isHidden }
 
     getState() {
 
