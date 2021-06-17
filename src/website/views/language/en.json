@@ -83,6 +83,13 @@
         "sendMessage": "Send message"
     },
 
+    "aboutUs": {
+        "whatIsVimsu": "What is VIMSU?",
+        "thisIsVimsu": "VIMSU (Virtual Interactive Meeting SimUlator) is a software that was developed in response to the corona pandemic and originaly was intended to allow scientific conferences and similar events to be held virtually with telepresence. In cooperation with Lehr-Lern-Labor, VIMSU currently mainly is used for workshops that have the purpose to get school students closer to computer science related topics. This takes place in the form of an interactive virtual event area. The participants are represented by virtual avatars that can be controlled in real-time.",
+        "whoAreWe": "Who are we?",
+        "thisIsUs": "We are 5 computer science students (Eric Ritte, Niklas Schmidt, Laura Traub, Klaudia Leo, Philipp Schumacher) that developed VIMSU within the context of our bachelor degree as part of the course “Software Engineering Practice” in summer semester 2020 at the Chair of Dependable Nano Computing (CDNC), Karlsruher Institut für Technologie (KIT). Since february 2021, we have been working on an extension that makes it possible to use VIMSU in a workshop context."
+    },
+
     "forgotPassword": {
         "linkSent": "We have sent you a link to your_email to reset your password.",
         "resetPassword": "Reset Password"
