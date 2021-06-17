@@ -2,28 +2,36 @@
 <html>
 
 <head>
-	<%- include('partials/head') %>
+    <%- include('partials/head') %>
 </head>
 
 <body>
-	<div class="container">
-		<%- include('partials/header') %>
-        <section class="large-form-content row align-items-center justify-content-center">
-            <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-10" id="form">
-                <h5 class="mb-5"><%=languageData.aboutUs.whatIsVimsu%></h5>
-                <div class="row justify-content-center mb-3 m-0 p-0">
-                    <%=languageData.aboutUs.thisIsVimsu%>
-                </div>
-            </div>
-            <div class="col-xl-4 col-lg-5 col-md-6 col-sm-8 col-10" id="form">
-                <h5 class="mb-5"><%=languageData.aboutUs.whoAreWe%></h5>
-                <div class="row justify-content-center mb-3 m-0 p-0">
-                    <%=languageData.aboutUs.thisIsUs%>
-                </div>
-            </div>
-        </section>
-	</div>
-	<%- include('partials/footer') %>
+    <div class="container">
+        <%- include('partials/header') %>
+            <section class="d-flex content align-items-center justify-content-center">
+                <span>
+                    <h5 class="mb-3 text-center">
+                        <%=languageData.aboutUs.whatIsVimsu%>
+                    </h5>
+                    <div class="text-justify">
+                        <%=languageData.aboutUs.thisIsVimsu%>
+                    </div>
+                </span>
+            </section>
+            <section class="d-flex align-items-center justify-content-center" style="min-height: 100vh">
+                <span>
+                    <h5 class="mb-3 text-center">
+                        <%=languageData.aboutUs.whoAreWe%>
+                    </h5>
+                    <div class="text-justify">
+                        <%=languageData.aboutUs.thisIsUs%>
+                    </div>
+                </span>
+               
+
+            </section>
+    </div>
+    <%- include('partials/footer') %>
 </body>
 
 </html>
