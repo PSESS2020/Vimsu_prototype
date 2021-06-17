@@ -62,15 +62,15 @@ class VideoMeetingView extends WindowView {
     draw(meeting, ownDisplayName) {
         $('#meetingWindowWait').hide();
 
-        if (this.currentMeeting) {
+        if (this.currentMeeting && this.isMinimized) {
             //The meeting was only minimized, do nothing but maximize meeting again
-            if (this.currentMeeting.id === meeting.id && this.isMinimized) {
+            if (this.currentMeeting.id === meeting.id) {
                 this.maximizeMeeting();
                 return;
             }
             
             //Another meeting was minimized before, that should be closed now
-            if (this.currentMeeting.id !== meeting.id && this.isMinimized) {
+            else {
                 this.jitsi.dispose();
             }
         }
@@ -151,6 +151,8 @@ class VideoMeetingView extends WindowView {
         iframe.style.height = window.innerHeight * 0.85 * 0.33;
         $('#meetingMinimizeBtnImage').removeClass('fa fa-window-minimize');
         $('#meetingMinimizeBtnImage').addClass('fa fa-window-maximize');
+
+        this.jitsi.executeCommand('setTileView', false);
     }
     
     /**
