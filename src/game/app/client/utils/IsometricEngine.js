@@ -80,8 +80,10 @@ class IsometricEngine {
         TypeChecker.isInt(canvasWidth);
         TypeChecker.isInt(canvasHeight);
 
-        this.mapOriginX = Math.floor(canvasWidth / 2 - this.mapNumTilesX * this.tileHeight);
-        this.mapOriginY = Math.floor(canvasHeight / 2);
+        let mapWidth = (this.mapNumTilesX + this.mapNumTilesY) * this.tileHeight;
+        let diffTopBottomMapHeight = (this.mapNumTilesX - this.mapNumTilesY) * (this.tileHeight / 2);
+        this.mapOriginX = Math.floor( (canvasWidth - mapWidth) / 2 );
+        this.mapOriginY = Math.floor( (canvasHeight / 2) + (diffTopBottomMapHeight / 2) );
     }
 
     /**
