@@ -151,6 +151,8 @@ class VideoMeetingView extends WindowView {
         iframe.style.height = window.innerHeight * 0.85 * 0.33;
         $('#meetingMinimizeBtnImage').removeClass('fa fa-window-minimize');
         $('#meetingMinimizeBtnImage').addClass('fa fa-window-maximize');
+
+        this.jitsi.executeCommand('setTileView', false);
     }
     
     /**
@@ -172,5 +174,9 @@ class VideoMeetingView extends WindowView {
         iframe.style.height = window.innerHeight * 0.85;
         $('#meetingMinimizeBtnImage').removeClass('fa fa-window-maximize');
         $('#meetingMinimizeBtnImage').addClass('fa fa-window-minimize');
+
+        if (this.jitsi.getNumberOfParticipants() >= 3) {
+            this.jitsi.executeCommand('setTileView', true);
+        }
     }
 }
