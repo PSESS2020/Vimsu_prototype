@@ -94,7 +94,8 @@ class VideoMeetingView extends WindowView {
                 startWithVideoMuted: true
             }
         });
-    
+        this.jitsi.minimized = false;
+
         this.currentMeeting = meeting;
 
         if (this.isMinimized) {
@@ -111,6 +112,13 @@ class VideoMeetingView extends WindowView {
         // join a protected channel
         this.jitsi.on('passwordRequired', function () {
             this.executeCommand('password', meeting.password);
+        });
+
+        // don't switch to tile view when meeting is minimized and 3rd ppant joins
+        this.jitsi.on('participantJoined', function () {
+            if (this.minimized && this.getNumberOfParticipants() >= 3) {
+                this.executeCommand('setTileView', false);
+            }
         });
 
         // When user leaves meeting, then jitsi-object is disposed
@@ -149,6 +157,7 @@ class VideoMeetingView extends WindowView {
         meetingContent.style.height = '85%';
         minimizeBtn.title = this.languageData.tooltips.maximizeMeeting;
         iframe.style.height = window.innerHeight * 0.85 * 0.33;
+        this.jitsi.minimized = true;
         $('#meetingMinimizeBtnImage').removeClass('fa fa-window-minimize');
         $('#meetingMinimizeBtnImage').addClass('fa fa-window-maximize');
 
@@ -172,6 +181,7 @@ class VideoMeetingView extends WindowView {
         meetingContent.style.height = '90%';
         minimizeBtn.title = this.languageData.tooltips.minimizeMeeting;
         iframe.style.height = window.innerHeight * 0.85;
+        this.jitsi.minimized = false;
         $('#meetingMinimizeBtnImage').removeClass('fa fa-window-maximize');
         $('#meetingMinimizeBtnImage').addClass('fa fa-window-minimize');
 
