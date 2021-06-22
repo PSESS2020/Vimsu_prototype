@@ -2,8 +2,8 @@ const TypeChecker = require("../../../client/shared/TypeChecker");
 const AchievementService = require("../../services/AchievementService");
 const TaskService = require("../../services/TaskService");
 const AlgoLibrary = require("../../utils/AlgoLibrary");
-const LevelList = require("../customlisttypes/LevelList");
-const TaskList = require("../customlisttypes/TaskList");
+const LevelList = require("../customdatastructures/LevelList");
+const TaskList = require("../customdatastructures/TaskList");
 const Achievement = require("../rewards/Achievement");
 const Settings = require(`../../utils/${process.env.SETTINGS_FILENAME}`);
 

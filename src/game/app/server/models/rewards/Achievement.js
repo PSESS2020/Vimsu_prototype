@@ -1,6 +1,8 @@
 const TypeChecker = require("../../../client/shared/TypeChecker");
 const AlgoLibrary = require("../../utils/AlgoLibrary");
 const TypeOfTask = require("../../utils/TypeOfTask");
+const LevelList = require("../customdatastructures/LevelList");
+const TaskList = require("../customdatastructures/TaskList");
 const Participant = require("../mapobjects/Participant");
 
 /**
@@ -12,16 +14,16 @@ const Participant = require("../mapobjects/Participant");
  */
 class Achievement {
 
-    #id; #task; #title; #icon; #description; #levels;
+    #id; #tasks; #title; #icon; #description; #levels;
     #amountLevels; #restrictions; #isSilent; #isHidden
 
-    constructor (id, task, title, icon, description, levels, restrictions, isSilent, isHidden) {
+    constructor (id, tasks, title, icon, description, levels, restrictions, isSilent, isHidden) {
         TypeChecker.isString(id);
         TypeChecker.isString(title);
         TypeChecker.isString(icon);
         TypeChecker.isString(description);
-        TypeChecker.isInstanceOf(levels, Array)
-        levels.forEach( level => TypeChecker.isInstanceOf(level, Level) )
+        TypeChecker.isInstanceOf(levels, LevelList)
+        TypeChecker.isInstanceOf(tasks, TaskList)
         // no typechecking for restrictions possible
         TypeChecker.isBoolean(isSilent)
         TypeChecker.isBoolean(isHidden)
@@ -29,6 +31,7 @@ class Achievement {
         this.#title        = title; 
         this.#icon         = icon; 
         this.#description  = description; 
+        this.#tasks        = tasks
         this.#levels       = levels; 
         this.#amountLevels = levels.length; 
         this.#restrictions = restrictions; 
@@ -40,20 +43,32 @@ class Achievement {
 
     isHidden() { return this.#isHidden }
 
-    getState() {
-
+    getStateAtLevel (levelCount) {
+        let level = this.#levels[levelCount - 1]
+        return {
+            title:        this.getTitle(),
+            description:  this.getDescription(),
+            color:        level.getColor(),
+            icon:         this.getIcon(),
+            currentLevel: levelCount,
+        }
     }
 
-    checkEligibleToUnlockLevel (ppant) {
+    caresAboutAtLeastOneTaskOf (taskList) {
+        return this.#tasks.intersectsWith(taskList)
+    }
+
+    getNewLevelUnlocked (ppant) {
+        TypeChecker.isInstanceOf(ppant, Participant)
         let currLevel = ppant.getCurrentLevelOfAchvm(this.#id)
         let maxUnlockLevel = 0
         for (let i = currLevel; i < this.#amountLevels; i++) {
             if (this.levels[i].checkForUnlock(ppant)) { maxUnlockLevel = (i + 1) } 
         }
-        return Math.max(currLevel, maxUnlockLevel)
+        return { unlockFlag: (currLevel < maxUnlockLevel), newLevel: Math.max(currLevel, maxUnlockLevel) }
     }
 
-    checkIfFulfillsRestrictions (ppant) {
+    fulfillsRestrictions (ppant) {
         TypeChecker.isInstanceOf(ppant, Participant)
         return AlgoLibrary.checkObjectMeetsSpecs(ppant, this.#restrictions)
     }

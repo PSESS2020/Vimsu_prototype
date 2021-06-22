@@ -15,11 +15,11 @@ class LevelFactory {
         // TypeChecking
         // Also, counter structure may need to be redone to match taskStruc
         var newLevel = new Level(counter, color, points, taskStrucForLevel)
-        var fn = this.#writeEligibilityCheckingMethod(taskStrucForLevel)
+        var fn = this.#writeCheckForUnlockMethod(taskStrucForLevel)
         return Object.defineProperty(newLevel, 'checkForUnlock', { value: new Function('ppant', fn), writable: false })      
     }
 
-    #writeEligibilityCheckingMethod = function (taskStruc) {
+    #writeCheckForUnlockMethod = function (taskStruc) {
         var fn = ""
         if (Array.isArray(taskStruc)) {
             fn += `return (`

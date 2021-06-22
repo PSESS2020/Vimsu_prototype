@@ -1,5 +1,5 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
-const TaskList = require('../models/customlisttypes/TaskList.js');
+const TaskList = require('../models/customdatastructures/TaskList.js');
 const TaskFactory = require('../models/factories/TaskFactory.js');
 const Task = require('../models/rewards/Task.js');
 const AlgoLibrary = require('../utils/AlgoLibrary.js');
@@ -64,6 +64,10 @@ class TaskService {
             ppant.incrTaskCounter(task)
         })
         return tasksToIncrement
+    }
+
+    getTasksToIncrement(typeOfTask, contextObject) {
+        return this.#taskLibraryByType.get(typeOfTask).filter( task => task.checkIfWasPerformed(typeOfTask, contextObject) )
     }
 
     #calculateTaskID(typeOfTask, detail, points) {  

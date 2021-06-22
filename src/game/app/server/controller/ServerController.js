@@ -3576,56 +3576,49 @@ module.exports = class ServerController {
         TypeChecker.isEnumOf(taskType, TypeOfTask);
 
         var ppant = this.#ppants.get(participantId);
-        var task = new TaskService().getTaskByType(taskType);
 
         if (ppant) {
-            //participant is online
+            // participant is online
+            let socketId = this.getSocketId(participantId)
 
-            this.#achvmtService.checkForTaskIncrementation(ppant, taskType, contextObject)
+            // TODO check for incr, perform
+            let incrementedTasks = this.#taskService.checkForAndPerformTaskIncr(ppant, typeOfTask, contextObject)
+            
+            // TODO
+            // update database
+            // how does this method work???
+            ParticipantService.updateTaskCounts(participantId, Settings.CONFERENCE_ID, ppant.getTaskCounters(), this.#db);
 
-            ppant.addTask(task);
+            // TODO check for unlocked levels
+            let newAchvmtsAndTheirLevels = this.#achvmtService.checkForNewLevelUnlock(ppant, incrementedTasks)
 
-            // TODO update
-            ParticipantService.updateTaskCounts(participantId, Settings.CONFERENCE_ID, ppant.getTaskTypeMappingCounts(), this.#db);
-
-            // computes achievements, updates participants, and returns newly unlocked achievements
-            var newAchievements = new AchievementService().computeAchievements(ppant);
-
-            newAchievements.forEach(ach => {
-                var achData = {
-                    currentLevel: ach.getCurrentLevel(),
-                    color: ach.getColor(),
-                    icon: ach.getIcon(),
-                    title: ach.getTitle(),
-                    description: ach.getDescription()
+            // TODO if new achvm unlocked,
+            //   i. open doors accordingly
+            //  ii. inform ppant (unless achvm silent)
+            // iii. update database
+            for (const [achvmt, level] of newAchvmtsAndTheirLevels.entries()) {
+                if (!achvmt.isSilent()) { 
+                    this.#io.to(socketId).emit('newAchievement', achvmt.getStateAtLevel(level)) 
                 }
+                ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, achvmt.getId(), level, this.#db)
+            }
 
-                //if this new achievement opens a door, open it for this ppant
-                let opensDoorID = ach.getOpensDoorID();
-                if (opensDoorID !== undefined && ach.getCurrentLevel() === ach.getMaxLevel()) {
-                    let door = this.getDoorByID(opensDoorID);
-                    if (door !== undefined) {
-                        door.openDoorFor(participantId);
-                    }
-                }
+            // TODO calculate updated points and inform ppant
+            this.#achvmtService.calculateAwardPoints(ppant)
+            this.#io.to(socketId).emit('updatePoints', ppant.getAwardPoints());
 
-                this.#io.to(this.getSocketId(participantId)).emit('newAchievement', achData);
-
-                ParticipantService.updateAchievementLevel(participantId, Settings.CONFERENCE_ID, ach.getId(), ach.getCurrentLevel(), this.#db);
-            });
-
-            this.#io.to(this.getSocketId(participantId)).emit('updatePoints', ppant.getAwardPoints());
-
+            // also update database
             await ParticipantService.updatePoints(participantId, Settings.CONFERENCE_ID, ppant.getAwardPoints(), this.#db);
 
-            //updates the rank of all active participants
+            // TODO update ranklist and inform ppant
+            // updates the rank of all active participants
             Promise.all([...this.#ppants.keys()].map(async ppantId => {
                 var rank = await RankListService.getRank(ppantId, Settings.CONFERENCE_ID, this.#db)
                 this.#io.to(this.getSocketId(ppantId)).emit('updateRank', rank);
             }))
         } else {
-            //participant is not online, so update alle infos to the database
-
+            // participant is not online, so update alle infos to the database
+            // TODO: how can this functionality be maintained? 
             var awardPoints = task.getAwardPoints();
             var points = await ParticipantService.getPoints(participantId, Settings.CONFERENCE_ID, this.#db);
             var currentPoints = points + awardPoints;

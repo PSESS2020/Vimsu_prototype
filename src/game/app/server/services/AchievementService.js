@@ -17,6 +17,7 @@ class AchievementService {
 
     #achievementsByTask
     #achievementsById
+    #allAchievements
     #achievementFactory
 
     /**
@@ -30,6 +31,7 @@ class AchievementService {
 
         this.#achievementsByTask = this.#initMapTaskToAchievements()
         this.#achievementsById = {}
+        this.#allAchievements = []
         this.#achievementFactory = new AchievementFactory()
         this.#initAllAchievements();
         AchievementService.instance = this;
@@ -45,6 +47,7 @@ class AchievementService {
         for (const [achvmtName, achvmtData] of Object.entries(AchievementDefinitions)) {
             var achvmt = this.#achievementFactory.createAchievement(achvmtName, achvmtData)
             Object.defineProperty(this.#achievementsById, achvmt.getId(), { value: achvmt })
+            this.#allAchievements.push(achvmt)
             achvmt.getTaskList().forEach( taskType => this.#achievementsByTask.get(taskType).push(achvmt) )
         }
     }
@@ -63,11 +66,17 @@ class AchievementService {
     /**
      * @method module:AchievementService#checkForAchievementEligibility
      */
-    checkForAchievementEligibility (ppant, achvmntsToCheck) {
-        achvmntsToCheck.filter( achvmt => achvmt.fulfillsRestrictions(ppant) ).forEach( achvmt => {
-            achvmt.checkEligibleToUnlockLevel(ppant)
-            // update ppant level list
+    checkForNewLevelUnlock (ppant, performedTasks) {
+        let newAchvmts = new Map()
+        this.#allAchievements.filter( achvmt => (achvmt.fulfillsRestrictions(ppant) && achvmt.caresAboutAtLeastOneTaskOf(performedTasks)) ).forEach( achvmt => {
+            const { unlockFlag, newLevel } = achvmt.getNewLevelUnlocked(ppant)
+            if (unlockFlag) {
+                ppant.updateLevelOfAchvmt(achvmt.getId(), newLevel)
+                achvmt.informDoorsFor(ppant)
+                newAchvmts.set(achvmt, newLevel)
+            }
         })
+        return newAchvmts
     }
 
     // HOW TO DO TASK CHECKING?

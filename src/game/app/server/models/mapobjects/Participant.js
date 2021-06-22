@@ -272,6 +272,8 @@ module.exports = class Participant {
         return this.#meetingList;
     }
 
+    getTaskCounters() { }
+
     /**
      * Adds chat to the chat list
      * @method module:Participant#addChat
@@ -605,21 +607,17 @@ module.exports = class Participant {
      * @returns {Boolean} whether the participant is currently in
      *                    the room indexed by the passed id
      */
-    isInRoom(roomId) {
-        return (this.getPosition().getRoomId() === roomId)
-    }
+    isInRoom(roomId) { return (this.getPosition().getRoomId() === roomId) }
 
-    getCurrentLevelOfAchvm(achvmId) {
-        let unlockedLevel = this.#achievementList.get(achvmId)
-        if (unlockedLevel === undefined) { return 0 }
-        else { return unlockedLevel }
-    }
+    getCurrentLevelOfAchvm(achvmtId) { return ( this.#achievementList.has(achvmtId) ? this.#achievementList.get(achvmtId) : 0 ) }
 
     trackNewTask(task) { this.#taskCounters.set(task, 0) }
 
     incrTaskCounter(task) { this.#taskCounters.set(task, this.#taskCounters.get(task) + 1) }
 
     getTaskCounterValue(task) { return this.#taskCounters.get(task) }
+
+    updateLevelOfAchvmt(achvmtId, levelCount) { this.#achievementList.set(achvmtId, levelCount) }
 
     getStateForSelf() {
         return Object.freeze({
