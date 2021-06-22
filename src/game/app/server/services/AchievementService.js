@@ -63,11 +63,11 @@ class AchievementService {
     /**
      * @method module:AchievementService#checkForAchievementEligibility
      */
-    checkForAchievementEligibility (ppant, /* the appropriate task count of the participant */ achvmntsToCheck) {
+    checkForAchievementEligibility (ppant, achvmntsToCheck) {
         achvmntsToCheck.filter( achvmt => achvmt.fulfillsRestrictions(ppant) ).forEach( achvmt => {
-
+            achvmt.checkEligibleToUnlockLevel(ppant)
+            // update ppant level list
         })
-
     }
 
     // HOW TO DO TASK CHECKING?

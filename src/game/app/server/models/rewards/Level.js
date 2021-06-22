@@ -26,7 +26,9 @@ class Level {
 
     getPoints() { return this.#awardPoints }
 
-    checkEligibility() { throw new Error(`Error on calling checkEligibility of Level ${this}. Needs to be implemented by LevelFactory on construction.`) }
+    checkForUnlock() { 
+        throw new Error(`Error on calling checkForUnlock of Level ${this}. Needs to be implemented by LevelFactory on construction.`) 
+    }
 
 }
 

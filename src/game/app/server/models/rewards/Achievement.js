@@ -45,7 +45,12 @@ class Achievement {
     }
 
     checkEligibleToUnlockLevel (ppant) {
-
+        let currLevel = ppant.getCurrentLevelOfAchvm(this.#id)
+        let maxUnlockLevel = 0
+        for (let i = currLevel; i < this.#amountLevels; i++) {
+            if (this.levels[i].checkForUnlock(ppant)) { maxUnlockLevel = (i + 1) } 
+        }
+        return Math.max(currLevel, maxUnlockLevel)
     }
 
     checkIfFulfillsRestrictions (ppant) {

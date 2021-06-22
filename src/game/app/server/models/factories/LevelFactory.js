@@ -16,7 +16,7 @@ class LevelFactory {
         // Also, counter structure may need to be redone to match taskStruc
         var newLevel = new Level(counter, color, points, taskStrucForLevel)
         var fn = this.#writeEligibilityCheckingMethod(taskStrucForLevel)
-        return Object.defineProperty(newLevel, 'checkEligibility', { value: new Function('ppant', fn), writable: false })      
+        return Object.defineProperty(newLevel, 'checkForUnlock', { value: new Function('ppant', fn), writable: false })      
     }
 
     #writeEligibilityCheckingMethod = function (taskStruc) {

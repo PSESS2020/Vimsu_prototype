@@ -609,6 +609,12 @@ module.exports = class Participant {
         return (this.getPosition().getRoomId() === roomId)
     }
 
+    getCurrentLevelOfAchvm(achvmId) {
+        let unlockedLevel = this.#achievementList.get(achvmId)
+        if (unlockedLevel === undefined) { return 0 }
+        else { return unlockedLevel }
+    }
+
     trackNewTask(task) { this.#taskCounters.set(task, 0) }
 
     incrTaskCounter(task) { this.#taskCounters.set(task, this.#taskCounters.get(task) + 1) }
