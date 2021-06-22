@@ -1,4 +1,5 @@
 const TypeChecker = require('../../client/shared/TypeChecker.js');
+const TaskList = require('../models/customlisttypes/TaskList.js');
 const TaskFactory = require('../models/factories/TaskFactory.js');
 const Task = require('../models/rewards/Task.js');
 const AlgoLibrary = require('../utils/AlgoLibrary.js');
@@ -30,23 +31,30 @@ class TaskService {
         TaskService.instance    = this;
     }
 
-    getMatchingTask(taskData) {
-        const { typeOfTask, detail } = taskData
+    getMatchingTask({ typeOfTask, detail: { points } }) {
         TypeChecker.isEnumOf(typeOfTask, TypeOfTask)
         if (detail === undefined || detail === "") { detail = {} }
-        const { points } = detail
         if (points === undefined) { points = 0 }
         var taskId = this.#calculateTaskID(typeOfTask, detail, points)
         if (this.#taskLibraryById.has(taskId)) { return this.#taskLibraryById.get(taskId) }
         else {
             var newTask = this.#taskFactory(taskId, typeOfTask, detail, points)
             this.#taskLibraryById.set(taskId, newTask)
-            if (this.#taskLibraryByType.has(typeOfTask)) {
-                // probably overkill
-                this.#taskLibraryByType.set(typeOfTask, [...this.#taskLibraryByType.get(typeOfTask), newTask])
+            if (this.#taskLibraryByType.has(typeOfTask)) { 
+                this.#taskLibraryByType.set(typeOfTask, [...this.#taskLibraryByType.get(typeOfTask), newTask]) 
             } else { this.#taskLibraryByType.set(typeOfTask, [newTask]) }
             return newTask
         }
+    }
+
+    buildTaskStructureForLevel({ typeOfTask, detail }) {
+        if (Array.isArray(typeOfTask)) {
+            var taskListToReturn = new TaskList()
+            for (i in [...Array(typeOfTask.length)]) {
+                taskListToReturn.push( this.buildTaskStructureForLevel({ typeOfTask: typeOfTask[i], detail: detail[i] }) )
+            }
+            return taskListToReturn         
+        } else { return this.getMatchingTask({ typeOfTask, detail }) }
     }
 
     checkForAndPerformTaskIncr(ppant, typeOfTask, contextObject) {

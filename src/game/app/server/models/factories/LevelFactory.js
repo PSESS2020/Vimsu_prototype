@@ -1,4 +1,5 @@
 const TypeOfTask = require("../../utils/TypeOfTask");
+const Level = require("../rewards/Level");
 const Task = require("../rewards/Task");
 
 class LevelFactory {
@@ -10,8 +11,34 @@ class LevelFactory {
         LevelFactory.instance = this;
     }
 
-    createLevel (counter, color, points) {
-        
+    createLevel ({ counter, color, points }, taskStrucForLevel) {
+        // TypeChecking
+        // Also, counter structure may need to be redone to match taskStruc
+        var newLevel = new Level(counter, color, points, taskStrucForLevel)
+        var fn = this.#writeEligibilityCheckingMethod(taskStrucForLevel)
+        return Object.defineProperty(newLevel, 'checkEligibility', { value: new Function('ppant', fn), writable: false })      
+    }
+
+    #writeEligibilityCheckingMethod = function (taskStruc) {
+        var fn = ""
+        if (Array.isArray(taskStruc)) {
+            fn += `return (`
+            for (i in [...Array(taskStruc.length)]) {
+                fn += `${(i >= 1) ? " || " : ""}(`
+                if (!Array.isArray(taskStruc[i])) {
+                    fn += `this.counter[${i}] <= ppant.getTaskCounterValue(this.taskStruc[${i}])`
+                } else {
+                    for (j in [...Array(taskStruc[i].length)]) {
+                        fn += `${(j >= 1) ? " && " : ""}(this.counter[${i}][${j}] <= ppant.getTaskCounterValue(this.taskStruc[${i}][${j}]))`
+                    }
+                }
+                fn += `)`
+            }
+            fn += `)`
+        } else {
+            fn += `return (this.counter <= ppant.getTaskCounterValue(this.taskStruc))`
+        }      
+        return fn
     }
 }
 

@@ -5,14 +5,12 @@ const AlgoLibrary = require("../../utils/AlgoLibrary");
 const LevelList = require("../customlisttypes/LevelList");
 const TaskList = require("../customlisttypes/TaskList");
 const Achievement = require("../rewards/Achievement");
-const TaskFactory = require("./TaskFactory");
 const Settings = require(`../../utils/${process.env.SETTINGS_FILENAME}`);
 
 class AchievementFactory {
 
     #AchievementService
     #taskService
-    #taskFactory
     #levelFactory
 
     /**
@@ -25,7 +23,6 @@ class AchievementFactory {
             return AchievementFactory.instance;
         }
         this.#taskService  = new TaskService()
-        this.#taskFactory  = new TaskFactory()
         this.#levelFactory = new LevelFactory() 
         AchievementFactory.instance = this;
     }
@@ -71,45 +68,41 @@ class AchievementFactory {
                 levelListToReturn.addLevels(newLevels)
             }
         } else {
-            taskListToReturn.buildTasks(task)
+            this.#checkIfProperlyFormattedTask(task)
+            let taskStrucForLevel = this.#taskService.buildTaskStructureForLevel(task)
+            // flatten taskStruc and add to taskList w/o double entries
             levels.forEach( level => {
-                this.#checkFormat(task, level)
-                var newLevel = this.#levelFactory.createLevel(level)
-                let fn = this.#writeEligibilityCheckingMethod(task)
-                Object.defineProperty(newLevel, "isEligibleForLevel", { value: new Function('ppant', fn) })
-                levelListToReturn.add(level)
+                this.#checkLevelFormatMatchesTask(task, level)
+                levelListToReturn.add( this.#levelFactory.createLevel(level, taskStrucForLevel) )
             })
         }
         return { taskList: taskListToReturn, levelList: levelListToReturn }
     }
 
-    #writeEligibilityCheckingMethod = function (task) {
-        var fn = ""
-        // TODO 
-        return fn
+    #checkIfProperlyFormattedTask = function ({ typeOfTask, detail }) {
+        const errorString = `Error while creating ${achvmtName}! The structure of the typeOfTask and  the detail field of a task definition must match.`
+        if (Array.isArray(typeOfTask)) {
+            if(!Array.isArray(detail) || (typeOfTask.length !== detail.length)) { throw new Error(errorString) }           
+            for (i in [...Array(typeOfTask.length)]) {
+                this.#checkIfProperlyFormattedTask({ typeOfTask: typeOfTask[i], detail: detail[i] })
+            }
+        } else if (Array.isArray(detail)) { throw new Error(errorString) }
     }
 
     // TODO
     // maybe rethink how to connect tasks?
-    #checkFormat = function (task, level) {
-        const { typeOfTask: toT, detail: det } = task
+    #checkLevelFormatMatchesTask = function (task, level) {
+        const { typeOfTask: toT } = task
         const { counter: cou } = level
-        const errorString = `Error while creating ${achvmtName}! The structure of the typeOfTask field of a task definition, the detail field of a task definition and the counter field of the corresponding level definition must match.`
+        const errorString = `Error while creating ${achvmtName}! The structure of the task definition and the counter field of the corresponding level definition must match.`
         if (Array.isArray(toT)) {
-            if (!Array.isArray(cou)) {
-                
+            if (!Array.isArray(cou) || (toT.length !== cou.length)) {
+                throw new Error(errorString)
             }
-            if ( !Array.isArray(det) || (toT.length !== det.length) || (toT.length !== cou.length) ) { throw new Error(errorString) }
-            else {
-                for (i in [...Array(toT.length)]) {
-                    if (Array.isArray(toT[i])) {
-
-                    }
-                }
-            }
-        } else { 
-            if (Array.isArray(cou)) { throw new Error(errorString) }
-        }
+            for (i in [...Array(toT.length)]) {
+                this.#checkLevelFormatMatchesTask( {typeOfTask: toT[i]}, {counter: cou[i]} )
+            }          
+        } else if (Array.isArray(cou)) { throw new Error(errorString) }
     }
 }
 

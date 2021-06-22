@@ -1,3 +1,5 @@
+const TypeChecker = require("../../../client/shared/TypeChecker")
+
 /**
  * The Level Model
  * @module Level
@@ -7,7 +9,24 @@
  */
 class Level {
 
-    constructor() {}
+    #counter
+    #color
+    #awardPoints
+    #taskStruc
+
+    // may need an id field
+    constructor (counter, color, points, taskStruc) {
+        this.#counter     = counter
+        this.#color       = color
+        this.#awardPoints = points
+        this.#taskStruc   = taskStruc
+    }
+
+    getColor() { return this.#color }
+
+    getPoints() { return this.#awardPoints }
+
+    checkEligibility() { throw new Error(`Error on calling checkEligibility of Level ${this}. Needs to be implemented by LevelFactory on construction.`) }
 
 }
 

@@ -49,7 +49,6 @@ class AchievementService {
         }
     }
 
-
     #calculatePoints = function (ppant) {
         // TODO to implement
     }
