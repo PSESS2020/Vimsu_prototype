@@ -45,9 +45,10 @@ class Achievement {
 
     getStateAtLevel (levelCount) {
         let level = this.#levels[levelCount - 1]
+        let descrip = ( !level.hasCustomDescription() ? this.getDescription : level.getDescription() )
         return {
             title:        this.getTitle(),
-            description:  this.getDescription(),
+            description:  descrip,
             color:        level.getColor(),
             icon:         this.getIcon(),
             currentLevel: levelCount,
@@ -71,10 +72,6 @@ class Achievement {
     fulfillsRestrictions (ppant) {
         TypeChecker.isInstanceOf(ppant, Participant)
         return AlgoLibrary.checkObjectMeetsSpecs(ppant, this.#restrictions)
-    }
-
-    getPropertyOfLevel (propName, levelNumber) {
-        // TODO
     }
 
     #id
