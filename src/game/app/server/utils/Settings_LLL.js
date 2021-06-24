@@ -76,5 +76,9 @@ module.exports = Object.freeze({
     ACCOUNTDB_SUFFIX: "LLL",
 
     /* Decides which language is selected as default if clients preferred language is not available */
-    DEFAULT_LANGUAGE: "de"
+    DEFAULT_LANGUAGE: "de",
+
+    /* Decides whether or not moderators have the power to see chats and meetings 
+       from all exisiting groups, even if they are not part of them */
+    MODS_SEE_EVERYTHING: true
 });
