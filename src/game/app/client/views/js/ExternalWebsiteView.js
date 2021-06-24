@@ -47,6 +47,8 @@ class ExternalWebsiteView extends WindowView {
                 allowfullscreen scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-presentation"></iframe>
         `);
 
+        $('#externalWebsiteWindowBody' + gameObjectID)
+
         const handleClose = () => {
             this.exitFullscreenMode(gameObjectID, width, height);
 

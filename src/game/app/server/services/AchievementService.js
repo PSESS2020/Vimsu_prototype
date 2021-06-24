@@ -17,7 +17,9 @@ class AchievementService {
 
     #achievementsByTask
     #achievementsById
+    #achievementsByName
     #allAchievements
+    #achvmtLibrary
     #achievementFactory
 
     /**
@@ -29,8 +31,11 @@ class AchievementService {
             return AchievementService.instance;
         }
 
+        this.#achvmtLibrary = new Library()
+
         this.#achievementsByTask = this.#initMapTaskToAchievements()
         this.#achievementsById = {}
+        this.#achievementsByName = {}
         this.#allAchievements = []
         this.#achievementFactory = new AchievementFactory()
         this.#initAllAchievements();
@@ -48,6 +53,7 @@ class AchievementService {
             var achvmt = this.#achievementFactory.createAchievement(achvmtName, achvmtData)
             Object.defineProperty(this.#achievementsById, achvmt.getId(), { value: achvmt })
             this.#allAchievements.push(achvmt)
+            Object.defineProperty(this.#achievementsByName, achvmtName, { value: achvmt })
             achvmt.getTaskList().forEach( taskType => this.#achievementsByTask.get(taskType).push(achvmt) )
         }
     }
@@ -79,21 +85,14 @@ class AchievementService {
         return newAchvmts
     }
 
-    // HOW TO DO TASK CHECKING?
-
-
-    /**
-     * Gets achievement definition based on task type
-     * @method module:AchievementService#getAchievementDefinition
-     * 
-     * @param {TypeOfTask} achievementTaskType task type
-     * 
-     * @return {AchievementDefinition} AchievementDefinition instance
-     */
-    getAchievementDefinition(achievementTaskType) {
-        TypeChecker.isEnumOf(achievementTaskType, TypeOfTask);
-
-        return this.#achievementDefinitions[achievementTaskType];
+    letDoorObserveForUnlock (door, { name, level }) {
+        if (/* this.knowsObserverForThatAchvmtName */) {
+            /* add door to the list of objects to be
+               informed by that observer at unlock
+               of that level*/
+        } else {
+            /* create new observer and add door to it */
+        }
     }
 
     /**

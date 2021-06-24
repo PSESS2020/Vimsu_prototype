@@ -45,7 +45,7 @@ class Achievement {
 
     getStateAtLevel (levelCount) {
         let level = this.#levels[levelCount - 1]
-        let descrip = ( !level.hasCustomDescription() ? this.getDescription : level.getDescription() )
+        let descrip = ( !level.hasCustomDescription ? this.getDescription : level.getDescription() )
         return {
             title:        this.getTitle(),
             description:  descrip,
@@ -66,6 +66,7 @@ class Achievement {
         for (let i = currLevel; i < this.#amountLevels; i++) {
             if (this.levels[i].checkForUnlock(ppant)) { maxUnlockLevel = (i + 1) } 
         }
+        // if new level unlocked, inform observer
         return { unlockFlag: (currLevel < maxUnlockLevel), newLevel: Math.max(currLevel, maxUnlockLevel) }
     }
 

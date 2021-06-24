@@ -27,7 +27,7 @@ class AchievementFactory {
         AchievementFactory.instance = this;
     }
 
-    createAchievement (achvmtName, achvmtData) {
+    createAchievement (achvmtData) {
         // Deconstruct
         // might need some type-checking here
         // add modifier for less intrusive notification
@@ -41,12 +41,9 @@ class AchievementFactory {
             isSilentFlag = (isSilent !== undefined) ? isSilent : false
             isHiddenFlag = (isSilentFlag || isHidden)
         }
-
         const { taskList, levelList } = this.#buildTasksAndLevels(task, levels)
-
         var achvmtId = this.#calculateAchvmtID(title, taskList, levels, restrictions)
-        // add observers for door opening (will be done at later point & somewhere else)
-       return new Achievement(achvmtId, title, icon, description, taskList, levelList, restrictions, isSilentFlag, isHiddenFlag)
+        return new Achievement(achvmtId, title, icon, description, taskList, levelList, restrictions, isSilentFlag, isHiddenFlag)
     }
 
     #calculateAchvmtID = function (title, taskList, levels, restrictions) {

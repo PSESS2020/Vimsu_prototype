@@ -7,6 +7,7 @@ const GlobalStrings = require('../../../client/shared/GlobalStrings.js');
 const DoorLogos = require('../../utils/DoorLogos.js');
 const Messages = require('../../utils/Messages.js');
 const Settings = require('../../utils/Settings.js');
+const AchievementService = require('../../services/AchievementService.js');
 
 /**
  * The Door Factory
@@ -18,6 +19,7 @@ const Settings = require('../../utils/Settings.js');
 class DoorFactory {
 
     #doorIDPrefixList;
+    #achvmtService
 
     /**
      * creates an instance of DoorFactory
@@ -30,6 +32,7 @@ class DoorFactory {
 
         DoorFactory.instance = this;
         this.#doorIDPrefixList = [];
+        this.#achvmtService = new AchievementService()
     }
 
     /**
@@ -123,8 +126,10 @@ class DoorFactory {
      * @returns {Door} A door instance with the passed attributes
      */
     createDoor(creationData) {
+        // Mandatory
         const { roomId, wallSide, positionOfDoor: [xPos, yPos], directionOnExit, codeToOpen } = creationData
-        var { positionOnExit, logo, isOpen, closedMessage, isLectureDoor } = creationData
+        // Optional and conditionally mandatory
+        const { positionOnExit, logo, isOpen, closedMessage, isLectureDoor, unlocksAt: { name, level } } = creationData
 
         if (isLectureDoor && !Settings.VIDEOSTORAGE_ACTIVATED) { throw new Error("You tried to create a lecture door, but video storage is not activated for this conference!") }
         if ( isOpen         === undefined ) { isOpen        = true  }
@@ -133,6 +138,7 @@ class DoorFactory {
         if ( positionOnExit !== undefined ) { var [idExit, xExit, yExit] = positionOnExit }
         else if ( !isLectureDoor ) { throw new Error("You must define an exit position when creating a non-lecture door!") }
         if ( logo           === undefined ) { logo          = GlobalStrings.DEFAULT }
+        // check that unlocksAt is properly defined
 
         const assetPath = this.#getDoorLogo(logo, wallSide)
         const doorPosition = new Position(roomId, xPos, yPos)
@@ -154,8 +160,10 @@ class DoorFactory {
         let doorId = doorIdPrefix + '_' + this.#countDoorOccurrences(doorIdPrefix);
         this.#doorIDPrefixList.push(doorIdPrefix);
         
-
-        return new Door(doorId, TypeOfDoor[doorTypeKey], assetPath, doorPosition, enterPositionWithoutClick, enterPositions, exitPosition, directionOnExit, isOpen, closedMessage, codeToOpen)   
+        let doorToReturn = new Door(doorId, TypeOfDoor[doorTypeKey], assetPath, doorPosition, enterPositionWithoutClick, enterPositions, exitPosition, directionOnExit, isOpen, closedMessage, codeToOpen)
+        if (unlocksAt) { this.#achvmtService.letDoorObserveForUnlock(doorToReturn, unlocksAt) } 
+        return doorToReturn
+         
     } 
 
     /**

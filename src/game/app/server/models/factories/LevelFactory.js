@@ -11,10 +11,11 @@ class LevelFactory {
         LevelFactory.instance = this;
     }
 
-    createLevel ({ counter, color, points }, taskStrucForLevel) {
+    createLevel ({ counter, color, points, description }, taskStrucForLevel) {
         // TypeChecking
         // Also, counter structure may need to be redone to match taskStruc
-        var newLevel = new Level(counter, color, points, taskStrucForLevel)
+        let desc = (description) ? description : ""
+        var newLevel = new Level(counter, color, points, desc, taskStrucForLevel)
         var fn = this.#writeCheckForUnlockMethod(taskStrucForLevel)
         return Object.defineProperty(newLevel, 'checkForUnlock', { value: new Function('ppant', fn), writable: false })      
     }
