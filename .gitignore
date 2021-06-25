@@ -122,7 +122,3 @@ dist
 config/download/*
 .vscode/settings.json
 
-# Eric custom
-.gitignore
-src/game/app/server/utils/VIMSUscript
-
