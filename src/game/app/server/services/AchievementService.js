@@ -5,7 +5,7 @@ const Participant = require('../models/mapobjects/Participant');
 const Achievement = require('../models/rewards/Achievement');
 const AchievementFactory = require('../models/factories/AchievementFactory.js');
 const AchievementDefinitions = require('../utils/AchievementDefinitions.js');
-const AchievementObserver = require('../models/AchievementObserver.js');
+const AchievementObserver = require('../models/observers/AchievementObserver.js');
 
 /**
  * The Achievement Service
@@ -92,7 +92,7 @@ class AchievementService {
             const { unlockFlag, newLevel } = achvmt.getNewLevelUnlocked(ppant)
             if (unlockFlag) {
                 ppant.updateLevelOfAchvmt(achvmt.getId(), newLevel)
-                achvmt.informDoorsFor(ppant)
+                achvmt.informDoorsFor(ppant, newLevel)
                 newAchvmts.set(achvmt, newLevel)
             }
         })
@@ -101,14 +101,12 @@ class AchievementService {
 
     letDoorObserveForUnlock (door, { name, level }) {
         if (this.#achievementObservers.has(name)) {
-            /* add door to the list of objects to be
-               informed by that observer at unlock
-               of that level*/
+            this.#achievementObservers.get(name).addToUpdateList(door, level)
         } else {
             let observer = new AchievementObserver()
             this.#achievementObservers.set(name, observer)
-            observer.addToUpdateList(door)
-            
+            this.#achievementsByName.get(name).addObserver(observer)
+            observer.addToUpdateList(door, level)
         }
     }
 
