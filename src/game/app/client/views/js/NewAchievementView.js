@@ -7,6 +7,7 @@
 class NewAchievementView extends WindowView {
 
     confetti;
+    achievementSound;
 
     /**
      * Creates an instance of NewAchievementView
@@ -21,6 +22,8 @@ class NewAchievementView extends WindowView {
         }
 
         NewAchievementView.instance = this;
+
+        this.achievementSound = new Audio('../client/audio/achievement_sound.wav');
 
         $('#newAchievementUnlockedText').text(this.languageData.unlocked);
 
@@ -53,6 +56,7 @@ class NewAchievementView extends WindowView {
         var confettiSettings = { target: 'confettiCanvas' };
         this.confetti = new ConfettiGenerator(confettiSettings);
         this.confetti.render();
+        this.achievementSound.play();
 
         $('#newAchievementModal').modal('show');
         $('#confettiCanvas').show();
