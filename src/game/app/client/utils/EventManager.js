@@ -499,6 +499,9 @@ class EventManager {
      * @param {GameObjectView} viewObject clickable object view
      */
     handleMoveToObjectAndClick(viewObject) {
+        if (this.handlingPlaygroundClicked)
+            return;
+
         let startPos = this.clientController.getOwnParticipantPosition();
         let targetPos = viewObject.getGridPosition();
 
