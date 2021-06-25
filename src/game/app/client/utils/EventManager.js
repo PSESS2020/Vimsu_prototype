@@ -511,6 +511,8 @@ class EventManager {
         this.clientController.handleFromViewCodeEntered(doorId, enteredCode);
     }
 
+    
+
     /**
      * called from View when user clicked a clickable object
      * 

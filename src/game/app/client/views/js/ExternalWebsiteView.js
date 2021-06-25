@@ -6,6 +6,8 @@
  */
 class ExternalWebsiteView extends WindowView {
 
+    eventHandler
+
     /**
      * Creates an instance of ExternalWebsiteView
      * 
@@ -18,6 +20,7 @@ class ExternalWebsiteView extends WindowView {
             return ExternalWebsiteView.instance;
         }
 
+        this.eventHandler = new EventManager()
         ExternalWebsiteView.instance = this;
     }
 
@@ -47,7 +50,7 @@ class ExternalWebsiteView extends WindowView {
                 allowfullscreen scrolling="no" sandbox="allow-same-origin allow-scripts allow-popups allow-forms allow-presentation"></iframe>
         `);
 
-        $('#externalWebsiteWindowBody' + gameObjectID)
+        $('#externalWebsiteWindowBody' + gameObjectID).addEventListener("actionPerformed", onIFrameTaskPerformed, false)
 
         const handleClose = () => {
             this.exitFullscreenMode(gameObjectID, width, height);
@@ -133,6 +136,11 @@ class ExternalWebsiteView extends WindowView {
         document.getElementById("fullscreenBtn" + gameObjectID).title = this.languageData.fullscreenMode;
         $('#fullscreenBtnImage' + gameObjectID).removeClass('fa fa-window-minimize');
         $('#fullscreenBtnImage' + gameObjectID).addClass('fa fa-window-maximize');
+    }
+
+    onIFrameTaskPerformed (event) {
+        // check if event.origin is on whitelist
+        this.eventHandler.handleIFrameTaskPerformed(event.data)
     }
 
     /**
