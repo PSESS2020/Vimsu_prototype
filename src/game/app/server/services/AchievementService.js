@@ -5,6 +5,7 @@ const Participant = require('../models/mapobjects/Participant');
 const Achievement = require('../models/rewards/Achievement');
 const AchievementFactory = require('../models/factories/AchievementFactory.js');
 const AchievementDefinitions = require('../utils/AchievementDefinitions.js');
+const AchievementObserver = require('../models/AchievementObserver.js');
 
 /**
  * The Achievement Service
@@ -18,6 +19,7 @@ class AchievementService {
     #achievementsByTask
     #achievementsById
     #achievementsByName
+    #achievementObservers
     #allAchievements
     #achvmtLibrary
     #achievementFactory
@@ -36,6 +38,7 @@ class AchievementService {
         this.#achievementsByTask = this.#initMapTaskToAchievements()
         this.#achievementsById = {}
         this.#achievementsByName = {}
+        this.#achievementObservers = new Map()
         this.#allAchievements = []
         this.#achievementFactory = new AchievementFactory()
         this.#initAllAchievements();
@@ -58,8 +61,19 @@ class AchievementService {
         }
     }
 
+    // this method feels to inefficient to always use to calculate points
     #calculatePoints = function (ppant) {
-        // TODO to implement
+        let awardPoints = 0
+        for (const [achvmtId, level] of ppant.getAchievements().entries()) {
+            // TODO error handling (when trying to get points fo no longer existing achvmt)
+            awardPoints += this.#achievementsById[achvmtId].getPointsAtLevel(level)
+        }
+        for (const [task, counter] of ppant.getTaskCounters().entries()) {
+            // for consistency reasons, it might be better to just
+            // save the id in the ppant class and load these here from the service?
+            awardPoints += (counter * task.getAwardPoints())
+        }
+        return awardPoints
     }
 
     getAchievementByTitle(title) {
@@ -86,14 +100,19 @@ class AchievementService {
     }
 
     letDoorObserveForUnlock (door, { name, level }) {
-        if (/* this.knowsObserverForThatAchvmtName */) {
+        if (this.#achievementObservers.has(name)) {
             /* add door to the list of objects to be
                informed by that observer at unlock
                of that level*/
         } else {
-            /* create new observer and add door to it */
+            let observer = new AchievementObserver()
+            this.#achievementObservers.set(name, observer)
+            observer.addToUpdateList(door)
+            
         }
     }
+
+    #knowsObserverForAchvmt = function
 
     /**
      * Gets all achievements of a participant
