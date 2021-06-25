@@ -530,7 +530,7 @@
                 }
             },
             "door": {
-                "unknownCoomand": {
+                "unknownCommand": {
                     "header": "Unbekannter Türbefehl",
                     "body": "Du hast einen unbekannten Befehl eingegeben. Du kannst '\\door' eingeben, um eine Übersicht über alle verfügbaren Türbefehle mit Beschreibung zu erhalten."
                 },

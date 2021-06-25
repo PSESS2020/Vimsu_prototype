@@ -530,7 +530,7 @@
                 }
             },
             "door": {
-                "unknownCoomand": {
+                "unknownCommand": {
                     "header": "Unrecognized door command",
                     "body": "You entered an unrecognized command. Enter '\\door' to receive an overview of all door commands and how to use them."
                 },
