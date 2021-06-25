@@ -80,7 +80,9 @@ class NPCStoryView extends WindowView {
 
             if (i === 0) {
                 $('#story' + npcId + i).show();
-                $('#forwardStory' + npcId + i).show();
+                if (story.length > 1) {
+                    $('#forwardStory' + npcId + i).show();
+                }
             };
         }
     }
