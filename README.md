@@ -179,3 +179,7 @@ Orators have the following privileges during their own lecture:
 To generate the documentation with JSDoc, use the following command.
     
     $ npm run docs
+
+## Credits
+
+- Audio files from [Mixkit](https://mixkit.co/)

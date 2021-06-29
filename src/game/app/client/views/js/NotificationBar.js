@@ -25,7 +25,7 @@ class NotificationBar extends ViewWithLanguageData {
         NotificationBar.instance = this;
 
         this.eventManager = eventManager;
-        this.notificationSound = new Audio('../client/audio/notification_sound.mp3');
+        this.notificationSound = new Audio('../client/audio/notification_sound.wav');
 
         $('#unreadNotif').text($("#notifBar > div").length);
 
