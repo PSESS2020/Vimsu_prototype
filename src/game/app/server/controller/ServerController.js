@@ -3707,21 +3707,19 @@ module.exports = class ServerController {
         let enterPosition = ppant.getPosition();
         let currentRoomId = enterPosition.getRoomId();
         let currentRoom = this.getRoomById(currentRoomId);
+        let targetRoom = this.getRoomById(targetRoomId);
 
         //prevents server to crash when client emits a non existing room ID
-        if (!this.getRoomById(targetRoomId)) {
+        if (!targetRoom) {
             console.log('Client emitted wrong Room-ID!');
             return;
         }
-
-        let targetRoom = this.getRoomById(targetRoomId);
-        let targetRoomType = targetRoom.getTypeOfRoom();
 
         //get door from current room to target room
         let door = currentRoom.getDoorTo(targetRoomId);
 
         if (!door) {
-            console.log('There is no door from ' + currentRoom.getTypeOfRoom() + ' to ' + targetRoomType + '!');
+            console.log('There is no door from ' + currentRoom.getRoomName() + ' to ' + targetRoom.getRoomName() + '!');
             return;
         }
 
