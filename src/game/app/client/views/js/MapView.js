@@ -153,6 +153,7 @@ class MapView extends AbstractView {
         for (var row = (this.xNumTiles - 1); row >= 0; row--) {
             for (var col = 0; col < this.yNumTiles; col++) {
 
+                const position = new PositionClient(row, col);
                 mapObject = this.map[row][col];
                 if (mapObject !== null) {
 
