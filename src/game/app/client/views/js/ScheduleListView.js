@@ -74,7 +74,8 @@ class ScheduleListView extends WindowView {
      * draws schedule window
      */
     drawSchedule = function (interval) {
-        $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
+        const scheduleBody = $('#scheduleModal .modal-body #schedule > tbody:last-child');
+        scheduleBody.empty();
         
         var count = 0;
         var now = Date.now();
@@ -104,7 +105,7 @@ class ScheduleListView extends WindowView {
 
             var startingTime = new DateParser().parse(lecture.startingTime);
 
-            $('#scheduleModal .modal-body #schedule > tbody:last-child').append(`
+            scheduleBody.append(`
                 <tr id="${"schedulerow" + lecture.id}">
                     <th scope="row">${++count}</th>
                     <td>${lecture.title}</td>

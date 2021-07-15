@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class AvatarView extends Views {
+class AvatarView extends AbstractView {
 
     position;
     direction;

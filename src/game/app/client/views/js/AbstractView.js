@@ -1,19 +1,19 @@
 /**
- * The Views
+ * The AbstractView
  * 
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class Views {
+class AbstractView {
 
     isVisible;
 
     /**
-     * @abstract abstract Views class
+     * @abstract AbstractView class
      */
     constructor() {
-        if (new.target === Views) {
-            throw new Error("Cannot construct abstract Views instances directly");
+        if (new.target === AbstractView) {
+            throw new Error("Cannot construct AbstractView instance directly");
         }
     }
 

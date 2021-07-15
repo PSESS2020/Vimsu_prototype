@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class MapView extends Views {
+class MapView extends AbstractView {
     map;
     objectMap;
     clickableTiles;
@@ -137,6 +137,7 @@ class MapView extends Views {
         this.gameObjectViewFactory = new GameObjectViewFactory(assetImages, this.gameEngine, this.eventManager);
 
         this.buildMap();
+        this.refreshDisplay();
     }
 
     /**
@@ -146,12 +147,13 @@ class MapView extends Views {
 
         this.tileIndicator = this.gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tileselected_default", false, false);
 
+        var mapObject;
+        var gameObject
+
         for (var row = (this.xNumTiles - 1); row >= 0; row--) {
             for (var col = 0; col < this.yNumTiles; col++) {
 
-                var position = new PositionClient(row, col);
-
-                var mapObject = this.map[row][col];
+                mapObject = this.map[row][col];
                 if (mapObject !== null) {
 
                     if (mapObject instanceof Array) {
@@ -163,7 +165,7 @@ class MapView extends Views {
                     }
                 }
 
-                var gameObject = this.objectMap[row][col];
+                gameObject = this.objectMap[row][col];
                 if (gameObject !== null) {
                     if (gameObject instanceof Array) {
                         gameObject.forEach(object => {
@@ -174,8 +176,6 @@ class MapView extends Views {
                 }
             };
         };
-
-        this.refreshDisplay();
     }
 
     /**
@@ -447,7 +447,7 @@ class MapView extends Views {
                 let screenPos = new PositionClient(screenPosXY.x, screenPosXY.y);
 
                 object.updateScreenPos(screenPos);
-            })
+            });
         }
     }
 

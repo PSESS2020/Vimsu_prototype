@@ -57,10 +57,12 @@ class EventManager {
 
         var walkPath = AStar.astarSearch(occupationMap, "manhattan", false);
 
-        if ( walkPath == null) {
+        if ( walkPath == null)
+        {
             this.handlingPlaygroundClicked = false;
             return 0;
-        } else
+        }
+        else
         {
             var prev = startPos;
 
@@ -102,7 +104,7 @@ class EventManager {
 
                 prev = next;
 
-            })
+            });
             return walkPath.length;
         }
     }

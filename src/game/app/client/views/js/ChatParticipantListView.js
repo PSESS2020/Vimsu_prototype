@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class ChatParticipantListView extends Views {
+class ChatParticipantListView extends AbstractView {
 
     usernames;
 
@@ -28,14 +28,16 @@ class ChatParticipantListView extends Views {
      * @param {String[]} usernames usernames
      */
     draw(chatId, usernames) {
+        const chatParticipantList = $(`#chatParticipantListModal${chatId} .modal-body .list-group`);
+
         $('#chatParticipantListWait' + chatId).hide();
-        $(`#chatParticipantListModal${chatId} .modal-body .list-group`).empty();
+        chatParticipantList.empty();
 
         const sortedUsernames = usernames.sort((a, b) => a.localeCompare(b));
         this.usernames = sortedUsernames;
 
         this.usernames.forEach(username => {
-            $(`#chatParticipantListModal${chatId} .modal-body .list-group`).append(`
+            chatParticipantList.append(`
                 <li class="list-group-item bg-transparent chatthread" id="${"chatParticipantEntry" + username}">
                 <div class="row w-100">
                         <div class="col-1 px-0">

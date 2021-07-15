@@ -139,7 +139,7 @@ class ParticipantClient {
      * 
      * @param {boolean} isVisible 
      */
-    setisVisible(isVisible) {
+    setIsVisible(isVisible) {
         TypeChecker.isBoolean(isVisible);
         this.isVisible = isVisible;
     }

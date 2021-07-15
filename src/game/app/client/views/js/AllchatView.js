@@ -42,26 +42,27 @@ class AllchatView extends ViewWithLanguageData {
 
         const sendMessage = (event) => {
             event.preventDefault();
+            const input = $('#allchatMessageInput');
             //Replace needed to replace html tags.
-            const messageVal = $('#allchatMessageInput').val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            const messageVal = input.val().replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
             if (messageVal !== '') {
                 counter = -1;
                 eventManager.handleAllchatMessageInput(messageVal);
-                $('#allchatMessageInput').val('');
+                input.val('');
                 return false;
             }
         }
 
         const putCommandOnInput = () => {
-            var input = $('#allchatMessageInput');
+            const input = $('#allchatMessageInput');
             input.val(this.lastCommands[counter] ? this.lastCommands[counter] : input.val());
 
             var inputLength = input.val().length;
             setTimeout(() => {
                 input[0].focus();
                 input[0].setSelectionRange(inputLength, inputLength);
-            }, 1)
+            }, 1);
         }
 
         new EmojiPicker().draw('allchatEmojiTrigger', 'allchatEmojiPicker', 'allchatMessageInput');
@@ -109,16 +110,14 @@ class AllchatView extends ViewWithLanguageData {
     draw(roomName, messages, ownUsername) {
         $('#allchatMessageInput')[0].placeholder = this.languageData.enterMessage.replace('<roomName>', roomName);
         $('#allchatHeaderText').text(roomName + ' ' + this.languageData.chat);
-        $("#unreadAllchatMessage").text(0)
+        $("#unreadAllchatMessage").text(0);
 
         $('#showRoomChat').empty();
-        $('#showRoomChat').append(`
-            <small>${this.languageData.showMessages.replace('<roomName>', roomName)}</small>
-        `)
+        $('#showRoomChat').append(`<small>${this.languageData.showMessages.replace('<roomName>', roomName)}</small>`);
 
         $('#allchatMessages').empty();
         if (messages.length < 1) {
-            $('#noAllchat').text(this.languageData.quietChat.replace('<roomName>', roomName))
+            $('#noAllchat').text(this.languageData.quietChat.replace('<roomName>', roomName));
             return;
         }
 
@@ -155,7 +154,7 @@ class AllchatView extends ViewWithLanguageData {
     appendMessage(message, ownUsername) {
         $('#noAllchat').empty();
 
-        var timestamp = new DateParser().parseOnlyTime(new Date(message.timestamp))
+        var timestamp = new DateParser().parseOnlyTime(new Date(message.timestamp));
 
         const isOwnParticipant = message.username === ownUsername;
 
@@ -168,15 +167,15 @@ class AllchatView extends ViewWithLanguageData {
                         <small class="wrapword" style="text-align: ${isOwnParticipant ? "right" : "left"};">${message.text}</small>
                     </div>
                 </div>
-            `
+            `;
 
         $('#allchatMessages').append(messageDiv);
         $('#allchatBox').scrollTop($('#allchatMessages')[0].scrollHeight);
 
-        let currentCounter = $("#unreadAllchatMessage").text()
+        let currentCounter = $("#unreadAllchatMessage").text();
 
         if (!isOwnParticipant) {
-            $("#unreadAllchatMessage").text(++currentCounter)
+            $("#unreadAllchatMessage").text(++currentCounter);
         }
     }
 }

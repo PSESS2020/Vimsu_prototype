@@ -23,17 +23,12 @@ class ScheduleView extends GameMapElementView {
     
     /**
      * Called if participant clicks the schedule
-     * 
-     * @param {number} mousePos mouse position
      */
-    onclick(mousePos) {
-
-        if (super.getClickMapValueWithGridCoords(mousePos) === 1) {
-            $('#noschedule').empty();
-            $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
-            $('#scheduleModal').modal('show');
-            $('#scheduleWait').show();
-            this.eventManager.handleScheduleClicked();
-        }
+    onclick() {
+        $('#noschedule').empty();
+        $('#scheduleModal .modal-body #schedule > tbody:last-child').empty();
+        $('#scheduleModal').modal('show');
+        $('#scheduleWait').show();
+        this.eventManager.handleScheduleClicked();
     }
 }

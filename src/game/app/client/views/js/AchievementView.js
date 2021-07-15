@@ -29,8 +29,10 @@ class AchievementView extends WindowView {
      * @param {Object[]} achievements achievements
      */
     draw(achievements) {
+        const achievementsContent = $('#achievementModalContent');
+
         $('#achievementWait').hide();
-        $('#achievementModalContent').empty();
+        achievementsContent.empty();
 
         achievements.forEach(achievement => {
             var level = achievement.currentLevel;
@@ -38,16 +40,16 @@ class AchievementView extends WindowView {
             var currentCount = achievement.currentCount;
             var nextTarget = achievement.nextTarget;
 
-            if (nextTarget) {
-                var next = this.languageData.nextTarget.replace('<currentCount>', currentCount).replace('<nextTarget>', nextTarget);
-            } else {
-                var next = this.languageData.completed;
-            }
+            var next;
+            if (nextTarget)
+                next = this.languageData.nextTarget.replace('<currentCount>', currentCount).replace('<nextTarget>', nextTarget);
+            else
+                next = this.languageData.completed;
 
             var color = achievement.color;
             var blur = (level === 0) ? 'achievement-blur' : '';
 
-            $('#achievementModalContent').append(`
+            achievementsContent.append(`
                 <div class="col-4 d-flex flex-column align-items-center text-center">
                     <i style="color: ${color}; text-shadow: 0.25rem 0.25rem 1.5625rem ${color};" class="fas fa-${achievement.icon} fa-5x achievement-icon ${blur} mb-5 mt-4"></i>
                     

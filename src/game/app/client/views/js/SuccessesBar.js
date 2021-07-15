@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class SuccessesBar extends Views {
+class SuccessesBar extends AbstractView {
 
     /**
      * Creates an instance of SuccessesBar

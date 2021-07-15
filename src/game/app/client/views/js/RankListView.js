@@ -37,10 +37,11 @@ class RankListView extends WindowView {
      * @param {Boolean} emptyRankList true if ranklist should be emptied
      */
     draw(rankList, ownUsername, emptyRankList) {
+        const rankListModal = $('#rankListModal .modal-body #ranklistrow');
         $('#ranklistwait').hide();
 
         if (emptyRankList) {
-            $('#rankListModal .modal-body #ranklistrow').empty();
+            rankListModal.empty();
             this.rankList = [];
         }
 
@@ -71,7 +72,7 @@ class RankListView extends WindowView {
                 color = '#A9A9A9';
 
 
-            $('#rankListModal .modal-body #ranklistrow').append(`
+            rankListModal.append(`
                 <div class="col-sm-4 mb-2 mt-2">
                     <div class="card currentLecturesContainer" id="${"rank" + ppant.participantId}" style="border-radius: 0rem; border-color: ${color}; border-style: groove;">
                         <div class="card-body">
@@ -92,7 +93,7 @@ class RankListView extends WindowView {
 
             if (ppant.username === ownUsername)
                 document.getElementById("rank" + ppant.participantId).style.boxShadow = '0 0 0.25rem 0.25rem ' + color;
-        })
+        });
 
         modalBody.data('ready', true).on('scroll', () => {
             if (modalBody.data('ready') == false) return;

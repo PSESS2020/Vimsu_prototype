@@ -52,7 +52,7 @@ describe('ParticipantClient test', function () {
 
     it('test set valid isVisible', function () {
         let newIsVisible = !ppant.getIsVisible();
-        ppant.setisVisible(newIsVisible);
+        ppant.setIsVisible(newIsVisible);
         expect(ppant.getIsVisible()).to.equal(newIsVisible);
     });
 
@@ -77,7 +77,7 @@ describe('ParticipantClient test', function () {
     });
 
     it('test set invalid isVisible', function () {
-        expect(() => ppant.setisVisible('isVisible')).to.throw(TypeError);
+        expect(() => ppant.setIsVisible('isVisible')).to.throw(TypeError);
     });
 
     it('test set invalid isModerator', function () {

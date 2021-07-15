@@ -301,17 +301,17 @@ class GameView {
     /**
      * Adds view instance to list of views to be updated steadily
      * 
-     * @param {Views} viewInstance view instance
+     * @param {AbstractView} viewInstance view instance
      */
     addToUpdateList = function (viewInstance) {
         if (viewInstance instanceof Array) {
             var i;
             for (i = 0; i < viewInstance.length; i++) {
-                TypeChecker.isInstanceOf(viewInstance[i], Views);
+                TypeChecker.isInstanceOf(viewInstance[i], AbstractView);
             }
         }
         else {
-            TypeChecker.isInstanceOf(viewInstance, Views);
+            TypeChecker.isInstanceOf(viewInstance, AbstractView);
         }
 
         if (!this.updateList.includes(viewInstance)) {
@@ -457,7 +457,7 @@ class GameView {
     }
 
     /**
-     * Initializes room view when participant enters Room
+     * Initializes room view when own avatar enters Room
      * 
      * @param {Object[]} assetPaths asset paths
      * @param {number[][]} map map
@@ -574,7 +574,6 @@ class GameView {
 
         this.anotherParticipantAvatarViews[index].updateWalking(isMoving);
         this.anotherParticipantAvatarViews[index].updateCurrentAnimation();
-        this.anotherParticipantAvatarViews[index].draw();
     }
 
     /**

@@ -29,11 +29,13 @@ class NPCStoryView extends WindowView {
      * @param {String} npcId NPC id
      */
     draw(name, story, npcId) {
+        const npcStory = $('#npcStory' + npcId);
+        const npcStoryHeader = $(`#npcStoryModal${npcId} .modal-header`);
         $('#npcStoryWait' + npcId).hide();
-        $(`#npcStoryModal${npcId} .modal-header`).empty();
-        $('#npcStory' + npcId).empty();
+        npcStoryHeader.empty();
+        npcStory.empty();
         
-        $(`#npcStoryModal${npcId} .modal-header`).append(`
+        npcStoryHeader.append(`
             <h5 class="modal-title d-inline-block" id="npcStoryTitle${npcId}">
                 ${this.languageData.replace('npcNamePlaceholder', name)}
             </h5>
@@ -43,7 +45,7 @@ class NPCStoryView extends WindowView {
         `);
 
         for (var i = 0; i < story.length; i++) {
-            $('#npcStory' + npcId).append(`
+            npcStory.append(`
                 <p style="background-color: rgba(0, 0, 0, 0); padding: 0.3125rem; text-align: left; display:none" id='${"story" + npcId + i.toString()}'>${story[i]}</p>
                 <button style="float:left; display: none; outline: none; box-shadow: none" class="btn" id='${"backwardStory" + npcId + i.toString()}'>
                     <i class="fa fa-arrow-left fa-3x navbarIcons"></i>

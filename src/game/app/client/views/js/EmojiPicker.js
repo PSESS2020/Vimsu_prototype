@@ -4,7 +4,7 @@
  * @author Eric Ritte, Klaudia Leo, Laura Traub, Niklas Schmidt, Philipp Schumacher
  * @version 1.0.0
  */
-class EmojiPicker extends Views {
+class EmojiPicker extends AbstractView {
 
     /**
      * Creates an instance of emoji picker
@@ -26,14 +26,17 @@ class EmojiPicker extends Views {
      * @param {String} inputId input field id
      */
     draw(emojiTriggerId, emojiPickerId, inputId) {
-        $('#' + emojiTriggerId).off();
-        $('#' + emojiTriggerId).on('click', (event) => {
+        const emojiTrigger = $('#' + emojiTriggerId);
+        const emojiPickerDiv = $('#' + emojiPickerId + 'Div');
+
+        emojiTrigger.off();
+        emojiTrigger.on('click', (event) => {
             event.preventDefault();
 
-            if ($('#' + emojiPickerId + 'Div').css('display') !== 'none') {
-                $('#' + emojiPickerId + 'Div').hide();
+            if (emojiPickerDiv.css('display') !== 'none') {
+                emojiPickerDiv.hide();
             } else {
-                $('#' + emojiPickerId + 'Div').show();
+                emojiPickerDiv.show();
 
                 document.getElementById(emojiPickerId).shadowRoot.querySelector('.search-row').setAttribute('style', 'display:none');
                 document.getElementById(emojiPickerId).shadowRoot.querySelector('.favorites').setAttribute('style', 'display:none');
@@ -41,10 +44,9 @@ class EmojiPicker extends Views {
         });
 
         $(document).on('mouseup', (e) => {
-            const emojiPickerDiv = $('#' + emojiPickerId + 'Div');
 
             if (emojiPickerDiv.css('display') !== 'none') {
-                const descendants = [emojiPickerDiv, $('#' + inputId), $('#' + emojiTriggerId)];
+                const descendants = [emojiPickerDiv, $('#' + inputId), emojiTrigger];
                 let isNotDescendant = true;
 
                 descendants.forEach(descendant => {

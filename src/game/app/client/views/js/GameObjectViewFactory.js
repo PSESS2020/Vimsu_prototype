@@ -95,21 +95,24 @@ class GameObjectViewFactory {
 
         gameMapElementImage = this.assetImages[objectName];
         
-        if (gameMapElementImage !== undefined) {
+        if (gameMapElementImage !== undefined)
+        {
             var offset = this.calculateMapElementOffset(gameMapElementImage, gameObjectType);
+            var clickMap = isClickable ? this.getClickMap(gameMapElementImage, pos, offset) : [];
             // Strange fix to make sure left & right tiles
             // are displayed properly....
-            if (gameObjectType === GameObjectType.LEFTTILE) {
+            if (gameObjectType === GameObjectType.LEFTTILE)
                 pos = new PositionClient(pos.getCordX(), pos.getCordY() + 1);
-            } else if (gameObjectType === GameObjectType.RIGHTTILE){
+            else if (gameObjectType === GameObjectType.RIGHTTILE)
                 pos = new PositionClient(pos.getCordX() - 1, pos.getCordY());
-            }
-            if (isClickable && gameObjectType === GameObjectType.LEFTSCHEDULE) {
-                gameMapElementView = new ScheduleView(gameMapElementImage, this.getClickMap(gameMapElementImage, pos, offset), pos, offset, objectName, this.eventManager);
-            } else {
-                gameMapElementView = new GameMapElementView(gameMapElementImage, [], pos, offset, objectName);
-            }
-        } else {
+
+            if (gameObjectType === GameObjectType.LEFTSCHEDULE)
+                gameMapElementView = new ScheduleView(gameMapElementImage, clickMap, pos, offset, objectName, this.eventManager);
+            else
+                gameMapElementView = new GameMapElementView(gameMapElementImage, clickMap, pos, offset, objectName);
+        }
+        else
+        {
             throw new Error("The image for the key " + objectName + " could not be found in the cache for images. Did you reload the images after cache clear?");
         }
 
