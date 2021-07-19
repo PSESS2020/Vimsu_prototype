@@ -75,18 +75,32 @@ class GameObjectView extends AbstractView {
     }
 
     /**
-     * gets click map with grid coordinates
+     * Checks if the the clickable area of this view object contains the given point.
      * 
-     * @param {number} mousePos mouse position
+     * @param {number} x The x position of the point to check
+     * @param {number} y The y position of the point to check
+     * @return {boolean} True if the point is contained in the clickable area
      */
-    getClickMapValueWithGridCoords(mousePos) {
-        var screenPos = this.getScreenPosition();
-
-        var clickImgCordX = Math.abs(Math.abs(screenPos.getCordX() - Math.round(mousePos.x)));
+    contains(x, y) {
+        var clickImgCordX = Math.abs(Math.abs(this.screenPosition.getCordX() - Math.round(x)));
         
-        var clickImgCordY = Math.abs((screenPos.getCordY() + this.getScreenPositionOffset().y) - Math.round(mousePos.y));
+        var clickImgCordY = Math.abs((this.screenPosition.getCordY() + this.screenPositionOffset.y) - Math.round(y));
 
-        return this.clickMap[clickImgCordY][clickImgCordX];
+        return this.clickMap[clickImgCordY][clickImgCordX] === 1;
+    }
+
+    /**
+     * Checks if the the image of this view object contains the given point.
+     * 
+     * @param {number} x The x position of the point to check
+     * @param {number} y The y position of the point to check
+     * @return {boolean} True if the point is contained in the image of this view object
+     */
+     assetContains(x, y) {
+        return x > this.screenPosition.getCordX() + this.screenPositionOffset.x
+            && x < this.screenPosition.getCordX() + this.screenPositionOffset.x + this.objectImage.width
+            && y > this.screenPosition.getCordY() + this.screenPositionOffset.y
+            && y < this.screenPosition.getCordY() + this.screenPositionOffset.y + this.objectImage.height;
     }
 
     /**

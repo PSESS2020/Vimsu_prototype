@@ -326,18 +326,11 @@ class MapView extends AbstractView {
         for (let i = 0; i < this.clickableTiles.length; i++)
         {
             let elem = this.clickableTiles[i];
-            let screenPos = elem.getScreenPosition();
-            let screenPosOffset = elem.getScreenPositionOffset();
-            let image = elem.getObjectImage();
 
             //determines if mouse position on canvas is inside the asset image.
-            if (!(elem instanceof DoorView)
-                && canvasMousePos.x > screenPos.getCordX() + screenPosOffset.x
-                && canvasMousePos.x < screenPos.getCordX() + screenPosOffset.x + image.width
-                && canvasMousePos.y > screenPos.getCordY() + screenPosOffset.y
-                && canvasMousePos.y < screenPos.getCordY() + screenPosOffset.y + image.height)
+            if (!(elem instanceof DoorView) && elem.assetContains(canvasMousePos.x, canvasMousePos.y))
             {
-                if (elem.getClickMapValueWithGridCoords(canvasMousePos) === 1)
+                if (elem.contains(canvasMousePos.x, canvasMousePos.y))
                 {
                     if (isClicked)
                         elem.onclick(canvasMousePos);
