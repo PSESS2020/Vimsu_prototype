@@ -292,8 +292,14 @@ class MapView extends AbstractView {
             let tileName = tile.getName();
             let viewObjectName = viewObject.getName();
 
-            if (tile instanceof DoorClient && tileName === viewObjectName)
-                viewObject.onclick(tile.getTargetRoomId());
+            if (tile instanceof DoorClient && tileName === viewObjectName) {
+                let correctPosition = tile.getMapPosition().getCordX() === viewObject.getGridPosition().getCordX() && 
+                    tile.getMapPosition().getCordY() + Settings.MAP_BLANK_TILES_WIDTH === viewObject.getGridPosition().getCordY();
+
+                    if (correctPosition) {
+                        viewObject.onclick(tile.getTargetRoomId());
+                    }
+            }
             else
                 if (tile instanceof GameObjectClient && tileName === viewObjectName)
                     viewObject.onclick();
