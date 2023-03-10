@@ -444,6 +444,7 @@ class MapView extends AbstractView {
             // Check if selected tile is clickable and adjusts the image of selected tile border accordingly
             const newObjectImage = this.findClickableTileOrObjectOrNPC(selectedTileCords, false) ? this.tileSelectedClickableImage : this.tileSelectedDefaultImage;
             this.tileIndicator.updateObjectImage(newObjectImage);
+        }
     }
 
     /**
