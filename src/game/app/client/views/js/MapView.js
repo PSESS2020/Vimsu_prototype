@@ -7,6 +7,7 @@
 class MapView extends AbstractView {
     map;
     objectMap;
+    npcMap;
     clickableTiles;
     clickableObjects;
     tiles;
@@ -14,6 +15,8 @@ class MapView extends AbstractView {
     xNumTiles;
     yNumTiles;
     tileIndicator;
+    tileSelectedDefaultImage;
+    tileSelectedClickableImage;
 
     gameObjectViewFactory;
     gameEngine;
@@ -27,13 +30,14 @@ class MapView extends AbstractView {
      * @param {Object[]} assetPaths asset paths
      * @param {number[][]} map map array
      * @param {number[][]} objectMap object map array
+     * @param {NPCAvatarView[]} npcAvatarViews list of NPC views
      * @param {IsometricEngine} gameEngine game engine
      * @param {eventManager} eventManager event manager
      */
-    constructor(assetPaths, map, objectMap, eventManager) {
+    constructor(assetPaths, map, objectMap, npcAvatarViews, eventManager) {
         super();
 
-        this.initProperties(assetPaths, map, objectMap, eventManager);
+        this.initProperties(assetPaths, map, objectMap, npcAvatarViews, eventManager);
     }
 
     /**
@@ -106,20 +110,34 @@ class MapView extends AbstractView {
      * @param {Object[]} assetPaths asset paths
      * @param {number[][]} map map array
      * @param {number[][]} objectMap object map array
+     * @param {NPCAvatarView[]} npcAvatarViews list of NPC views
      * @param {eventManager} eventManager event manager
      */
-    initProperties = async (assetPaths, map, objectMap, eventManager) => {
-        assetPaths.tileselected_default = "../client/assets/tiles/tile_selected.png";
+    initProperties = async (assetPaths, map, objectMap, npcAvatarViews, eventManager) => {
         this.gameEngine = new IsometricEngine();
 
         super.setVisibility(true);
         this.gameEngine.initGameEngine(ctx_map.canvas.width, ctx_map.canvas.height, map.length, map[0].length);
         var assetImages = await this.gameEngine.loadImages(assetPaths);
+        this.tileSelectedDefaultImage = assetImages["tile_selected_default"];
+        this.tileSelectedClickableImage = assetImages["tile_selected_clickable"];
         if(!super.isVisible())
             return;
 
         this.map = map;
         this.objectMap = objectMap;
+
+        this.npcMap = new Array(map.length);
+        for (let i = 0; i < this.npcMap.length; i++) {
+            this.npcMap[i] = new Array(map[0].length).fill(null);
+        }
+
+        npcAvatarViews.forEach(nav => {
+            let xPos = nav.getGridPosition().getCordX();
+            let yPos = nav.getGridPosition().getCordY() + Settings.MAP_BLANK_TILES_WIDTH;
+            this.npcMap[xPos][yPos] = nav;
+        });
+        
         this.xNumTiles = map.length;
         this.yNumTiles = map[0].length;
 
@@ -145,7 +163,7 @@ class MapView extends AbstractView {
      */
     buildMap = function() {
 
-        this.tileIndicator = this.gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tileselected_default", false, false);
+        this.tileIndicator = this.gameObjectViewFactory.createGameObjectView(GameObjectType.SELECTED_TILE, new PositionClient(0, 2), "tile_selected_default", false, false);
 
         var mapObject;
         var gameObject
@@ -225,7 +243,7 @@ class MapView extends AbstractView {
     }
 
     /**
-     * Checks if tile or object is clickable at the selected position.
+     * Checks if tile or object or NPC is clickable at the selected position.
      * In case a click was performed, finds the tile/object in the list of clickable tiles/objects
      * and calls it's onclick function.
      * 
@@ -234,9 +252,10 @@ class MapView extends AbstractView {
      * 
      * @return {boolean} true if the selected tile or object is clickable, false otherwise
      */
-    findClickableTileOrObject(selectedTileCords, isClicked) {
+    findClickableTileOrObjectOrNPC(selectedTileCords, isClicked) {
         let tile = this.map[selectedTileCords.x][selectedTileCords.y];
         let object = this.objectMap[selectedTileCords.x][selectedTileCords.y];
+        let npc = this.npcMap[selectedTileCords.x][selectedTileCords.y];
 
         if (tile instanceof Array)
         {
@@ -277,6 +296,12 @@ class MapView extends AbstractView {
                 this.findObjectAndClick(object);
             return true;
         }
+        else if (npc !== null) {
+            if (isClicked)
+                npc.onClick();
+            return true;
+        }
+        
         return false;
     }
 
@@ -413,8 +438,13 @@ class MapView extends AbstractView {
 
         let position = new PositionClient(screenXY.x, screenXY.y);
 
-        if (this.tileIndicator !== undefined)
+        if (this.tileIndicator !== undefined) {
             this.tileIndicator.updateScreenPos(position);
+
+            // Check if selected tile is clickable and adjusts the image of selected tile border accordingly
+            const newObjectImage = this.findClickableTileOrObjectOrNPC(selectedTileCords, false) ? this.tileSelectedClickableImage : this.tileSelectedDefaultImage;
+            this.tileIndicator.updateObjectImage(newObjectImage);
+        }
     }
 
     /**

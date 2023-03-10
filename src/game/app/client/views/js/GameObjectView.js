@@ -48,6 +48,19 @@ class GameObjectView extends AbstractView {
     }
 
     /**
+     * Updates game object image if passed image is not the same as current one
+     * 
+     * @param {Image} newObjectImage 
+     */
+    updateObjectImage(newObjectImage) {
+        TypeChecker.isInstanceOf(newObjectImage, Image);
+
+        if (this.objectImage !== newObjectImage) {
+            this.objectImage = newObjectImage;
+        }
+    }
+
+    /**
      * Gets grid position
      * 
      * @return {PositionClient} gridPosition
