@@ -157,15 +157,8 @@ class GameView {
 
                 this.currentMapView.updateSelectedTile(selectedTileCords);
 
-                if (this.currentMapView.findClickableTileOrObject(selectedTileCords, false))
+                if (this.currentMapView.findClickableTileOrObjectOrNPC(selectedTileCords, false))
                     return canvas.style.cursor = 'pointer';
-
-                for (let i = 0, len = this.npcAvatarViews.length; i < len; i++)
-                {
-                    let npcView = this.npcAvatarViews[i];
-                    if (npcView.getGridPosition().getCordX() === selectedTileCords.x && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_LENGTH)
-                        return canvas.style.cursor = 'pointer';
-                }
 
                 for (let i = 0, len = this.anotherParticipantAvatarViews.length; i < len; i++)
                 {
@@ -236,22 +229,14 @@ class GameView {
         //check if clicked tile is a valid walkable tile
         if (this.currentMapView.isCursorOnPlayGround(selectedTileCords.x, selectedTileCords.y)) {
          
-            //first check if click is on door or clickable object in room (not existing at this point)
-            this.currentMapView.findClickableTileOrObject(selectedTileCords, true);
+            //first, check if click is on door, clickable object or NPC in room
+            this.currentMapView.findClickableTileOrObjectOrNPC(selectedTileCords, true);
 
             //then, check if there is an avatar at this position
             this.getAnotherParticipantAvatarViews().forEach(ppantView => {
                 if (ppantView.getGridPosition().getCordX() === selectedTileCords.x
                     && ppantView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_WIDTH) {
                     ppantView.onClick();
-                }
-            });
-
-            //then, check if there is an NPC at this position
-            this.npcAvatarViews.forEach(npcView => {
-                if (npcView.getGridPosition().getCordX() === selectedTileCords.x
-                    && npcView.getGridPosition().getCordY() === selectedTileCords.y - Settings.MAP_BLANK_TILES_WIDTH) {
-                    npcView.onClick();
                 }
             });
         }//check if clicked tile is outside the walkable area
@@ -472,13 +457,12 @@ class GameView {
         if(this.currentMapView !== undefined)
             this.currentMapView.setVisibility(false);
 
-        this.currentMapView = new MapView(assetPaths, map, objectMap, this.eventManager);
-
         this.npcAvatarViews = [];
         listOfNPCs.forEach(npc => {
             this.npcAvatarViews.push(new NPCAvatarView(npc.getId(), npc.getName(), npc.getPosition(), npc.getDirection(), npc.getShirtColor(), this.gameEngine, this.eventManager));
         });
 
+        this.currentMapView = new MapView(assetPaths, map, objectMap, this.npcAvatarViews, this.eventManager);
         this.statusBar.updateLocation(roomName);
     }
 
