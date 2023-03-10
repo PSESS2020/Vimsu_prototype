@@ -299,7 +299,7 @@ class MapView extends AbstractView {
         else if (npc !== null) {
             if (isClicked)
                 npc.onClick();
-            return true
+            return true;
         }
         
         return false;
@@ -442,12 +442,8 @@ class MapView extends AbstractView {
             this.tileIndicator.updateScreenPos(position);
 
             // Check if selected tile is clickable and adjusts the image of selected tile border accordingly
-            if (this.findClickableTileOrObjectOrNPC(selectedTileCords, false)) {
-                this.tileIndicator.updateObjectImage(this.tileSelectedClickableImage);
-            }
-            
-            this.tileIndicator.updateObjectImage(this.tileSelectedDefaultImage);
-        }
+            const newObjectImage = this.findClickableTileOrObjectOrNPC(selectedTileCords, false) ? this.tileSelectedClickableImage : this.tileSelectedDefaultImage;
+            this.tileIndicator.updateObjectImage(newObjectImage);
     }
 
     /**
