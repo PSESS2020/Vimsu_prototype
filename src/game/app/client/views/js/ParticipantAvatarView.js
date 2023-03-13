@@ -256,15 +256,16 @@ class ParticipantAvatarView extends AvatarView {
         let topClothing = super.getTopClothing();
         let bottomClothing = super.getBottomClothing();
         let shoes = super.getShoes();
+        let hair = super.getHair();
 
-        this.walkingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 1, 4);
-        this.walkingUpRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 11, 14);
-        this.walkingDownLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 6, 9);
-        this.walkingUpLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 9, 16, 19);
-        this.standingUpLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 15, 15);
-        this.standingUpRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 10, 10);
-        this.standingDownLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 5, 5);
-        this.standingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, 15, 0, 0);
+        this.walkingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, hair, 9, 1, 4);
+        this.walkingUpRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, hair, 9, 16, 19);
+        this.walkingDownLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, hair, 9, 6, 9);
+        this.walkingUpLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, hair, 9, 11, 14);
+        this.standingUpLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, hair, 15, 10, 10);
+        this.standingUpRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, hair, 15, 15, 15);
+        this.standingDownLeftAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, hair, 15, 5, 5);
+        this.standingDownRightAnimation = new SpriteAnimation(spriteSheet, topClothing, bottomClothing, shoes, hair, 15, 0, 0);
     }
 
     /**
