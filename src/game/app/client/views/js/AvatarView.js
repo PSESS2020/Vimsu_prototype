@@ -15,6 +15,7 @@ class AvatarView extends AbstractView {
     topClothing;
     bottomClothing;
     shoes;
+    hair;
 
     /**
      * Creates an instance of AvatarView
@@ -34,10 +35,11 @@ class AvatarView extends AbstractView {
         this.direction = direction;
         this.shirtColor = shirtColor;
 
-        this.spriteSheet = new SpriteSheet('../client/assets/avatar/CharacterSpriteSheetBody.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        this.topClothing = new SpriteSheet('../client/assets/avatar/TopClothing' + shirtColor + 'ShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        this.bottomClothing = new SpriteSheet('../client/assets/avatar/BottomBlackTrousersSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
-        this.shoes = new SpriteSheet('../client/assets/avatar/ShoesBlackSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.spriteSheet = new SpriteSheet('../client/assets/avatar/body' + Settings.AVATAR_BODY + '.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.topClothing = new SpriteSheet('../client/assets/avatar/top' + Settings.AVATAR_TOP + shirtColor + '.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT); // see updateShirtColor(shirtColor)
+        this.bottomClothing = new SpriteSheet('../client/assets/avatar/bottom' + Settings.AVATAR_BOTTOM + '.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.shoes = new SpriteSheet('../client/assets/avatar/shoes' + Settings.AVATAR_SHOES + '.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.hair = new SpriteSheet('../client/assets/avatar/hair' + Settings.AVATAR_HAIR + '.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
 
         if (new.target === AvatarView) {
             throw new Error("Cannot construct abstract AvatarView instances directly");
@@ -127,6 +129,15 @@ class AvatarView extends AbstractView {
     }
 
     /**
+     * Gets hair spritesheet
+     *
+     * @return {SpriteSheet} hair
+     */
+    getHair() {
+        return this.hair;
+    }
+
+    /**
      * Gets avatar isWalking status
      * 
      * @return {boolean} true if the Avatar is currently walking, otherwise false
@@ -171,7 +182,7 @@ class AvatarView extends AbstractView {
         TypeChecker.isEnumOf(shirtColor, ShirtColor);
         
         this.shirtColor = shirtColor;
-        this.topClothing = new SpriteSheet('../client/assets/avatar/TopClothing' + shirtColor + 'ShirtSpriteSheet.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
+        this.topClothing = new SpriteSheet('../client/assets/avatar/top' + Settings.AVATAR_TOP + shirtColor + '.png', Settings.AVATAR_WIDTH, Settings.AVATAR_HEIGHT);
         this.initSpriteAnimation();
     }
 

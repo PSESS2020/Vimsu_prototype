@@ -52,6 +52,21 @@ const Settings = Object.freeze({
     NPC_COLOR: 'firebrick',
     NPC_NAME_COLOR: 'white',
 
+    /* Appearance of Avatars */
+
+    // Skin color, e.g. White|Dark|Black
+    AVATAR_BODY: 'White',
+    // Type of Shirt, e.g. Shirt|Sleeveless|SweaterShirt|Sweatshirt|T-Shirt
+    AVATAR_TOP: 'Sweatshirt', //color is added separately
+    // Type + Color of Trousers, e.g. Trousers|Shorts + Black|Brown|Blue
+    AVATAR_BOTTOM: 'TrousersBlack',
+    // Type + Color of Shoes, e.g. (Shoes + Black|Brown|Blue)|(Sneakers + DefaultColors)
+    AVATAR_SHOES: 'ShoesBrown',
+    // Type + Color of Hair, e.g. Afro|Bob|Long|Ponytail|Short|Undercut + Blonde|Brown|Dark|Red
+    AVATAR_HAIR: 'AfroDark',
+
+
+
     //constants for arrow drawn above own Avatar
     ARROW_LENGTH: 20,
     ARROW_WIDTH: 7,

@@ -10,18 +10,20 @@ class SpriteAnimation {
      * Creates an instance of Sprite Animation
      * 
      * @param {SpriteSheet} spritesheetBody sprite sheet avatar body
-     * @param {SpriteSheet} spritesheetTopCloth sprite sheet avatar top cloth
+     * @param {SpriteSheet} spritesheetTopClothing sprite sheet avatar top clothing
      * @param {SpriteSheet} spriteSheetBottomClothing sprite sheet avatar bottom clothing
      * @param {SpriteSheet} spriteSheetShoes sprite sheet avatar shoes
+     * @param {SpriteSheet} spriteSheetHair sprite sheet avatar hair
      * @param {number} frameRate frame rate
      * @param {number} firstFrame first frame
      * @param {number} lastFrame last frame
      */
-    constructor(spritesheetBody, spritesheetTopCloth, spriteSheetBottomClothing, spriteSheetShoes, frameRate, firstFrame, lastFrame) {
+    constructor(spritesheetBody, spritesheetTopClothing, spriteSheetBottomClothing, spriteSheetShoes, spriteSheetHair, frameRate, firstFrame, lastFrame) {
         TypeChecker.isInstanceOf(spritesheetBody, SpriteSheet);
-        TypeChecker.isInstanceOf(spritesheetTopCloth, SpriteSheet);
+        TypeChecker.isInstanceOf(spritesheetTopClothing, SpriteSheet);
         TypeChecker.isInstanceOf(spriteSheetBottomClothing, SpriteSheet);
         TypeChecker.isInstanceOf(spriteSheetShoes, SpriteSheet);
+        TypeChecker.isInstanceOf(spriteSheetHair, SpriteSheet);
         TypeChecker.isInt(frameRate);
         TypeChecker.isInt(firstFrame);
         TypeChecker.isInt(lastFrame);
@@ -30,9 +32,10 @@ class SpriteAnimation {
         this.counter = 0;
         this.animationSequence = [];
         this.spritesheetBody = spritesheetBody;
-        this.spritesheetTopCloth = spritesheetTopCloth;
+        this.spritesheetTopClothing = spritesheetTopClothing;
         this.spriteSheetBottomClothing = spriteSheetBottomClothing;
         this.spriteSheetShoes = spriteSheetShoes;
+        this.spriteSheetHair = spriteSheetHair;
         this.firstFrame = firstFrame;
         this.lastFrame = lastFrame;
         this.frameRate = frameRate;
@@ -76,10 +79,10 @@ class SpriteAnimation {
             this.spritesheetBody.frameWidth, this.spritesheetBody.frameHeight);
 
         ctx_avatar.drawImage(
-            this.spritesheetTopCloth.image, col * this.spritesheetTopCloth.frameWidth, row * this.spritesheetTopCloth.frameHeight,
-            this.spritesheetTopCloth.frameWidth, this.spritesheetTopCloth.frameHeight,
+            this.spritesheetTopClothing.image, col * this.spritesheetTopClothing.frameWidth, row * this.spritesheetTopClothing.frameHeight,
+            this.spritesheetTopClothing.frameWidth, this.spritesheetTopClothing.frameHeight,
             x, y,
-            this.spritesheetTopCloth.frameWidth, this.spritesheetTopCloth.frameHeight);
+            this.spritesheetTopClothing.frameWidth, this.spritesheetTopClothing.frameHeight);
 
         ctx_avatar.drawImage(
             this.spriteSheetBottomClothing.image, col * this.spriteSheetBottomClothing.frameWidth, row * this.spriteSheetBottomClothing.frameHeight,
@@ -92,6 +95,12 @@ class SpriteAnimation {
             this.spriteSheetShoes.frameWidth, this.spriteSheetShoes.frameHeight,
             x, y,
             this.spriteSheetShoes.frameWidth, this.spriteSheetShoes.frameHeight);
+
+        ctx_avatar.drawImage(
+            this.spriteSheetHair.image, col * this.spriteSheetHair.frameWidth, row * this.spriteSheetHair.frameHeight,
+            this.spriteSheetHair.frameWidth, this.spriteSheetHair.frameHeight,
+            x, y,
+            this.spriteSheetHair.frameWidth, this.spriteSheetHair.frameHeight);
     }
 
 }
